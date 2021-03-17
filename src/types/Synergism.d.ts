@@ -1,194 +1,194 @@
-import type Decimal from 'break_infinity.js';
+import type number from 'break_infinity.js';
 import { Category, ResetHistoryEntryUnion } from '../History';
 import { IPlatBaseCost } from '../Platonic';
 
 export interface Player {
     worlds: number
-    coins: Decimal,
-    coinsThisPrestige: Decimal,
-    coinsThisTranscension: Decimal,
-    coinsThisReincarnation: Decimal,
-    coinsTotal: Decimal,
+    coins: number,
+    coinsThisPrestige: number,
+    coinsThisTranscension: number,
+    coinsThisReincarnation: number,
+    coinsTotal: number,
 
     firstOwnedCoin: number
-    firstGeneratedCoin: Decimal,
-    firstCostCoin: Decimal,
+    firstGeneratedCoin: number,
+    firstCostCoin: number,
     firstProduceCoin: number,
 
     secondOwnedCoin: number
-    secondGeneratedCoin: Decimal,
-    secondCostCoin: Decimal,
+    secondGeneratedCoin: number,
+    secondCostCoin: number,
     secondProduceCoin: number,
 
     thirdOwnedCoin: number
-    thirdGeneratedCoin: Decimal,
-    thirdCostCoin: Decimal,
+    thirdGeneratedCoin: number,
+    thirdCostCoin: number,
     thirdProduceCoin: number
 
     fourthOwnedCoin: number
-    fourthGeneratedCoin: Decimal,
-    fourthCostCoin: Decimal,
+    fourthGeneratedCoin: number,
+    fourthCostCoin: number,
     fourthProduceCoin: number
 
     fifthOwnedCoin: number
-    fifthGeneratedCoin: Decimal,
-    fifthCostCoin: Decimal,
+    fifthGeneratedCoin: number,
+    fifthCostCoin: number,
     fifthProduceCoin: number
 
     firstOwnedDiamonds: number
-    firstGeneratedDiamonds: Decimal,
-    firstCostDiamonds: Decimal,
+    firstGeneratedDiamonds: number,
+    firstCostDiamonds: number,
     firstProduceDiamonds: number,
 
     secondOwnedDiamonds: number
-    secondGeneratedDiamonds: Decimal,
-    secondCostDiamonds: Decimal,
+    secondGeneratedDiamonds: number,
+    secondCostDiamonds: number,
     secondProduceDiamonds: number,
 
     thirdOwnedDiamonds: number
-    thirdGeneratedDiamonds: Decimal,
-    thirdCostDiamonds: Decimal,
+    thirdGeneratedDiamonds: number,
+    thirdCostDiamonds: number,
     thirdProduceDiamonds: number,
 
     fourthOwnedDiamonds: number
-    fourthGeneratedDiamonds: Decimal,
-    fourthCostDiamonds: Decimal,
+    fourthGeneratedDiamonds: number,
+    fourthCostDiamonds: number,
     fourthProduceDiamonds: number,
 
     fifthOwnedDiamonds: number
-    fifthGeneratedDiamonds: Decimal,
-    fifthCostDiamonds: Decimal,
+    fifthGeneratedDiamonds: number,
+    fifthCostDiamonds: number,
     fifthProduceDiamonds: number,
 
     firstOwnedMythos: number
-    firstGeneratedMythos: Decimal,
-    firstCostMythos: Decimal,
+    firstGeneratedMythos: number,
+    firstCostMythos: number,
     firstProduceMythos: number
 
     secondOwnedMythos: number
-    secondGeneratedMythos: Decimal,
-    secondCostMythos: Decimal,
+    secondGeneratedMythos: number,
+    secondCostMythos: number,
     secondProduceMythos: number,
 
     thirdOwnedMythos: number
-    thirdGeneratedMythos: Decimal,
-    thirdCostMythos: Decimal,
+    thirdGeneratedMythos: number,
+    thirdCostMythos: number,
     thirdProduceMythos: number,
 
     fourthOwnedMythos: number
-    fourthGeneratedMythos: Decimal,
-    fourthCostMythos: Decimal,
+    fourthGeneratedMythos: number,
+    fourthCostMythos: number,
     fourthProduceMythos: number,
 
     fifthOwnedMythos: number
-    fifthGeneratedMythos: Decimal,
-    fifthCostMythos: Decimal,
+    fifthGeneratedMythos: number,
+    fifthCostMythos: number,
     fifthProduceMythos: number,
 
     firstOwnedParticles: number
-    firstGeneratedParticles: Decimal,
-    firstCostParticles: Decimal,
+    firstGeneratedParticles: number,
+    firstCostParticles: number,
     firstProduceParticles: number
 
     secondOwnedParticles: number
-    secondGeneratedParticles: Decimal,
-    secondCostParticles: Decimal,
+    secondGeneratedParticles: number,
+    secondCostParticles: number,
     secondProduceParticles: number
 
     thirdOwnedParticles: number
-    thirdGeneratedParticles: Decimal,
-    thirdCostParticles: Decimal,
+    thirdGeneratedParticles: number,
+    thirdCostParticles: number,
     thirdProduceParticles: number
 
     fourthOwnedParticles: number
-    fourthGeneratedParticles: Decimal,
-    fourthCostParticles: Decimal,
+    fourthGeneratedParticles: number,
+    fourthCostParticles: number,
     fourthProduceParticles: number
 
     fifthOwnedParticles: number
-    fifthGeneratedParticles: Decimal,
-    fifthCostParticles: Decimal,
+    fifthGeneratedParticles: number,
+    fifthCostParticles: number,
     fifthProduceParticles: number
 
     firstOwnedAnts: number
-    firstGeneratedAnts: Decimal,
-    firstCostAnts: Decimal,
+    firstGeneratedAnts: number,
+    firstCostAnts: number,
     firstProduceAnts: number
 
     secondOwnedAnts: number
-    secondGeneratedAnts: Decimal,
-    secondCostAnts: Decimal,
+    secondGeneratedAnts: number,
+    secondCostAnts: number,
     secondProduceAnts: number
 
     thirdOwnedAnts: number
-    thirdGeneratedAnts: Decimal,
-    thirdCostAnts: Decimal,
+    thirdGeneratedAnts: number,
+    thirdCostAnts: number,
     thirdProduceAnts: number
 
     fourthOwnedAnts: number
-    fourthGeneratedAnts: Decimal,
-    fourthCostAnts: Decimal,
+    fourthGeneratedAnts: number,
+    fourthCostAnts: number,
     fourthProduceAnts: number
 
     fifthOwnedAnts: number
-    fifthGeneratedAnts: Decimal,
-    fifthCostAnts: Decimal,
+    fifthGeneratedAnts: number,
+    fifthCostAnts: number,
     fifthProduceAnts: number
 
     sixthOwnedAnts: number
-    sixthGeneratedAnts: Decimal,
-    sixthCostAnts: Decimal,
+    sixthGeneratedAnts: number,
+    sixthCostAnts: number,
     sixthProduceAnts: number
 
     seventhOwnedAnts: number
-    seventhGeneratedAnts: Decimal,
-    seventhCostAnts: Decimal,
+    seventhGeneratedAnts: number,
+    seventhCostAnts: number,
     seventhProduceAnts: number
 
     eighthOwnedAnts: number
-    eighthGeneratedAnts: Decimal,
-    eighthCostAnts: Decimal,
+    eighthGeneratedAnts: number,
+    eighthCostAnts: number,
     eighthProduceAnts: number
 
     ascendBuilding1: {
         cost: number
         owned: number
-        generated: Decimal,
+        generated: number,
         multiplier: number
     },
     ascendBuilding2: {
         cost: number
         owned: number
-        generated: Decimal,
+        generated: number,
         multiplier: number
     },
     ascendBuilding3: {
         cost: number
         owned: number
-        generated: Decimal,
+        generated: number,
         multiplier: number
     },
     ascendBuilding4: {
         cost: number
         owned: number
-        generated: Decimal,
+        generated: number,
         multiplier: number
     },
     ascendBuilding5: {
         cost: number
         owned: number
-        generated: Decimal,
+        generated: number,
         multiplier: number
     },
 
-    multiplierCost: Decimal,
+    multiplierCost: number,
     multiplierBought: number
 
-    acceleratorCost: Decimal,
+    acceleratorCost: number,
     acceleratorBought: number
 
     acceleratorBoostBought: number
-    acceleratorBoostCost: Decimal,
+    acceleratorBoostCost: number,
 
     upgrades: number[]
 
@@ -196,13 +196,13 @@ export interface Player {
     transcendCount: number
     reincarnationCount: number
 
-    prestigePoints: Decimal,
-    transcendPoints: Decimal,
-    reincarnationPoints: Decimal,
+    prestigePoints: number,
+    transcendPoints: number,
+    reincarnationPoints: number,
 
-    prestigeShards: Decimal,
-    transcendShards: Decimal,
-    reincarnationShards: Decimal,
+    prestigeShards: number,
+    transcendShards: number,
+    reincarnationShards: number,
 
     toggles: Record<number, boolean>
 
@@ -340,7 +340,7 @@ export interface Player {
     sacrificeTimer: number
     quarkstimer: number
 
-    antPoints: Decimal,
+    antPoints: number,
     antUpgrades: (null | number)[]
     antSacrificePoints: number
     antSacrificeTimer: number
@@ -426,7 +426,7 @@ export interface Player {
         globalSpeed: number
 
     },
-    ascendShards: Decimal,
+    ascendShards: number,
     autoAscend: boolean,
     autoAscendMode: string
     autoAscendThreshold: number
@@ -499,81 +499,81 @@ export interface GlobalVariables {
     freeAcceleratorBoost: number
     totalAcceleratorBoost: number
     acceleratorPower: number
-    acceleratorEffect: Decimal
-    acceleratorEffectDisplay: Decimal
-    generatorPower: Decimal
+    acceleratorEffect: number
+    acceleratorEffectDisplay: number
+    generatorPower: number
 
     freeMultiplier: number
     totalMultiplier: number
     multiplierPower: number
-    multiplierEffect: Decimal
+    multiplierEffect: number
     challengeOneLog: number
     freeMultiplierBoost: number
     totalMultiplierBoost: number
 
-    globalCoinMultiplier: Decimal
+    globalCoinMultiplier: number
     totalCoinOwned: number
-    prestigeMultiplier: Decimal
+    prestigeMultiplier: number
     buildingPower: number
-    reincarnationMultiplier: Decimal
+    reincarnationMultiplier: number
 
-    coinOneMulti: Decimal
-    coinTwoMulti: Decimal
-    coinThreeMulti: Decimal
-    coinFourMulti: Decimal
-    coinFiveMulti: Decimal
+    coinOneMulti: number
+    coinTwoMulti: number
+    coinThreeMulti: number
+    coinFourMulti: number
+    coinFiveMulti: number
 
-    globalCrystalMultiplier: Decimal
-    globalMythosMultiplier: Decimal
-    grandmasterMultiplier: Decimal
+    globalCrystalMultiplier: number
+    globalMythosMultiplier: number
+    grandmasterMultiplier: number
 
-    atomsMultiplier: Decimal
+    atomsMultiplier: number
 
     mythosBuildingPower: number
-    challengeThreeMultiplier: Decimal
+    challengeThreeMultiplier: number
     totalMythosOwned: number
 
-    prestigePointGain: Decimal
+    prestigePointGain: number
     challengeFivePower: number
 
-    transcendPointGain: Decimal
-    reincarnationPointGain: Decimal
+    transcendPointGain: number
+    reincarnationPointGain: number
 
-    produceFirst: Decimal
-    produceSecond: Decimal
-    produceThird: Decimal
-    produceFourth: Decimal
-    produceFifth: Decimal
-    produceTotal: Decimal
+    produceFirst: number
+    produceSecond: number
+    produceThird: number
+    produceFourth: number
+    produceFifth: number
+    produceTotal: number
 
-    produceFirstDiamonds: Decimal
-    produceSecondDiamonds: Decimal
-    produceThirdDiamonds: Decimal
-    produceFourthDiamonds: Decimal
-    produceFifthDiamonds: Decimal
-    produceDiamonds: Decimal
+    produceFirstDiamonds: number
+    produceSecondDiamonds: number
+    produceThirdDiamonds: number
+    produceFourthDiamonds: number
+    produceFifthDiamonds: number
+    produceDiamonds: number
 
-    produceFirstMythos: Decimal
-    produceSecondMythos: Decimal
-    produceThirdMythos: Decimal
-    produceFourthMythos: Decimal
-    produceFifthMythos: Decimal
-    produceMythos: Decimal
+    produceFirstMythos: number
+    produceSecondMythos: number
+    produceThirdMythos: number
+    produceFourthMythos: number
+    produceFifthMythos: number
+    produceMythos: number
 
-    produceFirstParticles: Decimal
-    produceSecondParticles: Decimal
-    produceThirdParticles: Decimal
-    produceFourthParticles: Decimal
-    produceFifthParticles: Decimal
-    produceParticles: Decimal
+    produceFirstParticles: number
+    produceSecondParticles: number
+    produceThirdParticles: number
+    produceFourthParticles: number
+    produceFifthParticles: number
+    produceParticles: number
 
-    producePerSecond: Decimal
-    producePerSecondDiamonds: Decimal
-    producePerSecondMythos: Decimal
-    producePerSecondParticles: Decimal
+    producePerSecond: number
+    producePerSecondDiamonds: number
+    producePerSecondMythos: number
+    producePerSecondParticles: number
 
-    uFourteenMulti: Decimal
-    uFifteenMulti: Decimal
+    uFourteenMulti: number
+    uFifteenMulti: number
     tuSevenMulti: number
     currentTab: string
 
@@ -586,8 +586,8 @@ export interface GlobalVariables {
     challengeBaseRequirements: number[]
 
     prestigeamount: number
-    taxdivisor: Decimal
-    taxdivisorcheck: Decimal
+    taxdivisor: number
+    taxdivisorcheck: number
     runemultiplierincrease: {
         one: number
         two: number
@@ -597,9 +597,9 @@ export interface GlobalVariables {
         [key: string]: number
     },
 
-    mythosupgrade13: Decimal
-    mythosupgrade14: Decimal
-    mythosupgrade15: Decimal
+    mythosupgrade13: number
+    mythosupgrade14: number
+    mythosupgrade15: number
     challengefocus: number
 
     maxexponent: number
@@ -614,17 +614,17 @@ export interface GlobalVariables {
 
     shopConfirmation: boolean,
 
-    globalAntMult: Decimal
-    antMultiplier: Decimal
+    globalAntMult: number
+    antMultiplier: number
 
-    antOneProduce: Decimal
-    antTwoProduce: Decimal
-    antThreeProduce: Decimal
-    antFourProduce: Decimal
-    antFiveProduce: Decimal
-    antSixProduce: Decimal
-    antSevenProduce: Decimal
-    antEightProduce: Decimal
+    antOneProduce: number
+    antTwoProduce: number
+    antThreeProduce: number
+    antFourProduce: number
+    antFiveProduce: number
+    antSixProduce: number
+    antSevenProduce: number
+    antEightProduce: number
 
     antCostGrowth: number[]
 
@@ -745,11 +745,11 @@ export interface GlobalVariables {
     corruptionPointMultipliers: number[]
 
     ascendBuildingProduction: {
-        first: Decimal
-        second: Decimal
-        third: Decimal
-        fourth: Decimal
-        fifth: Decimal
+        first: number
+        second: number
+        third: number
+        fourth: number
+        fifth: number
     },
     freeUpgradeAccelerator: number
     freeUpgradeMultiplier: number
@@ -759,7 +759,7 @@ export interface GlobalVariables {
 
     constUpgradeCosts: number[]
 
-    globalConstantMult: Decimal
+    globalConstantMult: number
     autoTalismanTimer: number
 
     autoChallengeTimerIncrement: number

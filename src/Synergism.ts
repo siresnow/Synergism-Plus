@@ -61,191 +61,191 @@ export const clearInt = new Proxy(clearInterval, {
 
 export const player: Player = {
     worlds: 0,
-    coins: new Decimal("1e2"),
-    coinsThisPrestige: new Decimal("1e2"),
-    coinsThisTranscension: new Decimal("1e2"),
-    coinsThisReincarnation: new Decimal("1e2"),
-    coinsTotal: new Decimal("100"),
+    coins: 1,
+    coinsThisPrestige: 1,
+    coinsThisTranscension: 1,
+    coinsThisReincarnation: 1,
+    coinsTotal: 1,
 
     firstOwnedCoin: 0,
-    firstGeneratedCoin: new Decimal("0"),
-    firstCostCoin: new Decimal("100"),
-    firstProduceCoin: 0.25,
+    firstGeneratedCoin: 0,
+    firstCostCoin: 1,
+    firstProduceCoin: 0.02,
 
     secondOwnedCoin: 0,
-    secondGeneratedCoin: new Decimal("0"),
-    secondCostCoin: new Decimal("2e3"),
-    secondProduceCoin: 2.5,
+    secondGeneratedCoin: 0,
+    secondCostCoin: 20,
+    secondProduceCoin: 0.2,
 
     thirdOwnedCoin: 0,
-    thirdGeneratedCoin: new Decimal("0"),
-    thirdCostCoin: new Decimal("4e4"),
-    thirdProduceCoin: 25,
+    thirdGeneratedCoin: 0,
+    thirdCostCoin: 400,
+    thirdProduceCoin: 2,
 
     fourthOwnedCoin: 0,
-    fourthGeneratedCoin: new Decimal("0"),
-    fourthCostCoin: new Decimal("8e5"),
-    fourthProduceCoin: 250,
+    fourthGeneratedCoin: 0,
+    fourthCostCoin: 8000,
+    fourthProduceCoin: 22,
 
     fifthOwnedCoin: 0,
-    fifthGeneratedCoin: new Decimal("0"),
-    fifthCostCoin: new Decimal("16e6"),
-    fifthProduceCoin: 2500,
+    fifthGeneratedCoin: 0,
+    fifthCostCoin: 160000,
+    fifthProduceCoin: 250,
 
     firstOwnedDiamonds: 0,
-    firstGeneratedDiamonds: new Decimal("0"),
-    firstCostDiamonds: new Decimal("100"),
+    firstGeneratedDiamonds: 0,
+    firstCostDiamonds: 1,
     firstProduceDiamonds: 0.05,
 
     secondOwnedDiamonds: 0,
-    secondGeneratedDiamonds: new Decimal("0"),
-    secondCostDiamonds: new Decimal("1e5"),
+    secondGeneratedDiamonds: 0,
+    secondCostDiamonds: 50,
     secondProduceDiamonds: 0.0005,
 
     thirdOwnedDiamonds: 0,
-    thirdGeneratedDiamonds: new Decimal("0"),
-    thirdCostDiamonds: new Decimal("1e15"),
+    thirdGeneratedDiamonds: 0,
+    thirdCostDiamonds: 2500,
     thirdProduceDiamonds: 0.00005,
 
     fourthOwnedDiamonds: 0,
-    fourthGeneratedDiamonds: new Decimal("0"),
-    fourthCostDiamonds: new Decimal("1e40"),
+    fourthGeneratedDiamonds: 0,
+    fourthCostDiamonds: 1e5,
     fourthProduceDiamonds: 0.000005,
 
     fifthOwnedDiamonds: 0,
-    fifthGeneratedDiamonds: new Decimal("0"),
-    fifthCostDiamonds: new Decimal("1e100"),
+    fifthGeneratedDiamonds: 0,
+    fifthCostDiamonds: 1e6,
     fifthProduceDiamonds: 0.000005,
 
     firstOwnedMythos: 0,
-    firstGeneratedMythos: new Decimal("0"),
-    firstCostMythos: new Decimal("1"),
+    firstGeneratedMythos: 0,
+    firstCostMythos: 1,
     firstProduceMythos: 1,
 
     secondOwnedMythos: 0,
-    secondGeneratedMythos: new Decimal("0"),
-    secondCostMythos: new Decimal("100"),
+    secondGeneratedMythos: 0,
+    secondCostMythos: 50,
     secondProduceMythos: 0.01,
 
     thirdOwnedMythos: 0,
-    thirdGeneratedMythos: new Decimal("0"),
-    thirdCostMythos: new Decimal("1e4"),
+    thirdGeneratedMythos: 0,
+    thirdCostMythos: 2500,
     thirdProduceMythos: 0.001,
 
     fourthOwnedMythos: 0,
-    fourthGeneratedMythos: new Decimal("0"),
-    fourthCostMythos: new Decimal("1e8"),
+    fourthGeneratedMythos: 0,
+    fourthCostMythos: 1e5,
     fourthProduceMythos: 0.0002,
 
     fifthOwnedMythos: 0,
-    fifthGeneratedMythos: new Decimal("0"),
-    fifthCostMythos: new Decimal("1e16"),
+    fifthGeneratedMythos: 0,
+    fifthCostMythos: 1e6,
     fifthProduceMythos: 0.00004,
 
     firstOwnedParticles: 0,
-    firstGeneratedParticles: new Decimal("0"),
-    firstCostParticles: new Decimal("1"),
+    firstGeneratedParticles: 0,
+    firstCostParticles: 1,
     firstProduceParticles: .25,
 
     secondOwnedParticles: 0,
-    secondGeneratedParticles: new Decimal("0"),
-    secondCostParticles: new Decimal("100"),
+    secondGeneratedParticles: 0,
+    secondCostParticles: 50,
     secondProduceParticles: .20,
 
     thirdOwnedParticles: 0,
-    thirdGeneratedParticles: new Decimal("0"),
-    thirdCostParticles: new Decimal("1e4"),
+    thirdGeneratedParticles: 0,
+    thirdCostParticles: 2500,
     thirdProduceParticles: .15,
 
     fourthOwnedParticles: 0,
-    fourthGeneratedParticles: new Decimal("0"),
-    fourthCostParticles: new Decimal("1e8"),
+    fourthGeneratedParticles: 0,
+    fourthCostParticles: 1e5,
     fourthProduceParticles: .10,
 
     fifthOwnedParticles: 0,
-    fifthGeneratedParticles: new Decimal("0"),
-    fifthCostParticles: new Decimal("1e16"),
+    fifthGeneratedParticles: 0,
+    fifthCostParticles: 1e6,
     fifthProduceParticles: .5,
 
     firstOwnedAnts: 0,
-    firstGeneratedAnts: new Decimal("0"),
-    firstCostAnts: new Decimal("1e800"),
+    firstGeneratedAnts: 0,
+    firstCostAnts: 1e16,
     firstProduceAnts: .0001,
 
     secondOwnedAnts: 0,
-    secondGeneratedAnts: new Decimal("0"),
-    secondCostAnts: new Decimal("3"),
+    secondGeneratedAnts: 0,
+    secondCostAnts: 20,
     secondProduceAnts: .00005,
 
     thirdOwnedAnts: 0,
-    thirdGeneratedAnts: new Decimal("0"),
-    thirdCostAnts: new Decimal("100"),
+    thirdGeneratedAnts: 0,
+    thirdCostAnts: 1e3,
     thirdProduceAnts: .00002,
 
     fourthOwnedAnts: 0,
-    fourthGeneratedAnts: new Decimal("0"),
-    fourthCostAnts: new Decimal("1e4"),
+    fourthGeneratedAnts: 0,
+    fourthCostAnts: 1e6,
     fourthProduceAnts: .00001,
 
     fifthOwnedAnts: 0,
-    fifthGeneratedAnts: new Decimal("0"),
-    fifthCostAnts: new Decimal("1e12"),
+    fifthGeneratedAnts: 0,
+    fifthCostAnts: 1e8,
     fifthProduceAnts: .000005,
 
     sixthOwnedAnts: 0,
-    sixthGeneratedAnts: new Decimal("0"),
-    sixthCostAnts: new Decimal("1e36"),
+    sixthGeneratedAnts: 0,
+    sixthCostAnts: 1e11,
     sixthProduceAnts: .000002,
 
     seventhOwnedAnts: 0,
-    seventhGeneratedAnts: new Decimal("0"),
-    seventhCostAnts: new Decimal("1e100"),
+    seventhGeneratedAnts: 0,
+    seventhCostAnts: 1e15,
     seventhProduceAnts: .000001,
 
     eighthOwnedAnts: 0,
-    eighthGeneratedAnts: new Decimal("0"),
-    eighthCostAnts: new Decimal("1e300"),
+    eighthGeneratedAnts: 0,
+    eighthCostAnts: 1e20,
     eighthProduceAnts: .00000001,
 
     ascendBuilding1: {
         cost: 1,
         owned: 0,
-        generated: new Decimal("0"),
+        generated: 0,
         multiplier: 0.01
     },
     ascendBuilding2: {
         cost: 10,
         owned: 0,
-        generated: new Decimal("0"),
+        generated: 0,
         multiplier: 0.01
     },
     ascendBuilding3: {
         cost: 100,
         owned: 0,
-        generated: new Decimal("0"),
+        generated: 0,
         multiplier: 0.01
     },
     ascendBuilding4: {
         cost: 1000,
         owned: 0,
-        generated: new Decimal("0"),
+        generated: 0,
         multiplier: 0.01
     },
     ascendBuilding5: {
         cost: 10000,
         owned: 0,
-        generated: new Decimal("0"),
+        generated: 0,
         multiplier: 0.01
     },
 
-    multiplierCost: new Decimal("1e5"),
+    multiplierCost: 1000,
     multiplierBought: 0,
 
-    acceleratorCost: new Decimal("500"),
+    acceleratorCost: 100,
     acceleratorBought: 0,
 
     acceleratorBoostBought: 0,
-    acceleratorBoostCost: new Decimal("1e3"),
+    acceleratorBoostCost: 100,
 
     upgrades: Array(141).fill(0),
 
@@ -253,13 +253,13 @@ export const player: Player = {
     transcendCount: 0,
     reincarnationCount: 0,
 
-    prestigePoints: new Decimal("0"),
-    transcendPoints: new Decimal("0"),
-    reincarnationPoints: new Decimal("0"),
+    prestigePoints: 0,
+    transcendPoints: 0,
+    reincarnationPoints: 0,
 
-    prestigeShards: new Decimal("0"),
-    transcendShards: new Decimal("0"),
-    reincarnationShards: new Decimal("0"),
+    prestigeShards: 0,
+    transcendShards: 0,
+    reincarnationShards: 0,
 
     toggles: {
         1: false,
@@ -440,7 +440,7 @@ export const player: Player = {
     sacrificeTimer: 0,
     quarkstimer: 90000,
 
-    antPoints: new Decimal("1"),
+    antPoints: 1,
     antUpgrades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     antSacrificePoints: 0,
     antSacrificeTimer: 900,
@@ -530,7 +530,7 @@ export const player: Player = {
         globalSpeed: 0,
 
     },
-    ascendShards: new Decimal("0"),
+    ascendShards: 0,
     autoAscend: false,
     autoAscendMode: "c10Completions",
     autoAscendThreshold: 1,
@@ -652,9 +652,7 @@ export const loadSynergy = (): void => {
                 return;
             }
 
-            if (isDecimal(player[prop])) {
-                return (player[prop] = new Decimal(data[prop]));
-            } else if (prop === 'codes') {
+            else if (prop === 'codes') {
                 return (player.codes = new Map(data[prop]));
             } else if (oldCodesUsed.includes(prop)) {
                 return;
@@ -739,11 +737,11 @@ export const loadSynergy = (): void => {
             player.thirdOwnedParticles = 0;
             player.fourthOwnedParticles = 0;
             player.fifthOwnedParticles = 0;
-            player.firstCostParticles = new Decimal("1");
-            player.secondCostParticles = new Decimal("1e2");
-            player.thirdCostParticles = new Decimal("1e4");
-            player.fourthCostParticles = new Decimal("1e8");
-            player.fifthCostParticles = new Decimal("1e16");
+            player.firstCostParticles = 1;
+            player.secondCostParticles = 100;
+            player.thirdCostParticles = 1e4;
+            player.fourthCostParticles = 1e8;
+            player.fifthCostParticles = 1e16;
             player.autoSacrificeToggle = false;
             player.autoResearchToggle = false;
             player.autoResearch = 0;
@@ -760,11 +758,11 @@ export const loadSynergy = (): void => {
             player.thirdOwnedParticles = 0;
             player.fourthOwnedParticles = 0;
             player.fifthOwnedParticles = 0;
-            player.firstCostParticles = new Decimal("1");
-            player.secondCostParticles = new Decimal("1e2");
-            player.thirdCostParticles = new Decimal("1e4");
-            player.fourthCostParticles = new Decimal("1e8");
-            player.fifthCostParticles = new Decimal("1e16");
+            player.firstCostParticles = 1;
+            player.secondCostParticles = 1e2;
+            player.thirdCostParticles = 1e4;
+            player.fourthCostParticles = 1e8;
+            player.fifthCostParticles = 1e16;
         }
         if (data.loaded10091 === undefined || !data.loaded10091 || player.researches[86] > 100 || player.researches[87] > 100 || player.researches[88] > 100 || player.researches[89] > 100 || player.researches[90] > 10) {
             player.loaded10091 = true;
@@ -802,47 +800,47 @@ export const loadSynergy = (): void => {
             player.codes.set(21, false);
 
             player.firstOwnedAnts = 0;
-            player.firstGeneratedAnts = new Decimal("0");
-            player.firstCostAnts = new Decimal("1e800");
+            player.firstGeneratedAnts = 0;
+            player.firstCostAnts = 1e16;
             player.firstProduceAnts = .0001;
 
             player.secondOwnedAnts = 0;
-            player.secondGeneratedAnts = new Decimal("0");
-            player.secondCostAnts = new Decimal("3");
+            player.secondGeneratedAnts = 0;
+            player.secondCostAnts = 3;
             player.secondProduceAnts = .00005;
 
             player.thirdOwnedAnts = 0;
-            player.thirdGeneratedAnts = new Decimal("0");
-            player.thirdCostAnts = new Decimal("100");
+            player.thirdGeneratedAnts = 0;
+            player.thirdCostAnts = 30;
             player.thirdProduceAnts = .00002;
 
             player.fourthOwnedAnts = 0;
-            player.fourthGeneratedAnts = new Decimal("0");
-            player.fourthCostAnts = new Decimal("1e4");
+            player.fourthGeneratedAnts = 0;
+            player.fourthCostAnts = 1000;
             player.fourthProduceAnts = .00001;
 
             player.fifthOwnedAnts = 0;
-            player.fifthGeneratedAnts = new Decimal("0");
-            player.fifthCostAnts = new Decimal("1e12");
+            player.fifthGeneratedAnts = 0;
+            player.fifthCostAnts = 1e6;
             player.fifthProduceAnts = .000005;
 
             player.sixthOwnedAnts = 0;
-            player.sixthGeneratedAnts = new Decimal("0");
-            player.sixthCostAnts = new Decimal("1e36");
+            player.sixthGeneratedAnts = 0;
+            player.sixthCostAnts = 1e10;
             player.sixthProduceAnts = .000002;
 
             player.seventhOwnedAnts = 0;
-            player.seventhGeneratedAnts = new Decimal("0");
-            player.seventhCostAnts = new Decimal("1e100");
+            player.seventhGeneratedAnts = 0;
+            player.seventhCostAnts = 1e15;
             player.seventhProduceAnts = .000001;
 
             player.eighthOwnedAnts = 0;
-            player.eighthGeneratedAnts = new Decimal("0");
-            player.eighthCostAnts = new Decimal("1e300");
+            player.eighthGeneratedAnts = 0;
+            player.eighthCostAnts = 1e20;
             player.eighthProduceAnts = .00000001;
 
             player.achievements.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            player.antPoints = new Decimal("1");
+            player.antPoints = 1;
 
             player.upgrades[38] = 0;
             player.upgrades[39] = 0;
@@ -919,7 +917,7 @@ export const loadSynergy = (): void => {
         }
 
         if (player.firstOwnedAnts < 1 && player.firstCostAnts.gte("1e1200")) {
-            player.firstCostAnts = new Decimal("1e800");
+            player.firstCostAnts = 1e16;
             player.firstOwnedAnts = 0;
         }
 
@@ -1024,10 +1022,6 @@ export const loadSynergy = (): void => {
 
         if (!player.dayCheck) {
             player.dayCheck = new Date(player.dayCheck)
-        }
-
-        for (let i = 1; i <= 5; i++) {
-            player['ascendBuilding' + i].generated = new Decimal(player['ascendBuilding' + i].generated)
         }
 
         while (player.achievements[252] === undefined) {
@@ -1158,11 +1152,6 @@ export const loadSynergy = (): void => {
         getElementById<HTMLInputElement>("exitAutoChallengeTimerInput").value = player.autoChallengeTimer.exit + '';
         document.getElementById("enterTimerValue").textContent = format(player.autoChallengeTimer.enter, 2, true) + "s"
         getElementById<HTMLInputElement>("enterAutoChallengeTimerInput").value = player.autoChallengeTimer.enter + '';
-
-        /* document.getElementById("runeshowpower1").textContent = "Speed Rune Bonus: " + "+" + format(Math.floor(G['rune1level'] * m)) + " Accelerators, +" + (G['rune1level']/2  * m).toPrecision(2) +"% Accelerators, +" + format(Math.floor(G['rune1level']/10 * m)) + " Accelerator Boosts."
-if (player.achievements[38] == 1)document.getElementById("runeshowpower2").textContent = "Duplication Rune Bonus: " + "+" + Math.floor(G['rune2level'] * m / 10) * Math.floor(10 + G['rune2level'] * m /10) / 2 + " +" + m *G['rune2level']/2 +"% Multipliers, -" + (100 * (1 - Math.pow(10, - G['rune2level']/500))).toPrecision(4)  + "% Tax Growth.";
-if (player.achievements[44] == 1)document.getElementById("runeshowpower3").textContent = "Prism Rune Bonus: " + "All Crystal Producer production multiplied by " + format(Decimal.pow(G['rune3level'] * m, 2).times(Decimal.pow(2, G['rune3level'] * m - 8).add(1))) + ", gain +" + format(Math.floor(G['rune3level']/10 * m)) + " free crystal levels.";
-if (player.achievements[102] == 1)document.getElementById("runeshowpower4").textContent = "Thrift Rune Bonus: " + "Delay all producer cost increases by " + (G['rune4level']/4 * m).toPrecision(3) + "% buildings. Increase offering recycling chance: " + G['rune4level']/8 + "%."; */
 
         corruptionStatsUpdate();
         for (let i = 0; i < 4; i++) {
@@ -1503,16 +1492,16 @@ export const updateAllTick = (): void => {
         a += 1;
     }
     if (player.upgrades[27] !== 0) {
-        a += Math.min(250, Math.floor(Decimal.log(player.coins.add(1), 1e3))) + Math.min(1750, Math.max(0, Math.floor(Decimal.log(player.coins.add(1), 1e15)) - 50));
+        a += Math.min(250, Math.floor(Math.pow(player.coins/1000, 1/3)) + Math.min(1750, Math.max(0, Math.floor(1/5 * Math.pow(player.coins / 1e3, 1/3)) - 50)));
     }
     if (player.upgrades[29] !== 0) {
         a += Math.floor(Math.min(2000, (player.firstOwnedCoin + player.secondOwnedCoin + player.thirdOwnedCoin + player.fourthOwnedCoin + player.fifthOwnedCoin) / 80))
     }
     if (player.upgrades[32] !== 0) {
-        a += Math.min(500, Math.floor(Decimal.log(player.prestigePoints.add(1), 1e25)));
+        a += Math.min(500, 25 * Math.floor(Math.log10(player.prestigePoints)));
     }
     if (player.upgrades[45] !== 0) {
-        a += Math.min(2500, Math.floor(Decimal.log(player.transcendShards.add(1), 10)));
+        a += Math.min(2500, 125 * Math.floor(Math.log10(player.transcendShards)));
     }
     if (player.achievements[5] !== 0) {
         a += Math.floor(player.firstOwnedCoin / 500)
@@ -1603,19 +1592,19 @@ export const updateAllTick = (): void => {
     }
 
     if (player.currentChallenge.transcension !== 1) {
-        G['acceleratorEffect'] = Decimal.pow(G['acceleratorPower'], G['totalAccelerator']);
+        G['acceleratorEffect'] = G['acceleratorPower'] * G['totalAccelerator'];
     }
 
     if (player.currentChallenge.transcension === 1) {
-        G['acceleratorEffect'] = Decimal.pow(G['acceleratorPower'], G['totalAccelerator'] + G['totalMultiplier']);
+        G['acceleratorEffect'] = G['acceleratorPower'] * (G['totalAccelerator'] + G['totalMultiplier']);
     }
-    G['acceleratorEffectDisplay'] = new Decimal(G['acceleratorPower'] * 100 - 100);
+    G['acceleratorEffectDisplay'] = G['acceleratorPower'] * 100 - 100;
     if (player.currentChallenge.reincarnation === 10) {
-        G['acceleratorEffect'] = new Decimal(1);
+        G['acceleratorEffect'] = 1;
     }
-    G['generatorPower'] = new Decimal(1);
+    G['generatorPower'] = 1;
     if (player.upgrades[11] > 0.5 && player.currentChallenge.reincarnation !== 7) {
-        G['generatorPower'] = Decimal.pow(1.02, G['totalAccelerator'])
+        G['generatorPower'] = 1 + 0.02 * G['totalAccelerator']
     }
 
 }
@@ -1624,7 +1613,7 @@ export const updateAllMultiplier = (): void => {
     let a = 0;
 
     if (player.upgrades[7] > 0) {
-        a += Math.min(4, 1 + Math.floor(Decimal.log(player.fifthOwnedCoin + 1, 10)));
+        a += Math.min(4, 1 + Math.floor(Math.log10(player.fifthOwnedCoin + 1)));
     }
     if (player.upgrades[9] > 0) {
         a += Math.floor(player.acceleratorBought / 10);
