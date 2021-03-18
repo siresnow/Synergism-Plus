@@ -1,4 +1,3 @@
-import type number from 'break_infinity.js';
 import { Category, ResetHistoryEntryUnion } from '../History';
 import { IPlatBaseCost } from '../Platonic';
 
