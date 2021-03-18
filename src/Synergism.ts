@@ -1637,7 +1637,7 @@ export const updateAllMultiplier = (): void => {
         a += Math.min(1000, Math.floor((player.firstOwnedCoin + player.secondOwnedCoin + player.thirdOwnedCoin + player.fourthOwnedCoin + player.fifthOwnedCoin) / 160))
     }
     if (player.upgrades[30] > 0) {
-        a += Math.min(75, Math.floor(Decimal.log(player.coins.add(1), 1e10))) + Math.min(925, Math.floor(Decimal.log(player.coins.add(1), 1e30)));
+        a += Math.min(75, Math.floor(Math.log10(player.coins + 1))) + Math.min(925, Math.floor(Decimal.log(player.coins.add(1), 1e30)));
     }
     if (player.upgrades[33] > 0) {
         a += G['totalAcceleratorBoost']
