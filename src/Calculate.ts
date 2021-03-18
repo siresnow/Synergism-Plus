@@ -2,7 +2,6 @@ import { player, format, interval, clearInt, saveSynergy, resourceGain, updateAl
 import { sumContents, productContents } from './Utility';
 import { Globals as G } from './Variables';
 import { CalcECC } from './Challenges';
-import Decimal from 'break_infinity.js';
 import { toggleTalismanBuy, updateTalismanInventory } from './Talismans';
 import { reset } from './Reset';
 import { achievementaward } from './Achievements';
@@ -259,7 +258,7 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
             a += 4
         }
         a += 1 / 200 * G['rune5level'] * G['effectiveLevelMult'] * (1 + player.researches[85] / 200)
-        a *= (1 + Math.pow(Decimal.log(player.reincarnationShards.add(1), 10), 2 / 3) / 4);
+        a *= (1 + Math.pow(player.reincarnationShards, 2 / 3) / 4);
         a *= Math.min(Math.pow(player.reincarnationcounter / 10, 2), 1)
         if (player.reincarnationcounter >= 5) {
             a *= Math.max(1, player.reincarnationcounter / 10)
@@ -280,7 +279,7 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
         }
         b += 0.2 * player.researches[24]
         b += 1 / 200 * G['rune5level'] * G['effectiveLevelMult'] * (1 + player.researches[85] / 200)
-        b *= (1 + Math.pow(Decimal.log(player.transcendShards.add(1), 10), 1 / 2) / 5);
+        b *= (1 + Math.pow(player.transcendShards, 1 / 2) / 5);
         b *= (1 + CalcECC('reincarnation', player.challengecompletions[8]) / 25)
         b *= Math.min(Math.pow(player.transcendcounter / 10, 2), 1)
         if (player.transcendCount >= 5) {
@@ -303,7 +302,7 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
         }
         c += 0.2 * player.researches[24]
         c += 1 / 200 * G['rune5level'] * G['effectiveLevelMult'] * (1 + player.researches[85] / 200)
-        c *= (1 + Math.pow(Decimal.log(player.prestigeShards.add(1), 10), 1 / 2) / 5);
+        c *= (1 + Math.pow(player.prestigeShards, 1 / 2) / 5);
         c *= (1 + CalcECC('reincarnation', player.challengecompletions[6]) / 50)
         c *= Math.min(Math.pow(player.prestigecounter / 10, 2), 1)
         if (player.prestigeCount >= 5) {
@@ -369,7 +368,7 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
 export const calculateObtainium = () => {
     G['obtainiumGain'] = 1;
     if (player.upgrades[69] > 0) {
-        G['obtainiumGain'] *= Math.min(10, new Decimal(Decimal.pow(Decimal.log(G['reincarnationPointGain'].add(10), 10), 0.5)).toNumber())
+        G['obtainiumGain'] *= Math.min(10, Math.pow(G['reincarnationPointGain'], 0.5))
     }
     if (player.upgrades[72] > 0) {
         G['obtainiumGain'] *= Math.min(50, (1 + 2 * player.challengecompletions[6] + 2 * player.challengecompletions[7] + 2 * player.challengecompletions[8] + 2 * player.challengecompletions[9] + 2 * player.challengecompletions[10]))
@@ -419,7 +418,7 @@ export const calculateObtainium = () => {
     if (player.reincarnationCount >= 5) {
         G['obtainiumGain'] *= Math.max(1, player.reincarnationcounter / 10)
     }
-    G['obtainiumGain'] *= Math.pow(Decimal.log(player.transcendShards.add(1), 10) / 300, 2)
+    G['obtainiumGain'] *= (1 + Math.pow(player.transcendShards  + 1, 1/2) / 300)
     G['obtainiumGain'] = Math.pow(G['obtainiumGain'], Math.min(1, G['illiteracyPower'][player.usedCorruptions[5]] * (1 + 9 / 100 * player.platonicUpgrades[9] * Math.min(100, Math.log(player.researchPoints + 10) / Math.log(10)))))
     G['obtainiumGain'] *= (1 + 4 / 100 * player.cubeUpgrades[42])
     G['obtainiumGain'] *= (1 + 3 / 100 * player.cubeUpgrades[43])
@@ -627,8 +626,8 @@ export const calculateAntSacrificeELO = () => {
     G['antELO'] = 0;
     G['effectiveELO'] = 0;
     const antUpgradeSum = sumContents(player.antUpgrades);
-    if (player.antPoints.gte("1e40")) {
-        G['antELO'] += Decimal.log(player.antPoints, 10);
+    if (player.antPoints >= 1e40) {
+        G['antELO'] += Math.log10(player.antPoints);
         G['antELO'] += 1 / 2 * antUpgradeSum;
         G['antELO'] += 1 / 10 * player.firstOwnedAnts
         G['antELO'] += 1 / 5 * player.secondOwnedAnts
@@ -902,10 +901,10 @@ export function calculateCubeMultiplier(calcMult = true) {
         1 + 0.03 / 100 * player.researches[192] * player.antUpgrades[12-1],
         1 + calculateCorruptionPoints() / 400 * G['effectiveRuneSpiritPower'][2],
         1 + 0.004 / 100 * player.researches[200],
-        1 + 0.01 * Decimal.log(player.ascendShards.add(1), 4) * Math.min(1, player.constantUpgrades[10]),
+        1 + 0.01 * Math.log(player.ascendShards + 1) / Math.log(4) * Math.min(1, player.constantUpgrades[10]),
         1 + 0.25 * player.cubeUpgrades[30],
-        1 + player.achievements[193] * Decimal.log(player.ascendShards.add(1), 10) / 400,
-        1 + player.achievements[195] * Decimal.log(player.ascendShards.add(1), 10) / 400,
+        1 + player.achievements[193] * Math.log10(player.ascendShards + 1) / 400,
+        1 + player.achievements[195] * Math.log10(player.ascendShards + 1) / 400,
         1 + 4 / 100 * (player.achievements[198] + player.achievements[199] + player.achievements[200]) + 3 / 100 * player.achievements[201],
         1 + player.achievements[240] * Math.max(0.1, 1 / 20 * Math.log(calculateTimeAcceleration() + 0.01) / Math.log(10)),
         1 + 6 / 100 * player.achievements[250] + 10 / 100 * player.achievements[251],
@@ -1059,13 +1058,13 @@ export const CalcCorruptionStuff = () => {
 
     let tesseractGain = 1;
     tesseractGain *= Math.pow(1 + Math.max(0, (effectiveScore - 1e5)) / 1e4, .35);
-    tesseractGain *= (1 + 0.01 * Decimal.log(player.ascendShards.add(1), 4) * Math.min(1, player.constantUpgrades[10]));
+    tesseractGain *= (1 + 0.01 * Math.log(player.ascendShards + 1) / Math.log(4) * Math.min(1, player.constantUpgrades[10]));
     if (effectiveScore >= 100000) {
         tesseractGain += 2
     }
     tesseractGain *= (1 + 0.25 * player.cubeUpgrades[30])
     tesseractGain *= (1 + 1 / 200 * player.cubeUpgrades[38] * sumContents(player.usedCorruptions))
-    tesseractGain *= (1 + player.achievements[195] * Decimal.log(player.ascendShards.add(1), 10) / 400)
+    tesseractGain *= (1 + player.achievements[195] * Math.log10(player.ascendShards + 1) / 400)
     tesseractGain *= Math.pow(Math.min(1, player.ascensionCounter / 10), 2) * (1 + (1 / 4 * player.achievements[204] + 1 / 4 * player.achievements[211] + 1 / 2 * player.achievements[218]) * Math.max(0, player.ascensionCounter / 10 - 1))
     tesseractGain *= (1 + 0.00015 * corruptionLevelSum * player.platonicUpgrades[2])
     if (effectiveScore > 7.5e12 && player.platonicUpgrades[10] > 0) {
@@ -1116,7 +1115,7 @@ export const CalcCorruptionStuff = () => {
     platonicGain *= (G['challenge15Rewards'].cube1 * G['challenge15Rewards'].cube2 * G['challenge15Rewards'].cube3 * G['challenge15Rewards'].cube4)
     platonicGain *= (1 + player.achievements[223] * Math.min(2, player.ascensionCount / 1.337e9))
     platonicGain *= (1 + 4 / 100 * (player.achievements[219] + player.achievements[220] + player.achievements[221]) + 3 / 100 * player.achievements[222])
-    platonicGain *= (1 + player.achievements[196] * 1 / 5000 * Decimal.log(player.ascendShards.add(1), 10))
+    platonicGain *= (1 + player.achievements[196] * 1 / 5000 * Math.log10(player.ascendShards + 1))
     platonicGain *= (1 + player.achievements[240] * Math.max(0.1, 1 / 20 * Math.log(speed + 0.01) / Math.log(10)))
     platonicGain *= (1 + 6 / 100 * player.achievements[250] + 10 / 100 * player.achievements[251])
 
