@@ -16,7 +16,7 @@ import { toggleAscStatPerSecond, toggleAntMaxBuy, toggleAntAutoSacrifice, toggle
 import { c15RewardUpdate } from './Statistics';
 import { resetHistoryRenderAllTables } from './History';
 import { calculatePlatonicBlessings } from './PlatonicCubes';
-import { antSacrificePointsToMultiplier, autoBuyAnts, sacrificeAnts, calculateCrumbToCoinExp } from './Ants';
+import { autoBuyAnts, sacrificeAnts, calculateCrumbToCoinExp } from './Ants';
 import { calculatetax } from './Tax';
 import { ascensionAchievementCheck, challengeachievementcheck, achievementaward, resetachievementcheck, buildingAchievementCheck } from './Achievements';
 import { reset } from './Reset';
@@ -406,12 +406,6 @@ export const player: Player = {
         Array.from({ length: 30 }, (_, i) => [i + 1, false])
     ),
 
-    loaded1009: true,
-    loaded1009hotfix1: true,
-    loaded10091: true,
-    loaded1010: true,
-    loaded10101: true,
-
     shopUpgrades: {
         offeringPotion: 1,
         obtainiumPotion: 1,
@@ -583,9 +577,6 @@ export const player: Player = {
     tesseractQuarkDaily: 0,
     hypercubeOpenedDaily: 0,
     hypercubeQuarkDaily: 0,
-    loadedOct4Hotfix: false,
-    loadedNov13Vers: true,
-    loadedDec16Vers: true,
     version: '2.5.0~alpha-1',
     rngCode: 0
 }
@@ -596,8 +587,6 @@ export const blankSave = Object.assign({}, player, {
 
 export const saveSynergy = (button?: boolean): void => {
     player.offlinetick = Date.now();
-    player.loaded1009 = true;
-    player.loaded1009hotfix1 = true;
 
     // shallow hold, doesn't modify OG object nor is affected by modifications to OG
     const p = Object.assign({}, player, { 
@@ -629,11 +618,6 @@ export const loadSynergy = (): void => {
     if (data) {
         const hasOwnProperty = {}.hasOwnProperty;
 
-        const oldCodesUsed = Array.from(
-            { length: 24 }, // old codes only went up to 24
-            (_, i) => 'offerpromo' + (i + 1) + 'used'
-        );
-
         // size before loading
         const size = player.codes.size;
 
@@ -653,8 +637,6 @@ export const loadSynergy = (): void => {
 
             else if (prop === 'codes') {
                 return (player.codes = new Map(data[prop]));
-            } else if (oldCodesUsed.includes(prop)) {
-                return;
             } else if (Array.isArray(data[prop])) {
                 // in old savefiles, some arrays may be 1-based instead of 0-based (newer)
                 // so if the lengths of the savefile key is greater than that of the player obj
@@ -689,357 +671,13 @@ export const loadSynergy = (): void => {
             }
         }
 
-        if(!('rngCode' in data)) {
-            player.rngCode = 0;
-        }
-
-        if (data.loaded1009 === undefined || !data.loaded1009) {
-            player.loaded1009 = false;
-        }
-        if (data.loaded1009hotfix1 === undefined || !data.loaded1009hotfix1) {
-            player.loaded1009hotfix1 = false;
-        }
-        if (data.loaded10091 === undefined) {
-            player.loaded10091 = false;
-        }
-        if (data.loaded1010 === undefined) {
-            player.loaded1010 = false;
-        }
-        if (data.loaded10101 === undefined) {
-            player.loaded10101 = false;
-        }
-
-        //Fix dumb shop stuff
-        //First, if shop isn't even defined we just define it as so
-        if(data.shopUpgrades === undefined){
-            player.shopUpgrades = Object.assign({}, blankSave.shopUpgrades);
-        }
-
-        if (player.researches[76] === undefined) {
-            player.codes.set(13, false);
-            player.researches.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-            player.achievements.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-            player.maxofferings = player.runeshards;
-            player.maxobtainium = player.researchPoints;
-            player.researchPoints += 51200 * player.researches[50];
-            player.researches[50] = 0;
-        }
-
-        player.maxofferings = player.maxofferings || 0;
-        player.maxobtainium = player.maxobtainium || 0;
-        player.runeshards = player.runeshards || 0;
-        player.researchPoints = player.researchPoints || 0;
-
-        if (!data.loaded1009 || data.loaded1009hotfix1 === null || data.shopUpgrades.offeringPotion === undefined) {
-            player.firstOwnedParticles = 0;
-            player.secondOwnedParticles = 0;
-            player.thirdOwnedParticles = 0;
-            player.fourthOwnedParticles = 0;
-            player.fifthOwnedParticles = 0;
-            player.firstCostParticles = 1;
-            player.secondCostParticles = 100;
-            player.thirdCostParticles = 1e4;
-            player.fourthCostParticles = 1e8;
-            player.fifthCostParticles = 1e16;
-            player.autoSacrificeToggle = false;
-            player.autoResearchToggle = false;
-            player.autoResearch = 0;
-            player.autoSacrifice = 0;
-            player.sacrificeTimer = 0;
-            player.loaded1009 = true;
-            player.codes.set(18, false);
-        }
-        if (!data.loaded1009hotfix1) {
-            player.loaded1009hotfix1 = true;
-            player.codes.set(19, true);
-            player.firstOwnedParticles = 0;
-            player.secondOwnedParticles = 0;
-            player.thirdOwnedParticles = 0;
-            player.fourthOwnedParticles = 0;
-            player.fifthOwnedParticles = 0;
-            player.firstCostParticles = 1;
-            player.secondCostParticles = 1e2;
-            player.thirdCostParticles = 1e4;
-            player.fourthCostParticles = 1e8;
-            player.fifthCostParticles = 1e16;
-        }
-        if (data.loaded10091 === undefined || !data.loaded10091 || player.researches[86] > 100 || player.researches[87] > 100 || player.researches[88] > 100 || player.researches[89] > 100 || player.researches[90] > 10) {
-            player.loaded10091 = true;
-            player.researchPoints += 7.5e8 * player.researches[82];
-            player.researchPoints += 2e8 * player.researches[83];
-            player.researchPoints += 4.5e9 * player.researches[84];
-            player.researchPoints += 2.5e7 * player.researches[86];
-            player.researchPoints += 7.5e7 * player.researches[87];
-            player.researchPoints += 3e8 * player.researches[88];
-            player.researchPoints += 1e9 * player.researches[89];
-            player.researchPoints += 2.5e7 * player.researches[90];
-            player.researchPoints += 1e8 * player.researches[91];
-            player.researchPoints += 2e9 * player.researches[92];
-            player.researchPoints += 9e9 * player.researches[93];
-            player.researchPoints += 7.25e10 * player.researches[94];
-            player.researches[86] = 0;
-            player.researches[87] = 0;
-            player.researches[88] = 0;
-            player.researches[89] = 0;
-            player.researches[90] = 0;
-            player.researches[91] = 0;
-            player.researches[92] = 0;
-        }
-
-        //const shop = data.shopUpgrades as LegacyShopUpgrades & Player['shopUpgrades'];
-        if (
-            data.achievements[169] === undefined || 
-            player.achievements[169] === undefined || 
-        //    (shop.antSpeed === undefined && shop.antSpeedLevel === undefined) || 
-        //    (shop.antSpeed === undefined && typeof shop.antSpeedLevel === 'undefined') || 
-            data.loaded1010 === undefined || 
-            data.loaded1010 === false
-        ) {
-            player.loaded1010 = true;
-            player.codes.set(21, false);
-
-            player.firstOwnedAnts = 0;
-            player.firstGeneratedAnts = 0;
-            player.firstCostAnts = 1e16;
-            player.firstProduceAnts = .0001;
-
-            player.secondOwnedAnts = 0;
-            player.secondGeneratedAnts = 0;
-            player.secondCostAnts = 3;
-            player.secondProduceAnts = .00005;
-
-            player.thirdOwnedAnts = 0;
-            player.thirdGeneratedAnts = 0;
-            player.thirdCostAnts = 30;
-            player.thirdProduceAnts = .00002;
-
-            player.fourthOwnedAnts = 0;
-            player.fourthGeneratedAnts = 0;
-            player.fourthCostAnts = 1000;
-            player.fourthProduceAnts = .00001;
-
-            player.fifthOwnedAnts = 0;
-            player.fifthGeneratedAnts = 0;
-            player.fifthCostAnts = 1e6;
-            player.fifthProduceAnts = .000005;
-
-            player.sixthOwnedAnts = 0;
-            player.sixthGeneratedAnts = 0;
-            player.sixthCostAnts = 1e10;
-            player.sixthProduceAnts = .000002;
-
-            player.seventhOwnedAnts = 0;
-            player.seventhGeneratedAnts = 0;
-            player.seventhCostAnts = 1e15;
-            player.seventhProduceAnts = .000001;
-
-            player.eighthOwnedAnts = 0;
-            player.eighthGeneratedAnts = 0;
-            player.eighthCostAnts = 1e20;
-            player.eighthProduceAnts = .00000001;
-
-            player.achievements.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            player.antPoints = 1;
-
-            player.upgrades[38] = 0;
-            player.upgrades[39] = 0;
-            player.upgrades[40] = 0;
-
-            player.upgrades[76] = 0;
-            player.upgrades[77] = 0;
-            player.upgrades[78] = 0;
-            player.upgrades[79] = 0;
-            player.upgrades[80] = 0;
-
-
-        //    player.shopUpgrades.antSpeed = 0;
-        //    player.shopUpgrades.shopTalisman = 0;
-
-            player.antUpgrades = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-            player.unlocks.rrow4 = false;
-            player.researchPoints += 3e7 * player.researches[50];
-            player.researchPoints += 2e9 * player.researches[96];
-            player.researchPoints += 5e9 * player.researches[97];
-            player.researchPoints += 3e10 * player.researches[98];
-            player.researches[50] = 0;
-            player.researches[96] = 0;
-            player.researches[97] = 0;
-            player.researches[98] = 0;
-            player.researches.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-
-            player.talismanLevels = [0, 0, 0, 0, 0, 0, 0];
-            player.talismanRarity = [1, 1, 1, 1, 1, 1, 1];
-
-            player.talismanShards = 0;
-            player.commonFragments = 0;
-            player.uncommonFragments = 0;
-            player.rareFragments = 0;
-            player.epicFragments = 0;
-            player.legendaryFragments = 0;
-            player.mythicalFragments = 0;
-            player.buyTalismanShardPercent = 10;
-
-            player.talismanOne = [null, -1, 1, 1, 1, -1];
-            player.talismanTwo = [null, 1, 1, -1, -1, 1];
-            player.talismanThree = [null, 1, -1, 1, 1, -1];
-            player.talismanFour = [null, -1, -1, 1, 1, 1];
-            player.talismanFive = [null, 1, 1, -1, -1, 1];
-            player.talismanSix = [null, 1, 1, 1, -1, -1];
-            player.talismanSeven = [null, -1, 1, -1, 1, 1];
-
-            player.antSacrificePoints = 0;
-            player.antSacrificeTimer = 0;
-
-            player.obtainiumpersecond = 0;
-            player.maxobtainiumpersecond = 0;
-
-        }
-
-        if (data.loaded10101 === undefined || data.loaded10101 === false) {
-            player.loaded10101 = true;
-
-            const refundThese = [0, 31, 32, 61, 62, 63, 64, 76, 77, 78, 79, 80,
-                81, 98, 104, 105, 106, 107, 108,
-                109, 110, 111, 112, 113, 114, 115, 116,
-                117, 118, 119, 120, 121, 122, 123, 125];
-            const refundReward = [0, 2, 20, 5, 10, 80, 5e3, 1e7, 1e7, 2e7, 3e7, 4e7,
-                2e8, 3e10, 1e11, 1e12, 2e11, 1e12, 2e10,
-                2e11, 1e12, 2e13, 5e13, 1e14, 2e14, 5e14, 1e15,
-                2e15, 1e16, 1e15, 1e16, 1e14, 1e15, 1e15, 1e20];
-            for (let i = 1; i < refundThese.length; i++) {
-                player.researchPoints += player.researches[refundThese[i]] * refundReward[i]
-                player.researches[refundThese[i]] = 0;
-            }
-            player.autoAntSacrifice = false;
-            player.antMax = false;
-        }
-
-        if (player.firstOwnedAnts < 1 && player.firstCostAnts > 1e16) {
-            player.firstCostAnts = 1e16;
-            player.firstOwnedAnts = 0;
-        }
-
+        
         checkVariablesOnLoad(data)
-        if (data.ascensionCount === undefined || player.ascensionCount === 0) {
-            player.ascensionCount = 0;
-            if (player.ascensionCounter === undefined || (player.ascensionCounter === 0 && player.prestigeCount > 0)) {
-                player.ascensionCounter = 86400 * 90;
-            }
-            player.cubeUpgrades = [null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            player.wowCubes = 0;
-            player.wowTesseracts = 0;
-            player.wowHypercubes = 0;
-            player.cubeBlessings = {
-                accelerator: 0,
-                multiplier: 0,
-                offering: 0,
-                runeExp: 0,
-                obtainium: 0,
-                antSpeed: 0,
-                antSacrifice: 0,
-                antELO: 0,
-                talismanBonus: 0,
-                globalSpeed: 0
-            }
-        }
-        if (data.autoAntSacTimer === undefined) {
-            player.autoAntSacTimer = 900;
-        }
-        if (data.autoAntSacrificeMode === undefined) {
-            player.autoAntSacrificeMode = 0;
-        }
-
-        if (player.cubeUpgrades[7] === 0 && player.toggles[22]) {
-            for (let i = 22; i <= 26; i++) {
-                player.toggles[i] = false
-            }
-        }
-
-        if (player.transcendCount < 0) {
-            player.transcendCount = 0
-        }
-        if (player.reincarnationCount < 0) {
-            player.reincarnationCount = 0;
-        }
-        if (player.runeshards < 0) {
-            player.runeshards = 0;
-        }
-        if (player.researchPoints < 0) {
-            player.researchPoints = 0;
-        }
-
-        if (player.resettoggle1 === 0) {
-            player.resettoggle1 = 1;
-            player.resettoggle2 = 1;
-            player.resettoggle3 = 1;
-        }
-        if (player.tesseractAutoBuyerToggle === 0) {
-            player.tesseractAutoBuyerToggle = 1;
-        }
-        if (player.reincarnationCount < 0.5 && player.unlocks.rrow4 === true) {
-            player.unlocks = {
-                coinone: false,
-                cointwo: false,
-                cointhree: false,
-                coinfour: false,
-                prestige: false,
-                generation: false,
-                transcend: false,
-                reincarnate: false,
-                rrow1: false,
-                rrow2: false,
-                rrow3: false,
-                rrow4: false
-            }
-        }
-
-        if (data.history === undefined || player.history === undefined) {
-            player.history = { ants: [], ascend: [], reset: [] };
-        }
-        if (data.historyShowPerSecond === undefined || player.historyShowPerSecond === undefined) {
-            player.historyShowPerSecond = false;
-            player.historyCountMax = 10;
-        }
-
-        if (!Number.isInteger(player.ascendBuilding1.cost)) {
-            player.ascendBuilding1.cost = 1;
-            player.ascendBuilding1.owned = 0;
-            player.ascendBuilding2.cost = 10;
-            player.ascendBuilding2.owned = 0;
-            player.ascendBuilding3.cost = 100;
-            player.ascendBuilding3.owned = 0;
-            player.ascendBuilding4.cost = 1000;
-            player.ascendBuilding4.owned = 0;
-            player.ascendBuilding5.cost = 10000;
-            player.ascendBuilding5.owned = 0;
-        }
-
-        if (!player.dayCheck) {
-            player.dayCheck = new Date(player.dayCheck)
-        }
-
-        while (player.achievements[252] === undefined) {
-            player.achievements.push(0)
-        }
-        while (player.researches[200] === undefined) {
-            player.researches.push(0)
-        }
-        while (player.upgrades[140] === undefined) {
-            player.upgrades.push(0)
-        }
-
-
+        
         if (player.saveString === undefined || player.saveString === "" || player.saveString === "Synergism-v1011Test.txt") {
             player.saveString = "Synergism-$VERSION$-$TIME$.txt"
         }
         getElementById<HTMLInputElement>("saveStringInput").value = player.saveString
-
-        player.wowCubes = player.wowCubes || 0;
 
         for (let j = 1; j < 126; j++) {
             upgradeupdate(j);
@@ -2753,7 +2391,7 @@ export const updateAll = (): void => {
     if (player.researches[175] > 0) {
         for (let i = 1; i <= 10; i++) {
             metaData = getConstUpgradeMetadata(i)
-            if (player.ascendShards >= (metaData[1])) {
+            if (player.ascendShards >= (metaData[1].toNumber())) {
                 buyConstantUpgrades(i, true);
             }
         }

@@ -3,7 +3,6 @@ import { sumContents, productContents } from './Utility';
 import { Globals as G } from './Variables';
 import { CalcECC } from './Challenges';
 import { toggleTalismanBuy, updateTalismanInventory } from './Talismans';
-import { reset } from './Reset';
 import { achievementaward } from './Achievements';
 import { redeemShards } from './Runes';
 import { resetNames } from './types/Synergism';
@@ -831,14 +830,7 @@ export const calculateOffline = (forceTime = 0) => {
     }
 
     player.offlinetick = updatedTime
-    if (!player.loadedNov13Vers) {
-        if (player.challengecompletions[14] > 0 || player.highestchallengecompletions[14] > 0) {
-            const ascCount = player.ascensionCount;
-            reset("ascensionChallenge");
-            player.ascensionCount = (ascCount + 1)
-        }
-        player.loadedNov13Vers = true
-    }
+    
     saveSynergy();
     updateTalismanInventory();
     calculateObtainium();

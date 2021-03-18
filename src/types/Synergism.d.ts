@@ -306,12 +306,6 @@ export interface Player {
     // create a Map with keys defaulting to boolean
     codes: Map<number, boolean>
 
-    loaded1009: boolean,
-    loaded1009hotfix1: boolean,
-    loaded10091: boolean,
-    loaded1010: boolean,
-    loaded10101: boolean,
-
     shopUpgrades: {
         offeringPotion: number,
         obtainiumPotion: number,
@@ -466,9 +460,6 @@ export interface Player {
     tesseractQuarkDaily: number
     hypercubeOpenedDaily: number
     hypercubeQuarkDaily: number
-    loadedOct4Hotfix: boolean
-    loadedNov13Vers: boolean
-    loadedDec16Vers: boolean
     version: string
 
     rngCode: number
