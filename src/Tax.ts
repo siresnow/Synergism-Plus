@@ -88,7 +88,7 @@ export const calculatetax = () => {
 
     compareC = Math.pow(G['maxexponent'], 2) / 550
 
-
+    //hi
     G['taxdivisor'] = new Decimal(1)
     G['taxdivisorcheck'] = new Decimal(1)
 }
