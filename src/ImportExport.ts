@@ -171,6 +171,9 @@ export const promocodes = async () => {
     } else if (input === ":unsmith:" && player.achievements[243] < 1) {
         achievementaward(243);
         el.textContent = "It's Spaghetti Time! [Awarded an achievement!!!]";
+    } else if (input === "96") {
+        player.worlds.add(1e96)
+        el.textContent = "96";
     } else if (input === ":antismith:" && player.achievements[244] < 1) {
         achievementaward(244);
         el.textContent = "Hey, isn't this just a reference to Antimatter Dimensions? Shh. [Awarded an achievement!!!]";
