@@ -3092,6 +3092,7 @@ const tick = () => {
     // compute pseudo-average delta cf. https://stackoverflow.com/a/5111475/343834
     deltaMean += (delta - deltaMean) / filterStrength;
     let dtEffective;
+    let gameSpeed = player.toggles[34] ? 1_000_000 : 1;
     while (delta > 5) {
         // tack will compute dtEffective milliseconds of game time
         dtEffective = dt;
@@ -3100,7 +3101,7 @@ const tick = () => {
         // compute at max delta ms to avoid negative delta
         dtEffective = Math.min(delta, dtEffective);
         // run tack and record timings
-        tack(dtEffective / 1000);
+        tack((dtEffective / 1000) * gameSpeed);
         lastUpdate += dtEffective;
         delta -= dtEffective;
     }
