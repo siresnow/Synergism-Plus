@@ -26,6 +26,8 @@ import { autoUpgrades } from './Automation';
 import { redeemShards } from './Runes';
 import { updateCubeUpgradeBG } from './Cubes';
 import { corruptionLoadoutTableUpdate, corruptionButtonsAdd, corruptionLoadoutTableCreate, corruptionStatsUpdate, updateCorruptionLoadoutNames } from './Corruptions';
+import './hotkeys';
+import { startHotkeys } from './hotkeys';
 import { generateEventHandlers } from './EventListeners';
 import { addTimers, automaticTools } from './Helper';
 //import { LegacyShopUpgrades } from './types/LegacySynergism';
@@ -3394,6 +3396,7 @@ export const reloadShit = async (reset = false) => {
     createTimer();
     constantIntervals();
     changeTabColor();
+    startHotkeys();
 
     eventCheck();
     interval(() => eventCheck(), 15000);
