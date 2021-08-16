@@ -53,12 +53,13 @@ export const visualUpdateBuildings = () => {
         DOMCacheGetOrSet("buyacceleratorboost").textContent = "Cost: " + format(player.acceleratorBoostCost) + " Diamonds."
 
         // update the tax text
-        let warning = "";
+        //let warning = "";
         if (player.reincarnationCount > 0.5) {
-            warning = `Your tax also caps your Coin gain at ${format(Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))}/s.`
+            //warning = `Your tax also caps your Coin gain at ${format(Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))}/s.`
         }
         DOMCacheGetOrSet("taxinfo").textContent =
-            `Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes! ${warning}`
+            //`Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes! ${warning}`
+            `Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes!`
     }
 
     if (G['buildingSubTab'] === "diamond") {

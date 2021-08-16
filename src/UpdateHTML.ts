@@ -375,6 +375,10 @@ export const revealStuff = () => {
         "toggle30": player.reincarnationCount > 0.5, // Settings - Confirmations - Reincarnation
         "toggle31": player.ascensionCount > 0, // Settings - Confirmations - Ascension
         "toggle32": player.achievements[173] > 0, // Settings - Confirmations - Ant Sacrifice
+        //MODIFICATIONS START HERE
+        "toggle33": true, //Settings - Mods - NoTax Toggle
+        "toggle34": true, //Settings - Mods - Testing Toggle
+        "toggle35": true, //Settings - Mods - Testing Toggle
     }
 
     Object.keys(automationUnlocks).forEach(key => {

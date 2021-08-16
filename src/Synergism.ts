@@ -34,8 +34,6 @@ import { checkVariablesOnLoad } from './CheckVariables';
 import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, ChallengeHepteract, ChronosHepteract, hepteractEffective, HyperrealismHepteract, MultiplierHepteract, QuarkHepteract } from './Hepteracts';
 import { QuarkHandler } from './Quark';
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
-import './Hotkeys';
-import { startHotkeys } from './Hotkeys';
 import { updatePlatonicUpgradeBG } from './Platonic';
 import { testing, version, lastUpdated } from './Config';
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -302,6 +300,8 @@ export const player: Player = {
         31: true,
         32: true,
         33: false,
+        34: false,
+        35: false,
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -3394,7 +3394,6 @@ export const reloadShit = async (reset = false) => {
     createTimer();
     constantIntervals();
     changeTabColor();
-    startHotkeys();
 
     eventCheck();
     interval(() => eventCheck(), 15000);
