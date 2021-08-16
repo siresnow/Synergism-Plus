@@ -41,6 +41,7 @@ Your Mod should now be running locally! If you make a update to your Mod but sti
 This is the part where I have to leave you to your own devices.<br>
 From here you can venture into the code and modify whatever you please, just be careful to fix any errors that you may cause!<br>
 Important: Make sure whatever effect your Mod has only runs when the toggle is enabled. Thanks :)<br>
+You can check if your Mod is toggled by using a simple if statment: `if(player.toggles[your Toggle Number])`<br>
 Have fun!
 
 ### Adding your Mod to Synergism Plus
