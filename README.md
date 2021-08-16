@@ -45,6 +45,6 @@ Have fun!
 
 ### Adding your Mod to Synergism Plus
 Are you finished with your Mod and ready to share it with the world? Here's a simple guide on how to do that!<br>
-First, be sure there are no errors. No Mods that cause errors will be added, sorry. (this does not include errors that are caused by conflicts with other Mods)<br>
+First, be sure there are no errors. No Mods that cause errors will be added, sorry.<br>
 Then simply create a PR (pull request) to the Synergism Plus repo, I'll merge it as soon as I see it :)
 
