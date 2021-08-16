@@ -40,10 +40,11 @@ Your Mod should now be running locally! If you make a update to your Mod but sti
 ### Coding your Mod
 This is the part where I have to leave you to your own devices.<br>
 From here you can venture into the code and modify whatever you please, just be careful to fix any errors that you may cause!<br>
+Important: Make sure whatever effect your Mod has only runs when the toggle is enabled. Thanks :)<br>
 Have fun!
 
 ### Adding your Mod to Synergism Plus
 Are you finished with your Mod and ready to share it with the world? Here's a simple guide on how to do that!<br>
-First, be sure there are no errors. No Mods that cause errors will be added, sorry. (this does not include errors that are caused by conflicts with other Mods)<br>
-Then simply create a PR (pull request) to the Synergism Plus repo, I'll merge it as soon as I see it :)
+First, be sure there are no errors. No Mods that cause errors will be added, sorry.<br>
+Then simply create a PR (pull request) to the Synergism Plus repo, I'll merge it as soon as I see it! Once I do your Mod will be on the main site! 
 
