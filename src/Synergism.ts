@@ -2441,7 +2441,7 @@ export const updateAntMultipliers = (): void => {
         G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 0.2)
     }
 
-    G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1 - 0.9 / 90 * Math.min(99, sumContents(player.usedCorruptions)))
+    G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1 )
     G['globalAntMult'] = Decimal.pow(G['globalAntMult'], G['extinctionMultiplier'][player.usedCorruptions[7]])
     G['globalAntMult'] = G['globalAntMult'].times(G['challenge15Rewards'].antSpeed)
     //V2.5.0: Moved ant shop upgrade as 'uncorruptable'
