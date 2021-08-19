@@ -1,5 +1,7 @@
 import Decimal from 'break_infinity.js';
 import { GlobalVariables } from './types/Synergism';
+import has = Reflect.has;
+import {player} from "./Synergism";
 
 export const Globals: GlobalVariables = {
     runediv: [1.5, 2, 3, 5, 8, 1, 1],
