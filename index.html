@@ -313,7 +313,7 @@
         </div>
 
         <div id="buildingtext">
-            <p class="prestigeunlock" id="taxinfo" style="color: orange;">Due to your excessive wealth, all coin production is divided by 1.00 to pay taxes!</p>
+            <p id="taxinfo" style="color: orange;">Due to your excessive wealth, all coin production is divided by 1.00 to pay taxes!</p>
             <p class="prestigeunlock" id="buildinghotkeys">Press [1], [2], [3], [4], or [5] to buy the corresponding tier starting from the top. Press [A] to buy Accelerator, [M] to buy Multiplier, or [B] to buy Accelerator Boost. Press [left arrow] or [right arrow] to switch tabs. Enjoy!</p>
         </div>
     </div>
@@ -385,6 +385,8 @@
             <p id="crystalupgradedescription" style="color: white; text-align: center;">Hover over a crystal upgrade to get information!</p>
             <p id="crystalupgradescost" style="color: white; text-align: center;">Cost: --- crystals</p>
             <p id="crystalupgradeslevel" style="color: white; text-align: center;">Level: ---</p>
+            <br><br>
+            <p class="supertax" id="crystaltaxinfo" style="color: orange;">Due to your excessive wealth, all diamond buildings are divided by 1.00 to pay taxes!</p>
         </div>
 
         <div id="autocrystalbuild">
@@ -449,6 +451,9 @@
         <p id="transcendshardinfo" style="color:pink; text-align: center">You have 1.39e+100394 Transcend Shards, providing 1,214,593 multiplier power boosts.</p>
         <p id="transcendshardbonus" style="color: limegreen; text-align: center;">Each Multiplier Boost increases the base effect of Multipliers by 0.005!</p>
 
+        <br><br>
+        <p class="supertax" id="mythostaxinfo" style="color: orange;">Due to your excessive wealth, all mythos buildings are divided by 1.00 to pay taxes!</p>
+        
         <button class="auto" id="toggle21" toggleid="21" format="Auto Transcend [$]">Auto: Off</button>
 
         <button id="transcendautotoggle" style="border:2px solid green;"></button>
@@ -512,6 +517,9 @@
             <p id="reincarnationshardinfo" style="color:lime; text-align: center">You have 1.39e+100394 Atoms, providing a building power of 3.02.</p>
             <p id="reincarnationCrystalInfo" style="color: cyan; text-align: center; display: none;">Thanks to research 3x9, you also multiply Crystal producion by 1.</p>
             <p id="reincarnationMythosInfo" style="color:plum; text-align: center; display: none;">Thanks to research 3x10, you also multiply Mythos Shard production by 1.</p>
+
+            <br><br>
+        <p class="supertax" id="particletaxinfo" style="color: orange;">Due to your excessive wealth, all particle buildings are divided by 1.00 to pay taxes!</p>
             <button class="auto" id="toggle27" toggleid="27" format="Auto Reincarnate [$]">Auto: Off</button>
         </div>
 
@@ -619,6 +627,9 @@
             <p id="constUpgradeLevel" style="color: white">Current Level: <span id="constUpgradeLevel2" style="color: orchid">---</span></p>
             <p id="constUpgradeCost" style="color: white">Cost: <span id="constUpgradeCost2" style="color: orchid">---</span> from your Constant</p>
             <p id="constUpgradeEffect1" style="color: white">Current Effect: <span id="constUpgradeEffect2" style="color: orchid">---</span></p>
+            
+            <br><br>
+        <p class="supertax" id="tessertaxinfo" style="color: orange;">Due to your excessive wealth, all tesseract buildings are divided by 1.00 to pay taxes!</p>
         </div>
         <div id="ascendautomation">
             <button id="tesseractautobuytoggle" style="border:2px solid red;">Auto Buy: OFF</button>
@@ -2990,6 +3001,7 @@
         <div>List of Mods:</div>
         <div>NoTax: Removes all Taxes</div>
         <div>1MxSpeed: Makes the game run a million times as fast</div>
+        <div>SuperTax: All Taxes start instantly and are much stronger (other stuff is buffed to compensate; only balanced up to first Transcension, although you can go further if ya want)</div>
         <div class="confirmationToggles">
             <div class="center"></div>
             <div class="modToggle">
@@ -3004,7 +3016,7 @@
             </div>
             <div class="modToggle">
                 <br>
-                <span>Placeholder</span>
+                <span>SuperTax</span>
                 <button class="auto modSquare" id="toggle35" toggleid="35" format="[$]" style="border:2px solid green">[ON]</button>
             </div>
         </div>

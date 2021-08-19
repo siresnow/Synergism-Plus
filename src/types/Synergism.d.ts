@@ -621,6 +621,10 @@ export interface GlobalVariables {
     prestigeamount: number
     taxdivisor: Decimal
     taxdivisorcheck: Decimal
+    crystaltax: Decimal
+    mythostax: Decimal
+    particletax: Decimal
+    tessertax: Decimal
     runemultiplierincrease: {
         one: number
         two: number

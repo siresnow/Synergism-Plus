@@ -1678,7 +1678,7 @@ export const updateAllTick = (): void => {
     }
 
     G['acceleratorPower'] = Math.pow(
-        1.1 + G['tuSevenMulti'] * 
+        (player.toggles[35]?1.25:1.1) + G['tuSevenMulti'] * 
         (G['totalAcceleratorBoost'] / 100) 
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20), 
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
@@ -1868,7 +1868,7 @@ export const updateAllMultiplier = (): void => {
         c7 = 1.25
     }
 
-    G['multiplierPower'] = 2 + 0.005 * G['totalMultiplierBoost'] * c7
+    G['multiplierPower'] = (player.toggles[35]?5:2) + 0.005 * G['totalMultiplierBoost'] * c7
 
     //No MA and Sadistic will always override Transcend Challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
@@ -2225,21 +2225,21 @@ export const resourceGain = (dt: number): void => {
     G['produceFourthDiamonds'] = player.fourthGeneratedDiamonds.add(player.fourthOwnedDiamonds).times(player.fourthProduceDiamonds).times(G['globalCrystalMultiplier'])
     G['produceFifthDiamonds'] = player.fifthGeneratedDiamonds.add(player.fifthOwnedDiamonds).times(player.fifthProduceDiamonds).times(G['globalCrystalMultiplier'])
 
-    player.fourthGeneratedDiamonds = player.fourthGeneratedDiamonds.add(G['produceFifthDiamonds'].times(dt / 0.025))
-    player.thirdGeneratedDiamonds = player.thirdGeneratedDiamonds.add(G['produceFourthDiamonds'].times(dt / 0.025))
-    player.secondGeneratedDiamonds = player.secondGeneratedDiamonds.add(G['produceThirdDiamonds'].times(dt / 0.025))
-    player.firstGeneratedDiamonds = player.firstGeneratedDiamonds.add(G['produceSecondDiamonds'].times(dt / 0.025))
+    player.fourthGeneratedDiamonds = player.fourthGeneratedDiamonds.add(G['produceFifthDiamonds'].div(G['crystaltax']).times(dt / 0.025))
+    player.thirdGeneratedDiamonds = player.thirdGeneratedDiamonds.add(G['produceFourthDiamonds'].div(G['crystaltax']).times(dt / 0.025))
+    player.secondGeneratedDiamonds = player.secondGeneratedDiamonds.add(G['produceThirdDiamonds'].div(G['crystaltax']).times(dt / 0.025))
+    player.firstGeneratedDiamonds = player.firstGeneratedDiamonds.add(G['produceSecondDiamonds'].div(G['crystaltax']).times(dt / 0.025))
     G['produceDiamonds'] = G['produceFirstDiamonds'];
 
     if (player.currentChallenge.transcension !== 3 && player.currentChallenge.reincarnation !== 10) {
-        player.prestigeShards = player.prestigeShards.add(G['produceDiamonds'].times(dt / 0.025))
+        player.prestigeShards = player.prestigeShards.add(G['produceDiamonds'].div(G['crystaltax']).times(dt / 0.025))
     }
 
-    G['produceFifthMythos'] = player.fifthGeneratedMythos.add(player.fifthOwnedMythos).times(player.fifthProduceMythos).times(G['globalMythosMultiplier']).times(G['grandmasterMultiplier']).times(G['mythosupgrade15'])
-    G['produceFourthMythos'] = player.fourthGeneratedMythos.add(player.fourthOwnedMythos).times(player.fourthProduceMythos).times(G['globalMythosMultiplier'])
-    G['produceThirdMythos'] = player.thirdGeneratedMythos.add(player.thirdOwnedMythos).times(player.thirdProduceMythos).times(G['globalMythosMultiplier']).times(G['mythosupgrade14'])
-    G['produceSecondMythos'] = player.secondGeneratedMythos.add(player.secondOwnedMythos).times(player.secondProduceMythos).times(G['globalMythosMultiplier'])
-    G['produceFirstMythos'] = player.firstGeneratedMythos.add(player.firstOwnedMythos).times(player.firstProduceMythos).times(G['globalMythosMultiplier']).times(G['mythosupgrade13'])
+    G['produceFifthMythos'] = player.fifthGeneratedMythos.add(player.fifthOwnedMythos).times(player.fifthProduceMythos).times(G['globalMythosMultiplier']).times(G['grandmasterMultiplier']).times(G['mythosupgrade15']).div(G['mythostax'])
+    G['produceFourthMythos'] = player.fourthGeneratedMythos.add(player.fourthOwnedMythos).times(player.fourthProduceMythos).times(G['globalMythosMultiplier']).div(G['mythostax'])
+    G['produceThirdMythos'] = player.thirdGeneratedMythos.add(player.thirdOwnedMythos).times(player.thirdProduceMythos).times(G['globalMythosMultiplier']).times(G['mythosupgrade14']).div(G['mythostax'])
+    G['produceSecondMythos'] = player.secondGeneratedMythos.add(player.secondOwnedMythos).times(player.secondProduceMythos).times(G['globalMythosMultiplier']).div(G['mythostax'])
+    G['produceFirstMythos'] = player.firstGeneratedMythos.add(player.firstOwnedMythos).times(player.firstProduceMythos).times(G['globalMythosMultiplier']).times(G['mythosupgrade13']).div(G['mythostax'])
     player.fourthGeneratedMythos = player.fourthGeneratedMythos.add(G['produceFifthMythos'].times(dt / 0.025));
     player.thirdGeneratedMythos = player.thirdGeneratedMythos.add(G['produceFourthMythos'].times(dt / 0.025));
     player.secondGeneratedMythos = player.secondGeneratedMythos.add(G['produceThirdMythos'].times(dt / 0.025));
@@ -2254,11 +2254,11 @@ export const resourceGain = (dt: number): void => {
     if (player.upgrades[67] > 0.5) {
         pm = pm.times(Decimal.pow(1.03, player.firstOwnedParticles + player.secondOwnedParticles + player.thirdOwnedParticles + player.fourthOwnedParticles + player.fifthOwnedParticles))
     }
-    G['produceFifthParticles'] = player.fifthGeneratedParticles.add(player.fifthOwnedParticles).times(player.fifthProduceParticles)
-    G['produceFourthParticles'] = player.fourthGeneratedParticles.add(player.fourthOwnedParticles).times(player.fourthProduceParticles)
-    G['produceThirdParticles'] = player.thirdGeneratedParticles.add(player.thirdOwnedParticles).times(player.thirdProduceParticles)
-    G['produceSecondParticles'] = player.secondGeneratedParticles.add(player.secondOwnedParticles).times(player.secondProduceParticles)
-    G['produceFirstParticles'] = player.firstGeneratedParticles.add(player.firstOwnedParticles).times(player.firstProduceParticles).times(pm)
+    G['produceFifthParticles'] = player.fifthGeneratedParticles.add(player.fifthOwnedParticles).times(player.fifthProduceParticles).div(G['particletax'])
+    G['produceFourthParticles'] = player.fourthGeneratedParticles.add(player.fourthOwnedParticles).times(player.fourthProduceParticles).div(G['particletax'])
+    G['produceThirdParticles'] = player.thirdGeneratedParticles.add(player.thirdOwnedParticles).times(player.thirdProduceParticles).div(G['particletax'])
+    G['produceSecondParticles'] = player.secondGeneratedParticles.add(player.secondOwnedParticles).times(player.secondProduceParticles).div(G['particletax'])
+    G['produceFirstParticles'] = player.firstGeneratedParticles.add(player.firstOwnedParticles).times(player.firstProduceParticles).div(G['particletax']).times(pm)
     player.fourthGeneratedParticles = player.fourthGeneratedParticles.add(G['produceFifthParticles'].times(dt / 0.025));
     player.thirdGeneratedParticles = player.thirdGeneratedParticles.add(G['produceFourthParticles'].times(dt / 0.025));
     player.secondGeneratedParticles = player.secondGeneratedParticles.add(G['produceThirdParticles'].times(dt / 0.025));
@@ -2277,7 +2277,7 @@ export const resourceGain = (dt: number): void => {
 
     createAnts(dt);
     for (let i = 1; i <= 5; i++) {
-        G['ascendBuildingProduction'][G['ordinals'][5 - i as ZeroToFour]] = (player[`ascendBuilding${6 - i as OneToFive}` as const]['generated']).add(player[`ascendBuilding${6 - i as OneToFive}` as const]['owned']).times(player[`ascendBuilding${i as OneToFive}` as const]['multiplier']).times(G['globalConstantMult'])
+        G['ascendBuildingProduction'][G['ordinals'][5 - i as ZeroToFour]] = (player[`ascendBuilding${6 - i as OneToFive}` as const]['generated']).add(player[`ascendBuilding${6 - i as OneToFive}` as const]['owned']).times(player[`ascendBuilding${i as OneToFive}` as const]['multiplier']).times(G['globalConstantMult']).div(G['tessertax'])
 
         if (i !== 5) {
             const fiveMinusI = 5 - i as 1|2|3|4;

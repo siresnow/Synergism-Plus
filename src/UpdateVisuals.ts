@@ -53,13 +53,13 @@ export const visualUpdateBuildings = () => {
         DOMCacheGetOrSet("buyacceleratorboost").textContent = "Cost: " + format(player.acceleratorBoostCost) + " Diamonds."
 
         // update the tax text
-        //let warning = "";
-        if (player.reincarnationCount > 0.5) {
-            //warning = `Your tax also caps your Coin gain at ${format(Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))}/s.`
+        let warning = "";
+        if (player.reincarnationCount > 0.5 || player.toggles[35]) {
+            warning = `Your tax also caps your Coin gain at ${format(Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))}/s.`
         }
         DOMCacheGetOrSet("taxinfo").textContent =
-            //`Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes! ${warning}`
-            `Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes!`
+            `Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes! ${warning}`
+            //`Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes!`
     }
 
     if (G['buildingSubTab'] === "diamond") {
@@ -75,7 +75,7 @@ export const visualUpdateBuildings = () => {
             const ith = G['ordinals'][i - 1 as ZeroToFour];
 
             DOMCacheGetOrSet("prestigetext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedDiamonds` as const], 0, true) + " [+" + format(player[`${ith}GeneratedDiamonds` as const], 2) + "]"
-            DOMCacheGetOrSet("prestigetext" + (2 * i)).textContent = perSecNames[i] + ": " + format((place).times(40), 2)
+            DOMCacheGetOrSet("prestigetext" + (2 * i)).textContent = perSecNames[i] + ": " + format((place).div(G['crystaltax']).times(40), 2)
             DOMCacheGetOrSet("buydiamond" + i).textContent = "Cost: " + format(player[`${ith}CostDiamonds` as const], 2) + " Diamonds"
         }
 
@@ -86,6 +86,9 @@ export const visualUpdateBuildings = () => {
         if (player.resettoggle1 === 2) {
             DOMCacheGetOrSet("autoprestige").textContent = "Prestige when the autotimer is at least " + (player.prestigeamount) + " real-life seconds. [Toggle number above]. Current timer: " + format(G['autoResetTimers'].prestige, 1) + "s."
         }
+        // update the crystal tax text
+        DOMCacheGetOrSet("crystaltaxinfo").textContent =
+            `Due to your excessive wealth, all Diamond Buildings are divided by ${format(G['crystaltax'], 2)} to pay taxes!`
     }
 
     if (G['buildingSubTab'] === "mythos") {
@@ -111,6 +114,9 @@ export const visualUpdateBuildings = () => {
         if (player.resettoggle2 === 2) {
             DOMCacheGetOrSet("autotranscend").textContent = "Transcend when the autotimer is at least " + (player.transcendamount) + " real-life seconds. [Toggle number above]. Current timer: " + format(G['autoResetTimers'].transcension, 1) + "s."
         }
+
+        DOMCacheGetOrSet("mythostaxinfo").textContent =
+            `Due to your excessive wealth, all Mythos Buildings are divided by ${format(G['mythostax'], 2)} to pay taxes!`
     }
 
     if (G['buildingSubTab'] === "particle") {
@@ -142,6 +148,9 @@ export const visualUpdateBuildings = () => {
         if (player.resettoggle3 === 2) {
             DOMCacheGetOrSet("autoreincarnate").textContent = "Reincarnate when the autotimer is at least " + (player.reincarnationamount) + " real-life seconds. [Toggle number above]. Current timer: " + format(G['autoResetTimers'].reincarnation, 1) + "s."
         }
+
+        DOMCacheGetOrSet("particletaxinfo").textContent =
+            `Due to your excessive wealth, all Particle Buildings are divided by ${format(G['particletax'], 2)} to pay taxes!`
     }
 
     if (G['buildingSubTab'] === "tesseract") {
@@ -158,6 +167,8 @@ export const visualUpdateBuildings = () => {
         DOMCacheGetOrSet("tesseractInfo").textContent = "You have " + format(player.wowTesseracts) + " Wow! Tesseracts. Gain more by beating Challenge 10 on each Ascension."
         DOMCacheGetOrSet("ascendShardInfo").textContent = "You have a mathematical constant of " + format(player.ascendShards, 2) + ". Taxes are divided by " + format(Math.pow(Decimal.log(player.ascendShards.add(1), 10) + 1, 1 + .2 / 60 * player.challengecompletions[10] * player.upgrades[125] + 0.1 * player.platonicUpgrades[5] + 0.2 * player.platonicUpgrades[10] + (G['platonicBonusMultiplier'][5] - 1)), 4, true) + "."
         DOMCacheGetOrSet("autotessbuyeramount").textContent = "Auto buyer will save at least " + format(player.tesseractAutoBuyerAmount) + " tesseracts. [Enter number above]."
+        DOMCacheGetOrSet("tessertaxinfo").textContent =
+            `Due to your excessive wealth, all Tesseract Buildings are divided by ${format(G['tessertax'], 2)} to pay taxes!`
     }
 }
 

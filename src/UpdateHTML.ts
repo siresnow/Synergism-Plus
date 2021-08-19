@@ -190,6 +190,11 @@ export const revealStuff = () => {
         ex.style.display = player.challenge15Exponent >= 1e15 ? "block" : "none";
     }
 
+    const example33 = document.getElementsByClassName("supertax") as HTMLCollectionOf<HTMLElement>;
+    for (const ex of Array.from(example33)) { // in SuperTax mod //
+        ex.style.display = player.toggles[35] ? "block" : "none";
+    }
+
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
     hepts.style.display = (player.achievements[255] > 0) ? "block" : "none";
 
