@@ -124,7 +124,7 @@ export const corruptionDisplay = (index: number) => {
 
 export const corruptionStatsUpdate = () => {
     for (let i = 1; i <= 9; i++) {
-        // https://discord.com/channels/677271830838640680/706329553639047241/841749032841379901
+        // https://discord.com/channels/677271830838640680/706329553639047241/841749032841379901 //
         const a = DOMCacheGetOrSet(`corrCurrent${i}`);
         const b = DOMCacheGetOrSet(`corrNext${i}`)
         if (a) a.textContent = format(player.usedCorruptions[i])
