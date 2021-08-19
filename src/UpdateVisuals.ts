@@ -413,7 +413,7 @@ export const visualUpdateCorruptions = () => {
     DOMCacheGetOrSet("corruptionHypercubesValue").textContent = format(metaData[6])
     DOMCacheGetOrSet("corruptionPlatonicCubesValue").textContent = format(metaData[7])
     DOMCacheGetOrSet("corruptionHepteractsValue").textContent = format(metaData[8])
-    DOMCacheGetOrSet("corruptionAntExponentValue").textContent = format((1 - 0.9 / 90 * sumContents(player.usedCorruptions)) * G['extinctionMultiplier'][player.usedCorruptions[7]], 3)
+    DOMCacheGetOrSet("corruptionAntExponentValue").textContent = format(1, 3)
     DOMCacheGetOrSet("corruptionSpiritBonusValue").textContent = format(calculateCorruptionPoints()/400,2,true)
 }
 
