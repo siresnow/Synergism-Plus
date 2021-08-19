@@ -9,7 +9,7 @@ import { achievementaward } from './Achievements';
 export const calculatetax = () => {
     let c = 0;
     let e = 1;
-    let f = 1;
+    let f = player.toggles[36]?1.1:1;
     let compareC = 0;
     G['produceFirst'] = (player.firstGeneratedCoin.add(player.firstOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinOneMulti']).times(player.firstProduceCoin);
     G['produceSecond'] = (player.secondGeneratedCoin.add(player.secondOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinTwoMulti']).times(player.secondProduceCoin);
@@ -53,7 +53,7 @@ export const calculatetax = () => {
     if (player.challengecompletions[6] > 0) {
         f /= 1.075
     }
-    let exponent = 1;
+    let exponent = player.toggles[36]?2.5:1;
     exponent *= e;
     exponent *= (1 - 1 / 20 * player.researches[51] - 1 / 40 * player.researches[52] - 1 / 80 * player.researches[53] - 1 / 160 * player.researches[54] - 1 / 320 * player.researches[55])
     exponent *= (1 - 0.05 / 1800 * (player.achievements[45] + player.achievements[46] + 2 * player.achievements[47]) * Math.min(player.prestigecounter, 1800))
@@ -74,7 +74,18 @@ export const calculatetax = () => {
     if (player.upgrades[121] > 0) {
         exponent *= 0.5
     }
-    G['maxexponent'] = Math.floor(275 / (Decimal.log(1.01, 10) * exponent)) - 1
+    let mxe = Math.floor((player.toggles[36]?.5:275) / (Decimal.log(player.toggles[36]?1.05:1.01, 10) * exponent)) - 1
+    G['maxexponent'] = mxe;
+    if (player.toggles[36]) {
+        let mxemult = 1+Object.keys(player.upgrades).filter(x => player.upgrades[Number(x)]==1 && (Number(x)<3||Number(x)==5||(Number(x)>=21&&Number(x)<23)||Number(x)==25||Number(x)==26)).length/3;
+        if (player.upgrades[6]>.5) mxemult += new Decimal(G['totalCoinOwned'] + 1).times(Decimal.min(1e30, Decimal.pow(1.008, G['totalCoinOwned']))).max(1).log10()/5;
+        if (player.upgrades[10]>.5) mxemult += 1;
+        if (player.upgrades[11]>.5) mxemult += Math.log10(player.acceleratorBought*1.1+1);
+        if (player.upgrades[12]>.5) mxemult += Object.keys(player.upgrades).filter(i => player.upgrades[Number(i)]>.5).length/11.5;
+        if (player.upgrades[27]>.5) mxemult += Math.log10(player.prestigePoints.plus(1).log10()+1)
+        if (player.upgrades[101]>.5) mxemult += Math.log10(player.prestigeShards.plus(1).log10()+1)
+        G['maxexponent'] *= mxemult;
+    }
     const a2 = Math.min(G['maxexponent'], Math.floor(Decimal.log(G['produceTotal'].add(1), 10)));
 
     if (player.currentChallenge.ascension === 13 && G['maxexponent'] <= 99999 && player.achievements[249] < 1) {
@@ -82,19 +93,40 @@ export const calculatetax = () => {
     }
 
     if (a2 >= 1) {
-        c = Math.pow(a2, 2) / 550
+        c = Math.pow(a2, 2) / (player.toggles[36]?1:550)
     }
 
 
-    compareC = Math.pow(G['maxexponent'], 2) / 550
-
+    compareC = Math.pow(mxe, 2) / (player.toggles[36]?1:550)
 
     if (!player.toggles[33]){
-        G['taxdivisor'] = Decimal.pow(1.01, (c) * (exponent))
-        G['taxdivisorcheck'] = Decimal.pow(1.01, (compareC) * (exponent))
+        let base = 1.01;
+        if (player.toggles[36]) {
+            base = 1.05;
+            if (G['produceFourth'].gte(1e4)) exponent /= 1.175;
+            if (G['produceFifth'].gte(1e5)) exponent /= 1.2; // what, you thought I'd fix actually fix these bugs? nah I'll just hardcode a temporary solution ;)
+            c /= Object.keys(player.upgrades).filter(x => player.upgrades[Number(x)]==1 && ((Number(x)>=3&&Number(x)<=4)||(Number(x)>=23&&Number(x)<=24))).length*1.25+1
+            compareC /= Object.keys(player.upgrades).filter(x => player.upgrades[Number(x)]==1 && ((Number(x)>=3&&Number(x)<=4)||(Number(x)>=23&&Number(x)<=24))).length*1.25+1
+            if (exponent>=200) exponent = Math.pow(exponent, 2)/200;
+        }
+
+        G['taxdivisor'] = Decimal.pow(base, (c) * (exponent)).times(player.toggles[36]?(G["produceTotal"].plus(1).log10()+1):1)
+        G['taxdivisorcheck'] = Decimal.pow(base, (compareC) * (exponent)).times(player.toggles[36]?(G["produceTotal"].plus(1).log10()+1):1)
     }
     else{
         G['taxdivisor'] = new Decimal(1)
         G['taxdivisorcheck'] = new Decimal(1)
+    }
+
+    if (player.toggles[36]) {
+        G['crystaltax'] = Decimal.pow(2, G['produceFirstDiamonds'].plus(1).times(G['produceSecondDiamonds'].plus(1)).times(G['produceThirdDiamonds'].plus(1)).times(G['produceFourthDiamonds'].plus(1)).times(G['produceFifthDiamonds'].plus(1)).plus(1).log10());
+        G['mythostax'] = Decimal.pow(3, G['produceFirstMythos'].plus(1).times(G['produceSecondMythos'].plus(1)).times(G['produceThirdMythos'].plus(1)).times(G['produceFourthMythos'].plus(1)).times(G['produceFifthMythos'].plus(1)).plus(1).log10());
+        G['particletax'] = Decimal.pow(4, G['produceFirstParticles'].plus(1).times(G['produceSecondParticles'].plus(1)).times(G['produceThirdParticles'].plus(1)).times(G['produceFourthParticles'].plus(1)).times(G['produceFifthParticles'].plus(1)).plus(1).log10());
+        G['tessertax'] = Decimal.pow(5, G['ascendBuildingProduction'].first.plus(1).times(G['ascendBuildingProduction'].second.plus(1)).times(G['ascendBuildingProduction'].third.plus(1)).times(G['ascendBuildingProduction'].fourth.plus(1)).times(G['ascendBuildingProduction'].fifth.plus(1)).plus(1).log10());
+    } else {
+        G['crystaltax'] = new Decimal(1);
+        G['mythostax'] = new Decimal(1);
+        G['particletax'] = new Decimal(1);
+        G['tessertax'] = new Decimal(1);
     }
 }

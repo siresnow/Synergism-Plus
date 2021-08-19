@@ -302,7 +302,17 @@ export const upgradeeffects = (i: number) => {
 }
 
 export const upgradedescriptions = (i: number) => {
-    const y = upgdesc[`upgdesc${i}`];
+    let y = upgdesc[`upgdesc${i}`];
+    if (player.toggles[36]) {
+        if (i<=5) y = y + " In addition, "+((i>=3&&i<=4)?"Coin Taxes start much later.":"the coin gain limit is increased greatly.");
+        if (i==6) y = "Increase all production & the coin gain limit based on producers bought.";
+        if (i==10) y = y + " In addition, the coin gain limit is increased greatly."
+        if (i==11) y = y + " In addition, Purchased Accelerators increase the coin gain limit at a reduced rate."
+        if (i==12) y = y + " In addition, # of Upgrades bought increases the coin gain limit."
+        if (i>=21&&i<=26) y = y + " In addition, "+((i>=23&&i<=24)?"Coin Taxes start much later.":"the coin gain limit is increased greatly.");
+        if (i==27) y = y + " In addition, the coin gain limit is increased based on your Diamonds."
+        if (i==101) y = y + " In addition, Crystals also increase the coin gain limit at a very reduced rate."
+    }
     const z = player.upgrades[i] > 0.5 ? ' BOUGHT!' : '';
 
     const el = DOMCacheGetOrSet("upgradedescription");
