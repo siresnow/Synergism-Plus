@@ -192,7 +192,7 @@ export const revealStuff = () => {
 
     const example33 = document.getElementsByClassName("supertax") as HTMLCollectionOf<HTMLElement>;
     for (const ex of Array.from(example33)) { // in SuperTax mod //
-        ex.style.display = player.toggles[35] ? "block" : "none";
+        ex.style.display = player.toggles[36] ? "block" : "none";
     }
 
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
@@ -382,8 +382,9 @@ export const revealStuff = () => {
         "toggle32": player.achievements[173] > 0, // Settings - Confirmations - Ant Sacrifice
         //MODIFICATIONS START HERE
         "toggle33": true, //Settings - Mods - NoTax Toggle
-        "toggle34": true, //Settings - Mods - Testing Toggle
-        "toggle35": true, //Settings - Mods - Testing Toggle
+        "toggle34": true, //Settings - Mods - 1MxSpeed Toggle
+        "toggle35": true, //Settings - Mods - ??? Toggle
+        "toggle36": true, //Settings - Mods - SuperTax Toggle
     }
 
     Object.keys(automationUnlocks).forEach(key => {

@@ -54,7 +54,7 @@ export const visualUpdateBuildings = () => {
 
         // update the tax text
         let warning = "";
-        if (player.reincarnationCount > 0.5 || player.toggles[35]) {
+        if (player.reincarnationCount > 0.5 || player.toggles[36]) {
             warning = `Your tax also caps your Coin gain at ${format(Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))}/s.`
         }
         DOMCacheGetOrSet("taxinfo").textContent =

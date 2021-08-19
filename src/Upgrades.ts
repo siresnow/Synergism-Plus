@@ -303,7 +303,7 @@ export const upgradeeffects = (i: number) => {
 
 export const upgradedescriptions = (i: number) => {
     let y = upgdesc[`upgdesc${i}`];
-    if (player.toggles[35]) {
+    if (player.toggles[36]) {
         if (i<=5) y = y + " In addition, "+((i>=3&&i<=4)?"Coin Taxes start much later.":"the coin gain limit is increased greatly.");
         if (i==6) y = "Increase all production & the coin gain limit based on producers bought.";
         if (i==10) y = y + " In addition, the coin gain limit is increased greatly."

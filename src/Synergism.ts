@@ -304,6 +304,7 @@ export const player: Player = {
         33: false,
         34: false,
         35: false,
+        36: false,
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1678,7 +1679,7 @@ export const updateAllTick = (): void => {
     }
 
     G['acceleratorPower'] = Math.pow(
-        (player.toggles[35]?1.25:1.1) + G['tuSevenMulti'] * 
+        (player.toggles[36]?1.25:1.1) + G['tuSevenMulti'] * 
         (G['totalAcceleratorBoost'] / 100) 
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20), 
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
@@ -1868,7 +1869,7 @@ export const updateAllMultiplier = (): void => {
         c7 = 1.25
     }
 
-    G['multiplierPower'] = (player.toggles[35]?5:2) + 0.005 * G['totalMultiplierBoost'] * c7
+    G['multiplierPower'] = (player.toggles[36]?5:2) + 0.005 * G['totalMultiplierBoost'] * c7
 
     //No MA and Sadistic will always override Transcend Challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
