@@ -489,6 +489,16 @@ export const buyProducer = (pos: FirstToFifth, type: keyof typeof buyProducerTyp
     G['ticker'] = 0;
 }
 
+export const buyProducerMultiplier = (n: number, pos: FirstToFifth) => {
+    const id = `${pos}OwnedCoin` as const;
+    if(player[id]>=player.producerMultiCost[n-1]){
+        player[id]-=player.producerMultiCost[n-1]
+        player.producerMultiCost[n-1]*=n+1
+        player.producerMultiAmt[n-1]++
+        player.producerMulti[n-1]=new Decimal(n/2+1).pow(player.producerMultiAmt[n-1])
+    }
+}
+
 type Upgrade = 'prestige' | 'transcend' | 'reincarnation' | 'coin';
 
 const upgradeToCurrency = (type: Upgrade) => {

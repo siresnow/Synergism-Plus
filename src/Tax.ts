@@ -11,11 +11,11 @@ export const calculatetax = () => {
     let e = 1;
     let f = player.toggles[36]?1.1:1;
     let compareC = 0;
-    G['produceFirst'] = (player.firstGeneratedCoin.add(player.firstOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinOneMulti']).times(player.firstProduceCoin);
-    G['produceSecond'] = (player.secondGeneratedCoin.add(player.secondOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinTwoMulti']).times(player.secondProduceCoin);
-    G['produceThird'] = (player.thirdGeneratedCoin.add(player.thirdOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinThreeMulti']).times(player.thirdProduceCoin);
-    G['produceFourth'] = (player.fourthGeneratedCoin.add(player.fourthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFourMulti']).times(player.fourthProduceCoin);
-    G['produceFifth'] = (player.fifthGeneratedCoin.add(player.fifthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFiveMulti']).times(player.fifthProduceCoin);
+    G['produceFirst'] = (player.firstGeneratedCoin.add(player.firstOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinOneMulti']).times(player.firstProduceCoin).pow(player.toggles[37]?0.5:1);
+    G['produceSecond'] = (player.secondGeneratedCoin.add(player.secondOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinTwoMulti']).times(player.secondProduceCoin).pow(player.toggles[37]?0.5:1);
+    G['produceThird'] = (player.thirdGeneratedCoin.add(player.thirdOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinThreeMulti']).times(player.thirdProduceCoin).pow(player.toggles[37]?0.5:1);
+    G['produceFourth'] = (player.fourthGeneratedCoin.add(player.fourthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFourMulti']).times(player.fourthProduceCoin).pow(player.toggles[37]?0.5:1);
+    G['produceFifth'] = (player.fifthGeneratedCoin.add(player.fifthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFiveMulti']).times(player.fifthProduceCoin).pow(player.toggles[37]?0.5:1);
     G['produceTotal'] = G['produceFirst'].add(G['produceSecond']).add(G['produceThird']).add(G['produceFourth']).add(G['produceFifth']);
 
     if (G['produceFirst'].lte(.0001)) {

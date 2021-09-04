@@ -136,6 +136,7 @@ export const Globals: GlobalVariables = {
     coinThreeMulti: new Decimal(1),
     coinFourMulti: new Decimal(1),
     coinFiveMulti: new Decimal(1),
+    totalCoinGain: new Decimal(0),
 
     globalCrystalMultiplier: new Decimal(1),
     globalMythosMultiplier: new Decimal(0.01),

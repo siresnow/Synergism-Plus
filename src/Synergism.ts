@@ -99,6 +99,10 @@ export const player: Player = {
     fifthCostCoin: new Decimal("16e6"),
     fifthProduceCoin: 2500,
 
+    producerMulti:[new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1)],
+    producerMultiAmt:[0,0,0,0,0],
+    producerMultiCost:[10,10,10,10,10],
+
     firstOwnedDiamonds: 0,
     firstGeneratedDiamonds: new Decimal("0"),
     firstCostDiamonds: new Decimal("100"),
@@ -305,6 +309,8 @@ export const player: Player = {
         34: false,
         35: false,
         36: false,
+        37: false,
+        38: false,
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1679,7 +1685,7 @@ export const updateAllTick = (): void => {
     }
 
     G['acceleratorPower'] = Math.pow(
-        (player.toggles[36]?1.25:1.1) + G['tuSevenMulti'] * 
+        (player.toggles[36]&&!player.toggles[37]?1.25:(player.toggles[37]?1.05:1.1)) + G['tuSevenMulti'] * 
         (G['totalAcceleratorBoost'] / 100) 
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20), 
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
@@ -1869,7 +1875,7 @@ export const updateAllMultiplier = (): void => {
         c7 = 1.25
     }
 
-    G['multiplierPower'] = (player.toggles[36]?5:2) + 0.005 * G['totalMultiplierBoost'] * c7
+    G['multiplierPower'] = (player.toggles[36]&&!player.toggles[37]?5:(player.toggles[37]?1.5:2)) + 0.005 * G['totalMultiplierBoost'] * c7
 
     //No MA and Sadistic will always override Transcend Challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
@@ -1982,6 +1988,7 @@ export const multipliers = (): void => {
     G['globalCoinMultiplier'] = Decimal.pow(G['globalCoinMultiplier'], G['financialcollapsePower'][player.usedCorruptions[9]])
 
     G['coinOneMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinOneMulti'] = G['coinOneMulti'].times(player.producerMulti[0])
     if (player.upgrades[1] > 0.5) {
         G['coinOneMulti'] = G['coinOneMulti'].times(first6CoinUp);
     }
@@ -1993,6 +2000,7 @@ export const multipliers = (): void => {
     }
 
     G['coinTwoMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinTwoMulti'] = G['coinTwoMulti'].times(player.producerMulti[1])
     if (player.upgrades[2] > 0.5) {
         G['coinTwoMulti'] = G['coinTwoMulti'].times(first6CoinUp);
     }
@@ -2007,6 +2015,7 @@ export const multipliers = (): void => {
     }
 
     G['coinThreeMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinThreeMulti'] = G['coinThreeMulti'].times(player.producerMulti[2])
     if (player.upgrades[3] > 0.5) {
         G['coinThreeMulti'] = G['coinThreeMulti'].times(first6CoinUp);
     }
@@ -2018,6 +2027,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFourMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinFourMulti'] = G['coinFourMulti'].times(player.producerMulti[3])
     if (player.upgrades[4] > 0.5) {
         G['coinFourMulti'] = G['coinFourMulti'].times(first6CoinUp);
     }
@@ -2029,6 +2039,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFiveMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinFiveMulti'] = G['coinFiveMulti'].times(player.producerMulti[4])
     if (player.upgrades[5] > 0.5) {
         G['coinFiveMulti'] = G['coinFiveMulti'].times(first6CoinUp);
     }
@@ -2202,12 +2213,15 @@ export const resourceGain = (dt: number): void => {
     multipliers();
     calculatetax();
     if (G['produceTotal'].gte(0.001)) {
-        const addcoin = Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))
+        let addcoin = Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))
+        if(player.toggles[38])G["totalCoinGain"]=addcoin.times(40)
         player.coins = player.coins.add(addcoin.times(dt / 0.025));
         player.coinsThisPrestige = player.coinsThisPrestige.add(addcoin.times(dt / 0.025));
         player.coinsThisTranscension = player.coinsThisTranscension.add(addcoin.times(dt / 0.025));
         player.coinsThisReincarnation = player.coinsThisReincarnation.add(addcoin.times(dt / 0.025));
         player.coinsTotal = player.coinsTotal.add(addcoin.times(dt / 0.025))
+    }else{
+        if(player.coins.lt(100))player.coins=new Decimal(100)
     }
 
     resetCurrency();

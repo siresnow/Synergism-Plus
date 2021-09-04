@@ -1,7 +1,7 @@
 import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop } from "./Toggles"
 import { resetrepeat, updateAutoReset, updateTesseractAutoBuyAmount } from "./Reset"
 import { player, resetCheck, saveSynergy } from "./Synergism"
-import { boostAccelerator, buyAccelerator, buyMultiplier, buyProducer, buyCrystalUpgrades, buyParticleBuilding, buyTesseractBuilding, buyUpgrades, buyRuneBonusLevels } from "./Buy"
+import { boostAccelerator, buyAccelerator, buyMultiplier, buyProducer, buyCrystalUpgrades, buyParticleBuilding, buyTesseractBuilding, buyUpgrades, buyRuneBonusLevels, buyProducerMultiplier } from "./Buy"
 import { crystalupgradedescriptions, constantUpgradeDescriptions, buyConstantUpgrades, upgradedescriptions } from "./Upgrades"
 import { buyAutobuyers } from "./Automation"
 import { buyGenerator } from "./Generators"
@@ -156,6 +156,12 @@ export const generateEventHandlers = () => {
         }
     }
 
+    // Building Multipliers - NG-
+    for(let i = 1; i < 6; i++){
+        DOMCacheGetOrSet(`buycoinmulti${i}`).addEventListener('click', () =>
+            buyProducerMultiplier(i, ordinals[i as OneToFive]))
+    }
+
     // Crystal Upgrades (Mouseover and Onclick)
     for (let index = 1; index <= 5; index++) {
         
@@ -188,7 +194,7 @@ export const generateEventHandlers = () => {
 
 //Part 4: Toggles
     // I'm just addressing all global toggles here
-    for (let index = 0; index < 36; index++) {
+    for (let index = 0; index < 38; index++) {
         DOMCacheGetOrSet(`toggle${index+1}`).addEventListener('click', () => toggleSettings(index))   
     }
     // Toggles auto reset type (between TIME and AMOUNT)

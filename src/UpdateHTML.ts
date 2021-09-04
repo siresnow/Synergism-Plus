@@ -6,7 +6,7 @@ import { achievementaward, totalachievementpoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
 import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
 import { getMaxChallenges } from './Challenges';
-import { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
+import { FirstToFifth, OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 
 export const revealStuff = () => {
@@ -385,6 +385,8 @@ export const revealStuff = () => {
         "toggle34": true, //Settings - Mods - 1MxSpeed Toggle
         "toggle35": true, //Settings - Mods - ??? Toggle
         "toggle36": true, //Settings - Mods - SuperTax Toggle
+        "toggle37": true, //Settings - Mods - NG- Toggle
+        "toggle38": true, //Settings - Modes - CoinGain Toggle
     }
 
     Object.keys(automationUnlocks).forEach(key => {
@@ -504,7 +506,7 @@ const visualTab: Record<string, () => void> = {
 
 export const htmlInserts = () => {
     // ALWAYS Update these, for they are the most important resources
-    DOMCacheGetOrSet('coinDisplay').textContent = format(player.coins)
+    DOMCacheGetOrSet('coinDisplay')[player.toggles[38]?"innerHTML":"textContent"] = format(player.coins)+(player.toggles[38]?"<sub>+"+format(G["totalCoinGain"])+"</sub>":"")
     DOMCacheGetOrSet('offeringDisplay').textContent = format(player.runeshards)
     DOMCacheGetOrSet('diamondDisplay').textContent = format(player.prestigePoints)
     DOMCacheGetOrSet('mythosDisplay').textContent = format(player.transcendPoints)
@@ -580,6 +582,19 @@ export const buttoncolorchange = () => {
         ((!player.toggles[8] || player.upgrades[88] === 0) && player.prestigePoints.gte(player.acceleratorBoostCost))
             ? h.classList.add("buildingPurchaseBtnAvailable")
             : h.classList.remove("buildingPurchaseBtnAvailable");
+        const hmm = ['coinone','cointwo','cointhree','coinfour'] as const;
+            function doThing(pos: FirstToFifth, num:number){
+                const id = `${pos}OwnedCoin` as const;
+                const ele = DOMCacheGetOrSet("buycoinmulti"+num)
+                if(player[id]>=player.producerMultiCost[num-1]){
+                    ele.classList.add("buildingPurchaseBtnAvailable")
+                }else ele.classList.remove("buildingPurchaseBtnAvailable")
+                ele.style.display=player.toggles[37]&&(num>1&&player.unlocks[hmm[num-2]]||num==1)?"":"none"
+            }
+            const o = ['null','first','second','third','fourth','fifth'] as const
+        for(let i=1;i<6;i++){
+            doThing(o[i as OneToFive],i)
+        }
     }
 
     if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
