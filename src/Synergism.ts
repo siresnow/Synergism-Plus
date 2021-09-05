@@ -689,7 +689,7 @@ const toAdapt = new Map<keyof Player, (data: Player) => unknown>([
 const loadSynergy = () => {
     console.log('loaded attempted')
     const save = localStorage.getItem("Synergysave2");
-    const savedmods = save ? JSON.parse(atob(save)).mods : false
+    const savedmods = save ? JSON.parse(atob(save)).mods as string[] : false
     const data = save ? JSON.parse(atob(save)) as Player & Record<string, unknown> : null;
     if(savedmods)player.mods=savedmods
 
