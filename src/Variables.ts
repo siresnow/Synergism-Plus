@@ -463,8 +463,8 @@ export const mods = [
     },
 ]
 
-export var modNames = [] as any[]
-export var modDescs = [] as any[]
+export let modNames = [] as string[]
+export let modDescs = [] as string[]
 mods.forEach(mod=>{
     modNames.push(mod.title)
     modDescs.push(mod.desc+"<br>Mod Author: "+mod.author)

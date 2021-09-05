@@ -6,7 +6,7 @@ import { achievementaward, totalachievementpoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
 import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
 import { getMaxChallenges } from './Challenges';
-import { FirstToFifth, OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
+import { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 
 export const revealStuff = () => {
@@ -580,17 +580,15 @@ export const buttoncolorchange = () => {
             ? h.classList.add("buildingPurchaseBtnAvailable")
             : h.classList.remove("buildingPurchaseBtnAvailable");
         const hmm = ['coinone','cointwo','cointhree','coinfour'] as const;
-            function doThing(pos: FirstToFifth, num:number){
-                const id = `${pos}OwnedCoin` as const;
-                const ele = DOMCacheGetOrSet("buycoinmulti"+num)
-                if(player[id]>=player.producerMultiCost[num-1]){
-                    ele.classList.add("buildingPurchaseBtnAvailable")
-                }else ele.classList.remove("buildingPurchaseBtnAvailable")
-                ele.style.display=player.toggles[37]&&(num>1&&player.unlocks[hmm[num-2]]||num==1)?"":"none"
-            }
             const o = ['null','first','second','third','fourth','fifth'] as const
-        for(let i=1;i<6;i++){
-            doThing(o[i as OneToFive],i)
+        for(let num=1;num<6;num++){
+            const pos = o[num as OneToFive]
+            const id = `${pos}OwnedCoin` as const;
+            const ele = DOMCacheGetOrSet("buycoinmulti"+num)
+            if(player[id]>=player.producerMultiCost[num-1]){
+                ele.classList.add("buildingPurchaseBtnAvailable")
+            }else ele.classList.remove("buildingPurchaseBtnAvailable")
+            ele.style.display=player.toggles[37]&&(num>1&&player.unlocks[hmm[num-2]]||num==1)?"":"none"
         }
     }
 
