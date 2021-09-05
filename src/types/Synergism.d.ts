@@ -513,6 +513,8 @@ export interface Player {
     overfluxOrbs: number
     overfluxPowder: number
     dailyPowderResetUses: number
+
+    firstLoad: boolean
 }
 
 export interface GlobalVariables {

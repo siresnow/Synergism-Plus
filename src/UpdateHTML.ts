@@ -1,5 +1,5 @@
 import { player, format, formatTimeShort, /*formatTimeShort*/ } from './Synergism';
-import { Globals as G } from './Variables';
+import { Globals as G, mods } from './Variables';
 import Decimal from 'break_infinity.js';
 import { CalcCorruptionStuff, calculateAscensionAcceleration, calculateTimeAcceleration} from './Calculate';
 import { achievementaward, totalachievementpoints } from './Achievements';
@@ -343,7 +343,7 @@ export const revealStuff = () => {
 
     // These are currently listed in the order they were in when this was converted to use element IDs instead of
     // the ordering of the HTML elements with the class "auto".
-    const automationUnlocks: Record<string, boolean> = {
+    var automationUnlocks: Record<string, boolean> = {
         "toggle1": player.upgrades[81] === 1, // Autobuyer - Coin Buildings - Tier 1 (Worker)
         "toggle2": player.upgrades[82] === 1, // Autobuyer - Coin Buildings - Tier 2 (Investments)
         "toggle3": player.upgrades[83] === 1, // Autobuyer - Coin Buildings - Tier 3 (Printers)
@@ -380,13 +380,10 @@ export const revealStuff = () => {
         "toggle30": player.reincarnationCount > 0.5, // Settings - Confirmations - Reincarnation
         "toggle31": player.ascensionCount > 0, // Settings - Confirmations - Ascension
         "toggle32": player.achievements[173] > 0, // Settings - Confirmations - Ant Sacrifice
-        //MODIFICATIONS START HERE
-        "toggle33": true, //Settings - Mods - NoTax Toggle
-        "toggle34": true, //Settings - Mods - 1MxSpeed Toggle
-        "toggle35": true, //Settings - Mods - ??? Toggle
-        "toggle36": true, //Settings - Mods - SuperTax Toggle
-        "toggle37": true, //Settings - Mods - NG- Toggle
-        "toggle38": true, //Settings - Modes - CoinGain Toggle
+    }
+
+    for(let x=0;x<Object.keys(mods).length;x++){
+        automationUnlocks["toggle"+(x+33)]=true
     }
 
     Object.keys(automationUnlocks).forEach(key => {

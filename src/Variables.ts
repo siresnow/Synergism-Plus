@@ -429,3 +429,43 @@ export const Globals: GlobalVariables = {
 }
 
 export const blankGlobals = { ...Globals };
+
+export const mods = [
+    {
+        title: "No Taxes",
+        desc: "Removes all taxes.",
+        author: "Flame"
+    },
+    {
+        title: "1MxSpeed",
+        desc: "Makes the game run a million times as fast.",
+        author: "Yhvr"
+    },
+    {
+        title: "Placeholder",
+        desc: "no description",
+        author: "no one"
+    },
+    {
+        title: "Super Tax",
+        desc: "All taxes start instantly and are much stronger; only balanced up to first Transcension, although you can go further if ya want)",
+        author: "Jacorb",
+    },
+    {
+        title: "NG-",
+        desc: "All building production is sqrted, AP is halved, and MP is 1.5x but get building multipliers that cost buildings (with more nerfs/features to come). Don't go past Prestige since it isn't nerfed yet.",
+        author: "gapples2"
+    },
+    {
+        title: "Coin Gain",
+        desc: "Adds a way to see how many coins you gain per second.",
+        author: "gapples2"
+    },
+]
+
+export var modNames = [] as any[]
+export var modDescs = [] as any[]
+mods.forEach(mod=>{
+    modNames.push(mod.title)
+    modDescs.push(mod.desc+"<br>Mod Author: "+mod.author)
+})

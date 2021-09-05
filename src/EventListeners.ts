@@ -17,7 +17,7 @@ import { corruptionCleanseConfirm, corruptionDisplay } from "./Corruptions"
 import { exportSynergism, updateSaveString, promocodes, importSynergism, resetGame } from "./ImportExport"
 import { resetHistoryTogglePerSecond } from "./History"
 import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, shopData } from "./Shop"
-import { Globals as G } from './Variables';
+import { Globals as G, mods, modNames, modDescs } from './Variables';
 import { changeTabColor } from "./UpdateHTML"
 import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp } from "./Hepteracts"
 import { exitOffline, forcedDailyReset, timeWarp } from "./Calculate"
@@ -194,8 +194,11 @@ export const generateEventHandlers = () => {
 
 //Part 4: Toggles
     // I'm just addressing all global toggles here
-    for (let index = 0; index < 38; index++) {
+    for (let index = 0; index < 32+Object.keys(mods).length; index++) {
         DOMCacheGetOrSet(`toggle${index+1}`).addEventListener('click', () => toggleSettings(index))   
+        if(index>=32)DOMCacheGetOrSet(`toggle${index+1}`).addEventListener('mouseover', () => {
+            DOMCacheGetOrSet("modDesc").innerHTML = `<b>${modNames[index-32]}</b><br>${modDescs[index-32]}`
+        })
     }
     // Toggles auto reset type (between TIME and AMOUNT)
     DOMCacheGetOrSet("prestigeautotoggle").addEventListener('click', () => toggleautoreset(1))

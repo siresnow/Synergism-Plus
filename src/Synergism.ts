@@ -2,7 +2,7 @@ import Decimal, { DecimalSource } from 'break_infinity.js';
 import LZString from 'lz-string';
 
 import { isDecimal, getElementById, sortWithIndices, sumContents, btoa } from './Utility';
-import { blankGlobals, Globals as G } from './Variables';
+import { blankGlobals, Globals as G, mods, modNames } from './Variables';
 import { CalcECC, getChallengeConditions, challengeDisplay, highestChallengeRewards, challengeRequirement, runChallengeSweep, getMaxChallenges, challenge15ScoreMultiplier } from './Challenges';
 
 import type { OneToFive, Player, ZeroToFour } from './types/Synergism';
@@ -305,12 +305,6 @@ export const player: Player = {
         30: true,
         31: true,
         32: true,
-        33: false,
-        34: false,
-        35: false,
-        36: false,
-        37: false,
-        38: false,
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -644,7 +638,8 @@ export const player: Player = {
     rngCode: 0,
     promoCodeTiming: {
         time: 0
-    }
+    },
+    firstLoad: true
 }
 
 export const blankSave = Object.assign({}, player, {
@@ -1360,6 +1355,10 @@ const loadSynergy = () => {
 
         if (player.autoSacrificeToggle && player.autoSacrifice > 0.5) {
             DOMCacheGetOrSet("rune" + player.autoSacrifice).style.backgroundColor = "orange"
+        }
+
+        for(let x=Object.keys(player.toggles).length;x<32+Object.keys(mods).length;x++){
+            player.toggles[x]=false
         }
 
         toggleTalismanBuy(player.buyTalismanShardPercent);
@@ -3431,6 +3430,31 @@ window.addEventListener('load', () => {
         ` ${testing ? 'Savefiles cannot be used in live!' : ''}`
     );
     document.title = `Synergism v${version}`;
+
+    const modAmt = Object.keys(mods).length
+    let table = DOMCacheGetOrSet("modTable")
+    for(let x=0;x<Math.ceil(modAmt/8);x++){
+        let row = document.createElement("tr")
+        for(let y=0;y<Math.min(modAmt-x*8,8);y++){
+            let td = document.createElement("td")
+            let ele = document.createElement("div")
+            
+            ele.innerHTML = `<br>${modNames[x*5+y]}<br><button class="auto modSquare" id="toggle${33+x*5+y}" toggleid="${33+x*5+y}" format="[$]" style="border:2px solid green">[ON]</button>`
+            ele.classList.add("modToggle")
+
+            td.appendChild(ele)
+            row.appendChild(td)
+        }
+        table.appendChild(row)
+        table.appendChild(document.createElement("br"))
+    }
+
+    if(window.location.href!="https://flamemasternxf.github.io/Synergism-Plus/"){
+        let s = "Mod Ids: \n"
+        modNames.forEach((a,i)=>s+=a+": "+(33+i)+"\n")
+        console.log(s+"New Mod ID: "+(modNames.length+33))
+    }
+
 
     generateEventHandlers();
     corruptionButtonsAdd();
