@@ -1,7 +1,5 @@
 import Decimal from 'break_infinity.js';
 import { GlobalVariables } from './types/Synergism';
-import has = Reflect.has;
-import {player} from "./Synergism";
 
 export const Globals: GlobalVariables = {
     runediv: [1.5, 2, 3, 5, 8, 1, 1],
@@ -45,19 +43,19 @@ export const Globals: GlobalVariables = {
         1e20, 2e20, 4e20, 8e20, 1e21,
         2e21, 4e21, 8e21, 2e22, 4e22,
         3.2e21, 2e23, 4e23, 1e21, 7.777e32,
-        5e8, 5e12, 5e16, 5e20, 5e24, /*ascension tier */
+        5e8, 5e12, 5e16, 5e20, 5e24,
         1e25, 2e25, 4e25, 8e25, 1e26,
         4e26, 8e26, 1e27, 2e27, 1e28,
-        5e9, 5e15, 5e21, 5e27, 1e28, /*challenge 11 tier */
+        5e9, 5e15, 5e21, 5e27, 1e28,
         1e29, 2e29, 4e29, 8e29, 1e27,
         2e30, 4e30, 8e30, 1e31, 2e31,
-        5e31, 1e32, 2e32, 4e32, 8e32, /*challenge 12 tier */
+        5e31, 1e32, 2e32, 4e32, 8e32,
         1e33, 2e33, 4e33, 8e33, 1e34,
         3e34, 1e35, 3e35, 6e35, 1e36,
-        3e36, 1e37, 3e37, 1e38, 3e38, /*challenge 13 tier */
+        3e36, 1e37, 3e37, 1e38, 3e38,
         1e39, 3e39, 1e40, 3e40, 1e50,
         3e41, 1e42, 3e42, 6e42, 1e43,
-        3e43, 1e44, 3e44, 1e45, 3e45, /*challenge 14 tier */
+        3e43, 1e44, 3e44, 1e45, 3e45,
         2e46, 6e46, 2e47, 6e47, 1e64,
         6e48, 2e49, 1e50, 1e51, 4e56
     ],
@@ -335,8 +333,8 @@ export const Globals: GlobalVariables = {
     benedictionbase: [null, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000, 1 / 1000],
     benedictionDRPower: [null, 1 / 12, 1 / 12, 1 / 6, 1 / 8, 1 / 6, 1 / 2, 1 / 12, 1 / 12, 1 / 64, 1 / 64],
     //10 Million of each before Diminishing returns on first 3, 200k for second, and 10k for the last few
-    platonicCubeBase: [2/4e6, 1.5/4e6, 1/4e6, 1/8e4, 1/1e4, 1/1e5, 1/1e4, 1/1e4],
-    platonicDRPower: [1/5, 1/5, 1/5, 1/5, 1/16, 1/16, 1/4, 1/8],
+    platonicCubeBase: [2 / 4e6, 1.5 / 4e6, 1 / 4e6, 1 / 8e4, 1 / 1e4, 1 / 1e5, 1 / 1e4, 1 / 1e4],
+    platonicDRPower: [1 / 5, 1 / 5, 1 / 5, 1 / 5, 1 / 16, 1 / 16, 1 / 4, 1 / 8],
 
     cubeBonusMultiplier: [null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     tesseractBonusMultiplier: [null, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -349,10 +347,10 @@ export const Globals: GlobalVariables = {
 
     divisivenessPower: [1, 0.87, 0.80, 0.75, 0.70, 0.6, 0.54, 0.45, 0.39, 0.33, 0.3, 0.2, 0.1, 0.05],
     maladaptivePower: [1, 0.87, 0.80, 0.75, 0.70, 0.6, 0.54, 0.45, 0.39, 0.33, 0.3, 0.2, 0.1, 0.05],
-    lazinessMultiplier: [1, 1 / 3, 1 / 10, 1 / 40, 1 / 200, 1 / 1e5, 1 / 1e7, 1 / 1e10, 1/1e13, 1/1e16, 1/1e20, 1/1e25, 1/1e35, 1/1e50],
+    lazinessMultiplier: [1, 1 / 3, 1 / 10, 1 / 40, 1 / 200, 1 / 1e5, 1 / 1e7, 1 / 1e10, 1 / 1e13, 1 / 1e16, 1 / 1e20, 1 / 1e25, 1 / 1e35, 1 / 1e50],
     hyperchallengedMultiplier: [1, 1.2, 1.5, 1.7, 3, 5, 8, 13, 21, 34, 55, 100, 400, 1600],
     illiteracyPower: [1, 0.8, 0.7, 0.6, 0.5, 0.3, 0.2, 0.15, 0.10, 0.06, 0.04, 0.02, 0.01, 0.005],
-    deflationMultiplier: [1, 0.3, 0.1, 0.03, 0.01, 1/1e6, 1/1e8, 1/1e10, 1/1e12, 1/1e15, 1/1e18, 1/1e25, 1/1e35, 1/1e50],
+    deflationMultiplier: [1, 0.3, 0.1, 0.03, 0.01, 1 / 1e6, 1 / 1e8, 1 / 1e10, 1 / 1e12, 1 / 1e15, 1 / 1e18, 1 / 1e25, 1 / 1e35, 1 / 1e50],
     extinctionMultiplier: [1, 0.92, 0.86, 0.8, 0.74, 0.65, 0.55, 0.5, 0.45, 0.4, 0.35, 0.3, 0.1, 0],
     droughtMultiplier: [1, 5, 25, 200, 1e4, 1e7, 1e11, 1e16, 1e22, 1e30, 1e40, 1e55, 1e80, 1e120],
     financialcollapsePower: [1, 0.9, 0.7, 0.6, 0.5, 0.37, 0.30, 0.23, 0.18, 0.15, 0.12, 0.09, 0.03, 0.01],
@@ -421,11 +419,12 @@ export const Globals: GlobalVariables = {
 
     timeMultiplier: 1,
     upgradeMultiplier: 1,
-    
-    isEvent: false,
 
-    // talismanResourceObtainiumCosts: [1e13, 1e14, 1e16, 1e18, 1e20, 1e22, 1e24]
-    // talismanResourceOfferingCosts: [0, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
+    isEvent: false,
+    crystaltax: new Decimal(0),
+    mythostax: new Decimal(0),
+    particletax: new Decimal(0),
+    tessertax: new Decimal(0)
 }
 
 export const blankGlobals = { ...Globals };
@@ -463,8 +462,8 @@ export const mods = [
     },
 ]
 
-export var modNames = [] as any[]
-export var modDescs = [] as any[]
+export let modNames = [] as string[]
+export let modDescs = [] as string[]
 mods.forEach(mod=>{
     modNames.push(mod.title)
     modDescs.push(mod.desc+"<br>Mod Author: "+mod.author)
