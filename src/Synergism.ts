@@ -2,7 +2,7 @@ import Decimal, { DecimalSource } from 'break_infinity.js';
 import LZString from 'lz-string';
 
 import { isDecimal, getElementById, sortWithIndices, sumContents, btoa } from './Utility';
-import { blankGlobals, Globals as G } from './Variables';
+import { blankGlobals, Globals as G, mods, modNames } from './Variables';
 import { CalcECC, getChallengeConditions, challengeDisplay, highestChallengeRewards, challengeRequirement, runChallengeSweep, getMaxChallenges, challenge15ScoreMultiplier } from './Challenges';
 
 import type { OneToFive, Player, ZeroToFour } from './types/Synergism';
@@ -98,6 +98,10 @@ export const player: Player = {
     fifthGeneratedCoin: new Decimal("0"),
     fifthCostCoin: new Decimal("16e6"),
     fifthProduceCoin: 2500,
+
+    producerMulti:[new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1)],
+    producerMultiAmt:[0,0,0,0,0],
+    producerMultiCost:[10,10,10,10,10],
 
     firstOwnedDiamonds: 0,
     firstGeneratedDiamonds: new Decimal("0"),
@@ -301,10 +305,6 @@ export const player: Player = {
         30: true,
         31: true,
         32: true,
-        33: false,
-        34: false,
-        35: false,
-        36: false,
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -638,7 +638,8 @@ export const player: Player = {
     rngCode: 0,
     promoCodeTiming: {
         time: 0
-    }
+    },
+    firstLoad: true
 }
 
 export const blankSave = Object.assign({}, player, {
@@ -1356,6 +1357,10 @@ const loadSynergy = () => {
             DOMCacheGetOrSet("rune" + player.autoSacrifice).style.backgroundColor = "orange"
         }
 
+        for(let x=Object.keys(player.toggles).length;x<32+Object.keys(mods).length;x++){
+            player.toggles[x]=false
+        }
+
         toggleTalismanBuy(player.buyTalismanShardPercent);
         updateTalismanInventory();
         calculateObtainium();
@@ -1679,7 +1684,7 @@ export const updateAllTick = (): void => {
     }
 
     G['acceleratorPower'] = Math.pow(
-        (player.toggles[36]?1.25:1.1) + G['tuSevenMulti'] * 
+        (player.toggles[36]&&!player.toggles[37]?1.25:(player.toggles[37]?1.05:1.1)) + G['tuSevenMulti'] * 
         (G['totalAcceleratorBoost'] / 100) 
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20), 
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
@@ -1869,7 +1874,7 @@ export const updateAllMultiplier = (): void => {
         c7 = 1.25
     }
 
-    G['multiplierPower'] = (player.toggles[36]?5:2) + 0.005 * G['totalMultiplierBoost'] * c7
+    G['multiplierPower'] = (player.toggles[36]&&!player.toggles[37]?5:(player.toggles[37]?1.5:2)) + 0.005 * G['totalMultiplierBoost'] * c7
 
     //No MA and Sadistic will always override Transcend Challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
@@ -1982,6 +1987,7 @@ export const multipliers = (): void => {
     G['globalCoinMultiplier'] = Decimal.pow(G['globalCoinMultiplier'], G['financialcollapsePower'][player.usedCorruptions[9]])
 
     G['coinOneMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinOneMulti'] = G['coinOneMulti'].times(player.producerMulti[0])
     if (player.upgrades[1] > 0.5) {
         G['coinOneMulti'] = G['coinOneMulti'].times(first6CoinUp);
     }
@@ -1993,6 +1999,7 @@ export const multipliers = (): void => {
     }
 
     G['coinTwoMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinTwoMulti'] = G['coinTwoMulti'].times(player.producerMulti[1])
     if (player.upgrades[2] > 0.5) {
         G['coinTwoMulti'] = G['coinTwoMulti'].times(first6CoinUp);
     }
@@ -2007,6 +2014,7 @@ export const multipliers = (): void => {
     }
 
     G['coinThreeMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinThreeMulti'] = G['coinThreeMulti'].times(player.producerMulti[2])
     if (player.upgrades[3] > 0.5) {
         G['coinThreeMulti'] = G['coinThreeMulti'].times(first6CoinUp);
     }
@@ -2018,6 +2026,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFourMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinFourMulti'] = G['coinFourMulti'].times(player.producerMulti[3])
     if (player.upgrades[4] > 0.5) {
         G['coinFourMulti'] = G['coinFourMulti'].times(first6CoinUp);
     }
@@ -2029,6 +2038,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFiveMulti'] = new Decimal(1);
+    if(player.toggles[37])G['coinFiveMulti'] = G['coinFiveMulti'].times(player.producerMulti[4])
     if (player.upgrades[5] > 0.5) {
         G['coinFiveMulti'] = G['coinFiveMulti'].times(first6CoinUp);
     }
@@ -2202,12 +2212,15 @@ export const resourceGain = (dt: number): void => {
     multipliers();
     calculatetax();
     if (G['produceTotal'].gte(0.001)) {
-        const addcoin = Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))
+        let addcoin = Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))
+        if(player.toggles[38])G["totalCoinGain"]=addcoin.times(40)
         player.coins = player.coins.add(addcoin.times(dt / 0.025));
         player.coinsThisPrestige = player.coinsThisPrestige.add(addcoin.times(dt / 0.025));
         player.coinsThisTranscension = player.coinsThisTranscension.add(addcoin.times(dt / 0.025));
         player.coinsThisReincarnation = player.coinsThisReincarnation.add(addcoin.times(dt / 0.025));
         player.coinsTotal = player.coinsTotal.add(addcoin.times(dt / 0.025))
+    }else{
+        if(player.coins.lt(100))player.coins=new Decimal(100)
     }
 
     resetCurrency();
@@ -3417,6 +3430,31 @@ window.addEventListener('load', () => {
         ` ${testing ? 'Savefiles cannot be used in live!' : ''}`
     );
     document.title = `Synergism v${version}`;
+
+    const modAmt = Object.keys(mods).length
+    let table = DOMCacheGetOrSet("modTable")
+    for(let x=0;x<Math.ceil(modAmt/8);x++){
+        let row = document.createElement("tr")
+        for(let y=0;y<Math.min(modAmt-x*8,8);y++){
+            let td = document.createElement("td")
+            let ele = document.createElement("div")
+            
+            ele.innerHTML = `<br>${modNames[x*5+y]}<br><button class="auto modSquare" id="toggle${33+x*5+y}" toggleid="${33+x*5+y}" format="[$]" style="border:2px solid green">[ON]</button>`
+            ele.classList.add("modToggle")
+
+            td.appendChild(ele)
+            row.appendChild(td)
+        }
+        table.appendChild(row)
+        table.appendChild(document.createElement("br"))
+    }
+
+    if(window.location.href!="https://flamemasternxf.github.io/Synergism-Plus/"){
+        let s = "Mod Ids: \n"
+        modNames.forEach((a,i)=>s+=a+": "+(33+i)+"\n")
+        console.log(s+"New Mod ID: "+(modNames.length+33))
+    }
+
 
     generateEventHandlers();
     corruptionButtonsAdd();

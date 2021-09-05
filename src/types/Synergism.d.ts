@@ -38,6 +38,10 @@ export interface Player {
     fifthCostCoin: Decimal,
     fifthProduceCoin: number
 
+    producerMulti: Decimal[],
+    producerMultiAmt: number[],
+    producerMultiCost: number[]
+
     firstOwnedDiamonds: number
     firstGeneratedDiamonds: Decimal,
     firstCostDiamonds: Decimal,
@@ -509,6 +513,8 @@ export interface Player {
     overfluxOrbs: number
     overfluxPowder: number
     dailyPowderResetUses: number
+
+    firstLoad: boolean
 }
 
 export interface GlobalVariables {
@@ -555,6 +561,7 @@ export interface GlobalVariables {
     coinThreeMulti: Decimal
     coinFourMulti: Decimal
     coinFiveMulti: Decimal
+    totalCoinGain: Decimal
 
     globalCrystalMultiplier: Decimal
     globalMythosMultiplier: Decimal

@@ -32,11 +32,16 @@ export const visualUpdateBuildings = () => {
             totalProductionDivisor = new Decimal(1);
         }
 
+        const numWords = ['coinOneMulti','coinTwoMulti','coinThreeMulti','coinFourMulti','coinFiveMulti'] as const;
+
         for (let i = 1; i <= 5; i++) {
             const place = G[upper[i - 1]];
             const ith = G['ordinals'][i - 1 as ZeroToFour];
+            const numWord = G[numWords[i-1]];
+            const ele = DOMCacheGetOrSet("buycoinmulti"+i)
 
-            DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"
+            if(ele&&player.toggles[37])ele.textContent = "Cost: " + format(player.producerMultiCost[i-1],0) + " " + names[i] + "."
+            DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"+(player.toggles[37]?` x${format(numWord,2)}`:"")
             DOMCacheGetOrSet("buycoin" + i).textContent = "Cost: " + format(player[`${ith}CostCoin` as const]) + " coins."
             percentage = percentage.fromMantissaExponent(place.mantissa / totalProductionDivisor.mantissa, place.exponent - totalProductionDivisor.exponent).times(100)
             DOMCacheGetOrSet("buildtext" + (2 * i)).textContent = "Coins/Sec: " + format((place.dividedBy(G['taxdivisor'])).times(40), 2) + " [" + format(percentage, 3) + "%]"

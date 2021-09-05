@@ -9,25 +9,17 @@ Once you've opened the Terminal run `npm install` to install all dependencies. T
 If you've completed all these steps you're ready to move on to the next section!
 
 ### Adding a new Mod Toggle
-Congrats on completing the first section! This section will walk you through creating the Mod Toggle for your Mod!<br>
-Let's start by adding it to `index.html`<br>
-Head over to `index.html` line `2986`. This line begins the section of `index.html` that contains all the content in the Modifications tab.<br>
-You should see a block of code that looks something like this: ![img.png](img.png)<br> 
-You're going to want to copy that entire code block and paste it beneath the last block of its type (so, if there were 3 blocks like that you'd paste it beneath the 3rd).<br>
-This is your Mod's toggle code! You'll want to start by replacing the text in the `<span>` element with the name of your Mod.<br>
-We're going to be making a few changes to the `button` element. First, replace the `id` with `toggle<your Mod's Toggle Number here>`. Then replace the `toggleid` with `<your Mod's Toggle Number here>`<br>
-Don't know what your Mod's Toggle Number is? That's ok, we'll be going over that in the next section :)<br>
-Congratulations! You've successfully created your Mod's Toggle! Head over to the next section to learn how to give its own Toggle Number and make it a functional toggle!
-Oh, and don't forget to add your Mod and a short description of it to the Mods List!
-
-### Creating a Toggle Number and making the Toggle functional
-You've almost finished setting up your Mod's Toggle! Read through this section to learn how to create a Toggle Number for your Mod and how to make the Toggle functional!<br>
-Ok, this is where things get a bit more complex. Let's start by heading over to line `378` of `UpdateHTML.ts`.<br>
-There you should see a list of Toggle Numbers with a comment next to them. You'll want to copy that line and paste it beneath the other Toggle Numbers.<br>
-From there, change the number in its name to the previous Toggle Number's plus one (so, if the previous Toggle was named `"toggle35"` you'd name yours `"toggle36"`) and change the comment to say `//Settings - Mods - <your Mod's name here> Toggle`<br>
-Now head over to `Synergism.ts` line `269`. There you should see a array of all the Toggle Numbers. Simply add your Toggle Number to the bottom of the array!<br>
-Last but not least head over to `EventListeners.ts` line `191`. There you should see a `for` loop. Simply change the second number in the `for` loop to whatever it was plus one (so, if it was a 35 you'd change it to a 36)!<br>
-Congratulations! You've now created a fully functional Mod Toggle! If you didn't already, go back to your code block in `index.html` and fill in your Toggle Numbers.
+Congrats on completing the first section! This short section will show you how to create the Mod Toggle for your Mod!<br>
+Go to `src/Variables.html` line 433. This is where all the mod data is stored.<br>
+You should add a new block of code that looks like this:
+```javascript
+{
+    title: "yourTitleHere",
+    desc: "yourDescriptionHere",
+    author: "yourUsernameHere"
+},
+``` 
+That's it!
 
 ### Running your Mod locally
 Running your Mod locally only takes 3 simple steps!<br>

@@ -1,12 +1,12 @@
 import { player, format, formatTimeShort, /*formatTimeShort*/ } from './Synergism';
-import { Globals as G } from './Variables';
+import { Globals as G, mods } from './Variables';
 import Decimal from 'break_infinity.js';
 import { CalcCorruptionStuff, calculateAscensionAcceleration, calculateTimeAcceleration} from './Calculate';
 import { achievementaward, totalachievementpoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
 import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
 import { getMaxChallenges } from './Challenges';
-import { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
+import { FirstToFifth, OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 
 export const revealStuff = () => {
@@ -343,7 +343,7 @@ export const revealStuff = () => {
 
     // These are currently listed in the order they were in when this was converted to use element IDs instead of
     // the ordering of the HTML elements with the class "auto".
-    const automationUnlocks: Record<string, boolean> = {
+    var automationUnlocks: Record<string, boolean> = {
         "toggle1": player.upgrades[81] === 1, // Autobuyer - Coin Buildings - Tier 1 (Worker)
         "toggle2": player.upgrades[82] === 1, // Autobuyer - Coin Buildings - Tier 2 (Investments)
         "toggle3": player.upgrades[83] === 1, // Autobuyer - Coin Buildings - Tier 3 (Printers)
@@ -380,11 +380,10 @@ export const revealStuff = () => {
         "toggle30": player.reincarnationCount > 0.5, // Settings - Confirmations - Reincarnation
         "toggle31": player.ascensionCount > 0, // Settings - Confirmations - Ascension
         "toggle32": player.achievements[173] > 0, // Settings - Confirmations - Ant Sacrifice
-        //MODIFICATIONS START HERE
-        "toggle33": true, //Settings - Mods - NoTax Toggle
-        "toggle34": true, //Settings - Mods - 1MxSpeed Toggle
-        "toggle35": true, //Settings - Mods - ??? Toggle
-        "toggle36": true, //Settings - Mods - SuperTax Toggle
+    }
+
+    for(let x=0;x<Object.keys(mods).length;x++){
+        automationUnlocks["toggle"+(x+33)]=true
     }
 
     Object.keys(automationUnlocks).forEach(key => {
@@ -504,7 +503,7 @@ const visualTab: Record<string, () => void> = {
 
 export const htmlInserts = () => {
     // ALWAYS Update these, for they are the most important resources
-    DOMCacheGetOrSet('coinDisplay').textContent = format(player.coins)
+    DOMCacheGetOrSet('coinDisplay')[player.toggles[38]?"innerHTML":"textContent"] = format(player.coins)+(player.toggles[38]?"<sub>+"+format(G["totalCoinGain"])+"</sub>":"")
     DOMCacheGetOrSet('offeringDisplay').textContent = format(player.runeshards)
     DOMCacheGetOrSet('diamondDisplay').textContent = format(player.prestigePoints)
     DOMCacheGetOrSet('mythosDisplay').textContent = format(player.transcendPoints)
@@ -580,6 +579,19 @@ export const buttoncolorchange = () => {
         ((!player.toggles[8] || player.upgrades[88] === 0) && player.prestigePoints.gte(player.acceleratorBoostCost))
             ? h.classList.add("buildingPurchaseBtnAvailable")
             : h.classList.remove("buildingPurchaseBtnAvailable");
+        const hmm = ['coinone','cointwo','cointhree','coinfour'] as const;
+            function doThing(pos: FirstToFifth, num:number){
+                const id = `${pos}OwnedCoin` as const;
+                const ele = DOMCacheGetOrSet("buycoinmulti"+num)
+                if(player[id]>=player.producerMultiCost[num-1]){
+                    ele.classList.add("buildingPurchaseBtnAvailable")
+                }else ele.classList.remove("buildingPurchaseBtnAvailable")
+                ele.style.display=player.toggles[37]&&(num>1&&player.unlocks[hmm[num-2]]||num==1)?"":"none"
+            }
+            const o = ['null','first','second','third','fourth','fifth'] as const
+        for(let i=1;i<6;i++){
+            doThing(o[i as OneToFive],i)
+        }
     }
 
     if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {

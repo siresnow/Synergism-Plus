@@ -255,6 +255,7 @@
                 <img class="image" id="coin1" src="Pictures/Tier1.png" alt="" loading="lazy">
                 <span class="desc" id="buildtext1" style="color: gold">Workers: 321495 [+1.49e+391945]</span>
                 <button class="buildingPurchaseBtn" id="buycoin1">Cost: 100 Coins.</button>
+                <button class="buildingPurchaseBtn" id="buycoinmulti1">Cost: 10 Workers.</button>
                 <button class="auto autobuyerToggleButton" id="toggle1" toggleid="1">Auto: On</button>
                 <span class="stats" id="buildtext2" style="color: gold">100 Coins/second [100%]</span>
             </div>
@@ -262,6 +263,7 @@
                 <img class="coinunlock1 image" id="coin2" src="Pictures/Tier2.png" alt="" loading="lazy">
                 <span class="coinunlock1 desc" id="buildtext3" style="color: gold">Investments: 0 [+0]</span>
                 <button class="coinunlock1 buildingPurchaseBtn" id="buycoin2">Cost: 2e3 Coins.</button>
+                <button class="coinunlock1 buildingPurchaseBtn" id="buycoinmulti2">Cost: 10 Investments.</button>
                 <button class="auto autobuyerToggleButton" id="toggle2" toggleid="2">Auto: On</button>
                 <span class="coinunlock1 stats" id="buildtext4" style="color: gold">0 Coins/second [0%]</span>
             </div>
@@ -269,6 +271,7 @@
                 <img class="coinunlock2 image" id="coin3" src="Pictures/Tier3.png" alt="" loading="lazy">
                 <span class="coinunlock2 desc" id="buildtext5" style="color: gold">Printers: 0 [+0]</span>
                 <button class="coinunlock2 buildingPurchaseBtn" id="buycoin3">Cost: 4e4 Coins.</button>
+                <button class="coinunlock2 buildingPurchaseBtn" id="buycoinmulti3">Cost: 10 Printers.</button>
                 <button class="auto autobuyerToggleButton" id="toggle3" toggleid="3">Auto: On</button>
                 <span class="coinunlock2 stats" id="buildtext6" style="color: gold">0 Coins/second [0%]</span>
             </div>
@@ -276,6 +279,7 @@
                 <img class="coinunlock3 image" id="coin4" src="Pictures/Tier4.png" alt="" loading="lazy">
                 <span class="coinunlock3 desc" id="buildtext7" style="color: gold">Coin Mints: 0 [+0]</span>
                 <button class="coinunlock3 buildingPurchaseBtn" id="buycoin4">Cost: 8e5 Coins.</button>
+                <button class="coinunlock3 buildingPurchaseBtn" id="buycoinmulti4">Cost: 10 Coin Mints.</button>
                 <button class="auto autobuyerToggleButton" id="toggle4" toggleid="4">Auto: On</button>
                 <span class="coinunlock3 stats" id="buildtext8" style="color: gold">0 Coins/second [0%]</span>
             </div>
@@ -283,6 +287,7 @@
                 <img class="coinunlock4 image" id="coin5" src="Pictures/Tier5.png" alt="" loading="lazy">
                 <span class="coinunlock4 desc" id="buildtext9" style="color: gold">Alchemies: 0 [+0]</span>
                 <button class="coinunlock4 buildingPurchaseBtn" id="buycoin5">Cost: 1.6e7 Coins.</button>
+                <button class="coinunlock4 buildingPurchaseBtn" id="buycoinmulti5">Cost: 10 Alchemies.</button>
                 <button class="auto autobuyerToggleButton" id="toggle5" toggleid="5">Auto: On</button>
                 <span class="coinunlock4 stats" id="buildtext10" style="color: gold">0 Coins/second [0%]</span>
             </div>
@@ -2998,33 +3003,8 @@
         <br>
         <div>Toggle the Mods you want! Be sure to export your save before enabling or disabling any Mods :)</div>
         <br>
-        <div>List of Mods:</div>
-        <div>NoTax: Removes all Taxes</div>
-        <div>1MxSpeed: Makes the game run a million times as fast</div>
-        <div>SuperTax: All Taxes start instantly and are much stronger (other stuff is buffed to compensate; only balanced up to first Transcension, although you can go further if ya want)</div>
-        <div class="confirmationToggles">
-            <div class="center"></div>
-            <div class="modToggle">
-                <br>
-                <span>NoTax</span>
-                <button class="auto modSquare" id="toggle33" toggleid="33" format="[$]" style="border:2px solid green">[ON]</button>
-            </div>
-            <div class="modToggle">
-                <br>
-                <span>1MxSpeed</span>
-                <button class="auto modSquare" id="toggle34" toggleid="34" format="[$]" style="border:2px solid green">[ON]</button>
-            </div>
-            <div class="modToggle">
-                <br>
-                <span>Placeholder</span>
-                <button class="auto modSquare" id="toggle35" toggleid="35" format="[$]" style="border:2px solid green">[ON]</button>
-            </div>
-            <div class="modToggle">
-                <br>
-                <span>SuperTax</span>
-                <button class="auto modSquare" id="toggle36" toggleid="36" format="[$]" style="border:2px solid green">[ON]</button>
-            </div>
-        </div>
+        <table class="confirmationToggles" id="modTable"></table>
+        <span id="modDesc">⠀<br>⠀<br>⠀</span>
     </div>
 </div>
 
