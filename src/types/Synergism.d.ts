@@ -515,7 +515,7 @@ export interface Player {
     dailyPowderResetUses: number
 
     firstLoad: boolean,
-    mods: Array[]
+    mods: string[]
 }
 
 export interface GlobalVariables {
