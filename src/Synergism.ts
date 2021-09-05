@@ -3467,5 +3467,6 @@ window.addEventListener('load', () => {
 });
 
 export const inMod = (id: string)=>{
+    if(!Array.isArray(player.mods))player.mods=[]
     return player.mods.includes(id)
 }
