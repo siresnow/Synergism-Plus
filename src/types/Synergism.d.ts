@@ -514,7 +514,8 @@ export interface Player {
     overfluxPowder: number
     dailyPowderResetUses: number
 
-    firstLoad: boolean
+    firstLoad: boolean,
+    mods: Array[]
 }
 
 export interface GlobalVariables {

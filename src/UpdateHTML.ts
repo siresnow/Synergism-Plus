@@ -1,10 +1,10 @@
-import { player, format, formatTimeShort, /*formatTimeShort*/ } from './Synergism';
-import { Globals as G, mods } from './Variables';
+import { player, format, formatTimeShort, inMod /*formatTimeShort*/ } from './Synergism';
+import { Globals as G, modIds, modNames } from './Variables';
 import Decimal from 'break_infinity.js';
 import { CalcCorruptionStuff, calculateAscensionAcceleration, calculateTimeAcceleration} from './Calculate';
 import { achievementaward, totalachievementpoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
-import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
+import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions, visualUpdateMods } from './UpdateVisuals';
 import { getMaxChallenges } from './Challenges';
 import { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -192,7 +192,7 @@ export const revealStuff = () => {
 
     const example33 = document.getElementsByClassName("supertax") as HTMLCollectionOf<HTMLElement>;
     for (const ex of Array.from(example33)) { // in SuperTax mod //
-        ex.style.display = player.toggles[36] ? "block" : "none";
+        ex.style.display = inMod("supertax") ? "block" : "none";
     }
 
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
@@ -382,10 +382,6 @@ export const revealStuff = () => {
         "toggle32": player.achievements[173] > 0, // Settings - Confirmations - Ant Sacrifice
     }
 
-    for(let x=0;x<Object.keys(mods).length;x++){
-        automationUnlocks["toggle"+(x+33)]=true
-    }
-
     Object.keys(automationUnlocks).forEach(key => {
         const el = DOMCacheGetOrSet(key);
         if (!el) {
@@ -498,12 +494,13 @@ const visualTab: Record<string, () => void> = {
     shop: visualUpdateShop,
     ants: visualUpdateAnts,
     cubes: visualUpdateCubes,
-    traits: visualUpdateCorruptions
+    traits: visualUpdateCorruptions,
+    options: visualUpdateMods
 }
 
 export const htmlInserts = () => {
     // ALWAYS Update these, for they are the most important resources
-    DOMCacheGetOrSet('coinDisplay')[player.toggles[38]?"innerHTML":"textContent"] = format(player.coins)+(player.toggles[38]?"<sub>+"+format(G["totalCoinGain"])+"</sub>":"")
+    DOMCacheGetOrSet('coinDisplay')[inMod("coingain")?"innerHTML":"textContent"] = format(player.coins)+(inMod("coingain")?"<sub>+"+format(G["totalCoinGain"])+"</sub>":"")
     DOMCacheGetOrSet('offeringDisplay').textContent = format(player.runeshards)
     DOMCacheGetOrSet('diamondDisplay').textContent = format(player.prestigePoints)
     DOMCacheGetOrSet('mythosDisplay').textContent = format(player.transcendPoints)
@@ -588,7 +585,7 @@ export const buttoncolorchange = () => {
             if(player[id]>=player.producerMultiCost[num-1]){
                 ele.classList.add("buildingPurchaseBtnAvailable")
             }else ele.classList.remove("buildingPurchaseBtnAvailable")
-            ele.style.display=player.toggles[37]&&(num>1&&player.unlocks[hmm[num-2]]||num==1)?"":"none"
+            ele.style.display=inMod("ng-")&&(num>1&&player.unlocks[hmm[num-2]]||num==1)?"":"none"
         }
     }
 
@@ -713,6 +710,14 @@ export const buttoncolorchange = () => {
                 ? DOMCacheGetOrSet(`antUpgrade${i}`).classList.add("antUpgradeBtnAvailable")
                 : DOMCacheGetOrSet(`antUpgrade${i}`).classList.remove("antUpgradeBtnAvailable")
         }
+    }
+
+    if (G['currentTab']=="settings") {
+        for(let i=1;i<=modNames.length;i++){
+            DOMCacheGetOrSet("modtoggle"+i).style.borderColor = inMod(modIds[i-1])?"green":"red"
+            DOMCacheGetOrSet("modtoggle"+i).style.display="block"
+        }
+        visualUpdateMods()
     }
 }
 

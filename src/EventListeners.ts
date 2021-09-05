@@ -1,6 +1,6 @@
 import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop } from "./Toggles"
 import { resetrepeat, updateAutoReset, updateTesseractAutoBuyAmount } from "./Reset"
-import { player, resetCheck, saveSynergy } from "./Synergism"
+import { player, resetCheck, saveSynergy, inMod } from "./Synergism"
 import { boostAccelerator, buyAccelerator, buyMultiplier, buyProducer, buyCrystalUpgrades, buyParticleBuilding, buyTesseractBuilding, buyUpgrades, buyRuneBonusLevels, buyProducerMultiplier } from "./Buy"
 import { crystalupgradedescriptions, constantUpgradeDescriptions, buyConstantUpgrades, upgradedescriptions } from "./Upgrades"
 import { buyAutobuyers } from "./Automation"
@@ -17,7 +17,7 @@ import { corruptionCleanseConfirm, corruptionDisplay } from "./Corruptions"
 import { exportSynergism, updateSaveString, promocodes, importSynergism, resetGame } from "./ImportExport"
 import { resetHistoryTogglePerSecond } from "./History"
 import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, shopData } from "./Shop"
-import { Globals as G, mods, modNames, modDescs } from './Variables';
+import { Globals as G, modNames, modDescs, modIds } from './Variables';
 import { changeTabColor } from "./UpdateHTML"
 import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp } from "./Hepteracts"
 import { exitOffline, forcedDailyReset, timeWarp } from "./Calculate"
@@ -194,11 +194,8 @@ export const generateEventHandlers = () => {
 
 //Part 4: Toggles
     // I'm just addressing all global toggles here
-    for (let index = 0; index < 32+Object.keys(mods).length; index++) {
+    for (let index = 0; index < 32; index++) {
         DOMCacheGetOrSet(`toggle${index+1}`).addEventListener('click', () => toggleSettings(index))   
-        if(index>=32)DOMCacheGetOrSet(`toggle${index+1}`).addEventListener('mouseover', () => {
-            DOMCacheGetOrSet("modDesc").innerHTML = `<b>${modNames[index-32]}</b><br>${modDescs[index-32]}`
-        })
     }
     // Toggles auto reset type (between TIME and AMOUNT)
     DOMCacheGetOrSet("prestigeautotoggle").addEventListener('click', () => toggleautoreset(1))
@@ -214,6 +211,19 @@ export const generateEventHandlers = () => {
     // Tesseract-specific of the above. I don't know why I didn't standardize names here.
     DOMCacheGetOrSet("tesseractautobuytoggle").addEventListener('click', () => toggleautobuytesseract())
     DOMCacheGetOrSet("tesseractAmount").addEventListener('blur', () => updateTesseractAutoBuyAmount())
+
+//Part 4.5: Mod Toggles
+    for(let x=0;x<modNames.length;x++){
+        let tog = DOMCacheGetOrSet(`modtoggle${x+1}`)
+        tog.addEventListener('mouseover', () => {
+            DOMCacheGetOrSet("modDesc").innerHTML = `<b>${modNames[x]}</b><br>${modDescs[x]}`
+        })
+        tog.addEventListener('click', () => {
+            let id = Number(tog.id.slice(9))
+            if(inMod(modIds[id-1]))player.mods.splice(player.mods.indexOf(modIds[id-1]),1)
+            else player.mods.push(modIds[id-1])
+        })
+    }
 
 // UPGRADES TAB
 // For all upgrades in the Upgrades Tab (125) count, we have the same mouseover event. So we'll work on those first.
