@@ -461,10 +461,16 @@ export const mods = [
         id: "ng-"
     },
     {
-        title: "Coin Gain",
-        desc: "Adds a way to see how many coins you gain per second.",
+        title: "Extra Text",
+        desc: "Adds a way to see how many coins you gain per second and building multipliers.",
         author: "gapples2",
         id: "coingain"
+    },
+    {
+        title: "10xSpeed",
+        desc: "Makes the game run 10 times as fast. Created for testing NG-.",
+        author: "gapples2",
+        id: "10xspeed"
     },
 ]
 

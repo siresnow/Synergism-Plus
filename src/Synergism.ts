@@ -689,7 +689,9 @@ const toAdapt = new Map<keyof Player, (data: Player) => unknown>([
 const loadSynergy = () => {
     console.log('loaded attempted')
     const save = localStorage.getItem("Synergysave2");
+    const savedmods = save ? JSON.parse(atob(save)).mods : false
     const data = save ? JSON.parse(atob(save)) as Player & Record<string, unknown> : null;
+    if(savedmods)player.mods=savedmods
 
     if (testing) {
         Object.defineProperty(window, 'player', {
@@ -1988,7 +1990,7 @@ export const multipliers = (): void => {
     G['globalCoinMultiplier'] = Decimal.pow(G['globalCoinMultiplier'], G['financialcollapsePower'][player.usedCorruptions[9]])
 
     G['coinOneMulti'] = new Decimal(1);
-    if(inMod("ng-"))G['coinOneMulti'] = G['coinOneMulti'].times(player.producerMulti[0])
+    if(inMod("ng-"))G['coinOneMulti'] = G['coinOneMulti'].times(player.producerMulti[0]).times(3)
     if (player.upgrades[1] > 0.5) {
         G['coinOneMulti'] = G['coinOneMulti'].times(first6CoinUp);
     }
@@ -2000,7 +2002,7 @@ export const multipliers = (): void => {
     }
 
     G['coinTwoMulti'] = new Decimal(1);
-    if(inMod("ng-"))G['coinTwoMulti'] = G['coinTwoMulti'].times(player.producerMulti[1])
+    if(inMod("ng-"))G['coinTwoMulti'] = G['coinTwoMulti'].times(player.producerMulti[1]).times(3)
     if (player.upgrades[2] > 0.5) {
         G['coinTwoMulti'] = G['coinTwoMulti'].times(first6CoinUp);
     }
@@ -2015,7 +2017,7 @@ export const multipliers = (): void => {
     }
 
     G['coinThreeMulti'] = new Decimal(1);
-    if(inMod("ng-"))G['coinThreeMulti'] = G['coinThreeMulti'].times(player.producerMulti[2])
+    if(inMod("ng-"))G['coinThreeMulti'] = G['coinThreeMulti'].times(player.producerMulti[2]).times(3)
     if (player.upgrades[3] > 0.5) {
         G['coinThreeMulti'] = G['coinThreeMulti'].times(first6CoinUp);
     }
@@ -2027,7 +2029,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFourMulti'] = new Decimal(1);
-    if(inMod("ng-"))G['coinFourMulti'] = G['coinFourMulti'].times(player.producerMulti[3])
+    if(inMod("ng-"))G['coinFourMulti'] = G['coinFourMulti'].times(player.producerMulti[3]).times(3)
     if (player.upgrades[4] > 0.5) {
         G['coinFourMulti'] = G['coinFourMulti'].times(first6CoinUp);
     }
@@ -2039,7 +2041,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFiveMulti'] = new Decimal(1);
-    if(inMod("ng-"))G['coinFiveMulti'] = G['coinFiveMulti'].times(player.producerMulti[4])
+    if(inMod("ng-"))G['coinFiveMulti'] = G['coinFiveMulti'].times(player.producerMulti[4]).times(3)
     if (player.upgrades[5] > 0.5) {
         G['coinFiveMulti'] = G['coinFiveMulti'].times(first6CoinUp);
     }
@@ -3108,6 +3110,7 @@ const tick = () => {
     deltaMean += (delta - deltaMean) / filterStrength;
     let dtEffective;
     let gameSpeed = inMod("1mxspeed") ? 1_000_000 : 1;
+    if(inMod("10xspeed"))gameSpeed*=10
     while (delta > 5) {
         // tack will compute dtEffective milliseconds of game time
         dtEffective = dt;

@@ -41,7 +41,7 @@ export const visualUpdateBuildings = () => {
             const ele = DOMCacheGetOrSet("buycoinmulti"+i)
 
             if(ele&&inMod("ng-"))ele.textContent = "Cost: " + format(player.producerMultiCost[i-1],0) + " " + names[i] + "."
-            DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"+(inMod("ng-")?` x${format(numWord,2)}`:"")
+            DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"+(inMod("coingain")?` x${format(numWord,2)}`:"")
             DOMCacheGetOrSet("buycoin" + i).textContent = "Cost: " + format(player[`${ith}CostCoin` as const]) + " coins."
             percentage = percentage.fromMantissaExponent(place.mantissa / totalProductionDivisor.mantissa, place.exponent - totalProductionDivisor.exponent).times(100)
             DOMCacheGetOrSet("buildtext" + (2 * i)).textContent = "Coins/Sec: " + format((place.dividedBy(G['taxdivisor'])).times(40), 2) + " [" + format(percentage, 3) + "%]"
