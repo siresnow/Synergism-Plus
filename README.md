@@ -20,7 +20,7 @@ You should add a new block of code that looks like this:
     id: "modIDhere"
 },
 ```
-Be sure to use a unique mod ID or both mods will be broken.<br>
+Be sure to use a unique mod ID or both mods will be broken. An easy way to check is to open the console while testing.<br>
 
 ### Running your Mod locally
 Running your Mod locally only takes 3 simple steps!<br>
