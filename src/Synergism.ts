@@ -2,7 +2,7 @@ import Decimal, { DecimalSource } from 'break_infinity.js';
 import LZString from 'lz-string';
 
 import { isDecimal, getElementById, sortWithIndices, sumContents, btoa } from './Utility';
-import { blankGlobals, Globals as G, mods, modNames } from './Variables';
+import { blankGlobals, Globals as G, mods, modNames, modIds } from './Variables';
 import { CalcECC, getChallengeConditions, challengeDisplay, highestChallengeRewards, challengeRequirement, runChallengeSweep, getMaxChallenges, challenge15ScoreMultiplier } from './Challenges';
 
 import type { OneToFive, Player, ZeroToFour } from './types/Synergism';
@@ -639,7 +639,8 @@ export const player: Player = {
     promoCodeTiming: {
         time: 0
     },
-    firstLoad: true
+    firstLoad: true,
+    mods: []
 }
 
 export const blankSave = Object.assign({}, player, {
@@ -1684,7 +1685,7 @@ export const updateAllTick = (): void => {
     }
 
     G['acceleratorPower'] = Math.pow(
-        (player.toggles[36]&&!player.toggles[37]?1.25:(player.toggles[37]?1.05:1.1)) + G['tuSevenMulti'] * 
+        (inMod("supertax")&&!inMod("ng-")?1.25:(inMod("ng-")?1.05:1.1)) + G['tuSevenMulti'] * 
         (G['totalAcceleratorBoost'] / 100) 
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20), 
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
@@ -1874,7 +1875,7 @@ export const updateAllMultiplier = (): void => {
         c7 = 1.25
     }
 
-    G['multiplierPower'] = (player.toggles[36]&&!player.toggles[37]?5:(player.toggles[37]?1.5:2)) + 0.005 * G['totalMultiplierBoost'] * c7
+    G['multiplierPower'] = (inMod("supertax")&&!inMod("ng-")?5:(inMod("ng-")?1.5:2)) + 0.005 * G['totalMultiplierBoost'] * c7
 
     //No MA and Sadistic will always override Transcend Challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
@@ -1987,7 +1988,7 @@ export const multipliers = (): void => {
     G['globalCoinMultiplier'] = Decimal.pow(G['globalCoinMultiplier'], G['financialcollapsePower'][player.usedCorruptions[9]])
 
     G['coinOneMulti'] = new Decimal(1);
-    if(player.toggles[37])G['coinOneMulti'] = G['coinOneMulti'].times(player.producerMulti[0])
+    if(inMod("ng-"))G['coinOneMulti'] = G['coinOneMulti'].times(player.producerMulti[0])
     if (player.upgrades[1] > 0.5) {
         G['coinOneMulti'] = G['coinOneMulti'].times(first6CoinUp);
     }
@@ -1999,7 +2000,7 @@ export const multipliers = (): void => {
     }
 
     G['coinTwoMulti'] = new Decimal(1);
-    if(player.toggles[37])G['coinTwoMulti'] = G['coinTwoMulti'].times(player.producerMulti[1])
+    if(inMod("ng-"))G['coinTwoMulti'] = G['coinTwoMulti'].times(player.producerMulti[1])
     if (player.upgrades[2] > 0.5) {
         G['coinTwoMulti'] = G['coinTwoMulti'].times(first6CoinUp);
     }
@@ -2014,7 +2015,7 @@ export const multipliers = (): void => {
     }
 
     G['coinThreeMulti'] = new Decimal(1);
-    if(player.toggles[37])G['coinThreeMulti'] = G['coinThreeMulti'].times(player.producerMulti[2])
+    if(inMod("ng-"))G['coinThreeMulti'] = G['coinThreeMulti'].times(player.producerMulti[2])
     if (player.upgrades[3] > 0.5) {
         G['coinThreeMulti'] = G['coinThreeMulti'].times(first6CoinUp);
     }
@@ -2026,7 +2027,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFourMulti'] = new Decimal(1);
-    if(player.toggles[37])G['coinFourMulti'] = G['coinFourMulti'].times(player.producerMulti[3])
+    if(inMod("ng-"))G['coinFourMulti'] = G['coinFourMulti'].times(player.producerMulti[3])
     if (player.upgrades[4] > 0.5) {
         G['coinFourMulti'] = G['coinFourMulti'].times(first6CoinUp);
     }
@@ -2038,7 +2039,7 @@ export const multipliers = (): void => {
     }
 
     G['coinFiveMulti'] = new Decimal(1);
-    if(player.toggles[37])G['coinFiveMulti'] = G['coinFiveMulti'].times(player.producerMulti[4])
+    if(inMod("ng-"))G['coinFiveMulti'] = G['coinFiveMulti'].times(player.producerMulti[4])
     if (player.upgrades[5] > 0.5) {
         G['coinFiveMulti'] = G['coinFiveMulti'].times(first6CoinUp);
     }
@@ -2213,7 +2214,7 @@ export const resourceGain = (dt: number): void => {
     calculatetax();
     if (G['produceTotal'].gte(0.001)) {
         let addcoin = Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))
-        if(player.toggles[38])G["totalCoinGain"]=addcoin.times(40)
+        if(inMod("coingain"))G["totalCoinGain"]=addcoin.times(40)
         player.coins = player.coins.add(addcoin.times(dt / 0.025));
         player.coinsThisPrestige = player.coinsThisPrestige.add(addcoin.times(dt / 0.025));
         player.coinsThisTranscension = player.coinsThisTranscension.add(addcoin.times(dt / 0.025));
@@ -3106,7 +3107,7 @@ const tick = () => {
     // compute pseudo-average delta cf. https://stackoverflow.com/a/5111475/343834
     deltaMean += (delta - deltaMean) / filterStrength;
     let dtEffective;
-    let gameSpeed = player.toggles[34] ? 1_000_000 : 1;
+    let gameSpeed = inMod("1mxspeed") ? 1_000_000 : 1;
     while (delta > 5) {
         // tack will compute dtEffective milliseconds of game time
         dtEffective = dt;
@@ -3439,7 +3440,7 @@ window.addEventListener('load', () => {
             let td = document.createElement("td")
             let ele = document.createElement("div")
             
-            ele.innerHTML = `<br>${modNames[x*5+y]}<br><button class="auto modSquare" id="toggle${33+x*5+y}" toggleid="${33+x*5+y}" format="[$]" style="border:2px solid green">[ON]</button>`
+            ele.innerHTML = `<br>${modNames[x*8+y]}<br><button class="auto modSquare" id="modtoggle${x*8+y+1}" format="[$]" style="border:2px solid green;display:flex">[ON]</button>`
             ele.classList.add("modToggle")
 
             td.appendChild(ele)
@@ -3451,8 +3452,8 @@ window.addEventListener('load', () => {
 
     if(window.location.href!="https://flamemasternxf.github.io/Synergism-Plus/"){
         let s = "Mod Ids: \n"
-        modNames.forEach((a,i)=>s+=a+": "+(33+i)+"\n")
-        console.log(s+"New Mod ID: "+(modNames.length+33))
+        modNames.forEach((a,i)=>s+=a+": "+modIds[i]+"\n")
+        console.log(s)
     }
 
 
@@ -3462,3 +3463,7 @@ window.addEventListener('load', () => {
 
     void reloadShit();
 });
+
+export const inMod = (id: string)=>{
+    return player.mods.includes(id)
+}

@@ -1,4 +1,4 @@
-import { player } from './Synergism';
+import { inMod, player } from './Synergism';
 import { Globals as G } from './Variables';
 import { sumContents } from './Utility';
 
@@ -9,13 +9,13 @@ import { achievementaward } from './Achievements';
 export const calculatetax = () => {
     let c = 0;
     let e = 1;
-    let f = player.toggles[36]?1.1:1;
+    let f = inMod("supertax")?1.1:1;
     let compareC = 0;
-    G['produceFirst'] = (player.firstGeneratedCoin.add(player.firstOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinOneMulti']).times(player.firstProduceCoin).pow(player.toggles[37]?0.5:1);
-    G['produceSecond'] = (player.secondGeneratedCoin.add(player.secondOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinTwoMulti']).times(player.secondProduceCoin).pow(player.toggles[37]?0.5:1);
-    G['produceThird'] = (player.thirdGeneratedCoin.add(player.thirdOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinThreeMulti']).times(player.thirdProduceCoin).pow(player.toggles[37]?0.5:1);
-    G['produceFourth'] = (player.fourthGeneratedCoin.add(player.fourthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFourMulti']).times(player.fourthProduceCoin).pow(player.toggles[37]?0.5:1);
-    G['produceFifth'] = (player.fifthGeneratedCoin.add(player.fifthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFiveMulti']).times(player.fifthProduceCoin).pow(player.toggles[37]?0.5:1);
+    G['produceFirst'] = (player.firstGeneratedCoin.add(player.firstOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinOneMulti']).times(player.firstProduceCoin).pow(inMod("ng-")?0.5:1);
+    G['produceSecond'] = (player.secondGeneratedCoin.add(player.secondOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinTwoMulti']).times(player.secondProduceCoin).pow(inMod("ng-")?0.5:1);
+    G['produceThird'] = (player.thirdGeneratedCoin.add(player.thirdOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinThreeMulti']).times(player.thirdProduceCoin).pow(inMod("ng-")?0.5:1);
+    G['produceFourth'] = (player.fourthGeneratedCoin.add(player.fourthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFourMulti']).times(player.fourthProduceCoin).pow(inMod("ng-")?0.5:1);
+    G['produceFifth'] = (player.fifthGeneratedCoin.add(player.fifthOwnedCoin)).times(G['globalCoinMultiplier']).times(G['coinFiveMulti']).times(player.fifthProduceCoin).pow(inMod("ng-")?0.5:1);
     G['produceTotal'] = G['produceFirst'].add(G['produceSecond']).add(G['produceThird']).add(G['produceFourth']).add(G['produceFifth']);
 
     if (G['produceFirst'].lte(.0001)) {
@@ -53,7 +53,7 @@ export const calculatetax = () => {
     if (player.challengecompletions[6] > 0) {
         f /= 1.075
     }
-    let exponent = player.toggles[36]?2.5:1;
+    let exponent = inMod("supertax")?2.5:1;
     exponent *= e;
     exponent *= (1 - 1 / 20 * player.researches[51] - 1 / 40 * player.researches[52] - 1 / 80 * player.researches[53] - 1 / 160 * player.researches[54] - 1 / 320 * player.researches[55])
     exponent *= (1 - 0.05 / 1800 * (player.achievements[45] + player.achievements[46] + 2 * player.achievements[47]) * Math.min(player.prestigecounter, 1800))
@@ -74,9 +74,9 @@ export const calculatetax = () => {
     if (player.upgrades[121] > 0) {
         exponent *= 0.5
     }
-    let mxe = Math.floor((player.toggles[36]?.5:275) / (Decimal.log(player.toggles[36]?1.05:1.01, 10) * exponent)) - 1
+    let mxe = Math.floor((inMod("supertax")?.5:275) / (Decimal.log(inMod("supertax")?1.05:1.01, 10) * exponent)) - 1
     G['maxexponent'] = mxe;
-    if (player.toggles[36]) {
+    if (inMod("supertax")) {
         let mxemult = 1+Object.keys(player.upgrades).filter(x => player.upgrades[Number(x)]==1 && (Number(x)<3||Number(x)==5||(Number(x)>=21&&Number(x)<23)||Number(x)==25||Number(x)==26)).length/3;
         if (player.upgrades[6]>.5) mxemult += new Decimal(G['totalCoinOwned'] + 1).times(Decimal.min(1e30, Decimal.pow(1.008, G['totalCoinOwned']))).max(1).log10()/5;
         if (player.upgrades[10]>.5) mxemult += 1;
@@ -93,15 +93,15 @@ export const calculatetax = () => {
     }
 
     if (a2 >= 1) {
-        c = Math.pow(a2, 2) / (player.toggles[36]?1:550)
+        c = Math.pow(a2, 2) / (inMod("supertax")?1:550)
     }
 
 
-    compareC = Math.pow(mxe, 2) / (player.toggles[36]?1:550)
+    compareC = Math.pow(mxe, 2) / (inMod("supertax")?1:550)
 
-    if (!player.toggles[33]){
+    if (!inMod("notax")){
         let base = 1.01;
-        if (player.toggles[36]) {
+        if (inMod("supertax")) {
             base = 1.05;
             if (G['produceFourth'].gte(1e4)) exponent /= 1.175;
             if (G['produceFifth'].gte(1e5)) exponent /= 1.2; // what, you thought I'd fix actually fix these bugs? nah I'll just hardcode a temporary solution ;)
@@ -110,15 +110,15 @@ export const calculatetax = () => {
             if (exponent>=200) exponent = Math.pow(exponent, 2)/200;
         }
 
-        G['taxdivisor'] = Decimal.pow(base, (c) * (exponent)).times(player.toggles[36]?(G["produceTotal"].plus(1).log10()+1):1)
-        G['taxdivisorcheck'] = Decimal.pow(base, (compareC) * (exponent)).times(player.toggles[36]?(G["produceTotal"].plus(1).log10()+1):1)
+        G['taxdivisor'] = Decimal.pow(base, (c) * (exponent)).times(inMod("supertax")?(G["produceTotal"].plus(1).log10()+1):1)
+        G['taxdivisorcheck'] = Decimal.pow(base, (compareC) * (exponent)).times(inMod("supertax")?(G["produceTotal"].plus(1).log10()+1):1)
     }
     else{
         G['taxdivisor'] = new Decimal(1)
         G['taxdivisorcheck'] = new Decimal(1)
     }
 
-    if (player.toggles[36]) {
+    if (inMod("supertax")) {
         G['crystaltax'] = Decimal.pow(2, G['produceFirstDiamonds'].plus(1).times(G['produceSecondDiamonds'].plus(1)).times(G['produceThirdDiamonds'].plus(1)).times(G['produceFourthDiamonds'].plus(1)).times(G['produceFifthDiamonds'].plus(1)).plus(1).log10());
         G['mythostax'] = Decimal.pow(3, G['produceFirstMythos'].plus(1).times(G['produceSecondMythos'].plus(1)).times(G['produceThirdMythos'].plus(1)).times(G['produceFourthMythos'].plus(1)).times(G['produceFifthMythos'].plus(1)).plus(1).log10());
         G['particletax'] = Decimal.pow(4, G['produceFirstParticles'].plus(1).times(G['produceSecondParticles'].plus(1)).times(G['produceThirdParticles'].plus(1)).times(G['produceFourthParticles'].plus(1)).times(G['produceFifthParticles'].plus(1)).plus(1).log10());

@@ -1,6 +1,6 @@
 import Decimal from 'break_infinity.js';
-import { Globals as G } from './Variables';
-import { player, format, formatTimeShort } from './Synergism';
+import { Globals as G, modNames, modIds } from './Variables';
+import { player, format, formatTimeShort, inMod } from './Synergism';
 import { version } from './Config';
 import { CalcECC } from './Challenges';
 import { calculateSigmoidExponential, calculateMaxRunes, calculateRuneExpToLevel, calculateSummationLinear, calculateRecycleMultiplier, calculateCorruptionPoints, CalcCorruptionStuff, calculateAutomaticObtainium, calculateTimeAcceleration } from './Calculate';
@@ -40,8 +40,8 @@ export const visualUpdateBuildings = () => {
             const numWord = G[numWords[i-1]];
             const ele = DOMCacheGetOrSet("buycoinmulti"+i)
 
-            if(ele&&player.toggles[37])ele.textContent = "Cost: " + format(player.producerMultiCost[i-1],0) + " " + names[i] + "."
-            DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"+(player.toggles[37]?` x${format(numWord,2)}`:"")
+            if(ele&&inMod("ng-"))ele.textContent = "Cost: " + format(player.producerMultiCost[i-1],0) + " " + names[i] + "."
+            DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"+(inMod("ng-")?` x${format(numWord,2)}`:"")
             DOMCacheGetOrSet("buycoin" + i).textContent = "Cost: " + format(player[`${ith}CostCoin` as const]) + " coins."
             percentage = percentage.fromMantissaExponent(place.mantissa / totalProductionDivisor.mantissa, place.exponent - totalProductionDivisor.exponent).times(100)
             DOMCacheGetOrSet("buildtext" + (2 * i)).textContent = "Coins/Sec: " + format((place.dividedBy(G['taxdivisor'])).times(40), 2) + " [" + format(percentage, 3) + "%]"
@@ -59,7 +59,7 @@ export const visualUpdateBuildings = () => {
 
         // update the tax text
         let warning = "";
-        if (player.reincarnationCount > 0.5 || player.toggles[36]) {
+        if (player.reincarnationCount > 0.5 || inMod("supertax")) {
             warning = `Your tax also caps your Coin gain at ${format(Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))}/s.`
         }
         DOMCacheGetOrSet("taxinfo").textContent =
@@ -480,5 +480,11 @@ export const visualUpdateShop = () => {
                 DOMCacheGetOrSet(`${key}Button`).textContent = "Maxed!": 
                 DOMCacheGetOrSet(`${key}Button`).textContent = "Upgrade for " + format(getShopCosts(key)) + " Quarks";
         }
+    }
+}
+
+export const visualUpdateMods = ()=>{
+    for(let i=1;i<=modNames.length;i++){
+        DOMCacheGetOrSet("modtoggle"+i).textContent = inMod(modIds[i-1])?"[ON]":"[OFF]"
     }
 }
