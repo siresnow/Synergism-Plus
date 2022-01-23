@@ -692,9 +692,6 @@ nav li:hover {
     margin-left: 5px;
     margin-right: 5px;
 }
-
-#promocodes {}
-#promocodes,
 #theme {
     transition-duration: 0.15s;
     padding: 5px;
