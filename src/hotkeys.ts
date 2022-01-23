@@ -2,7 +2,7 @@ import { sacrificeAnts } from './Ants';
 import { buyAccelerator, boostAccelerator, buyMultiplier } from './Buy';
 import { player, resetCheck } from './Synergism';
 import { keyboardTabChange } from './Toggles';
-import { Alert, Prompt } from './UpdateHTML';
+//import { Alert, Prompt } from './UpdateHTML';
 
 export const hotkeys = new Map<string, [string, () => unknown]>([
     ['A', ['Buy Accelerators', () => buyAccelerator()]],
@@ -51,7 +51,7 @@ document.addEventListener('keydown', event => {
     }
 });
 
-const makeSlot = (key: string, descr: string) => {
+/*const makeSlot = (key: string, descr: string) => {
     const div = document.createElement('div');
     div.classList.add('hotkeyItem');
 
@@ -101,8 +101,10 @@ const makeSlot = (key: string, descr: string) => {
     return div;
 }
 
+ */
+
 export const startHotkeys = () => {
-    const hotkey = document.querySelector('.hotkeys');
+    //const hotkey = document.querySelector('.hotkeys');
 
     /*for (const child of Array.from(hotkey.children))
         hotkey.removeChild(child);

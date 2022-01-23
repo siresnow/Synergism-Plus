@@ -63,6 +63,7 @@ export const generateEventHandlers = () => {
     }
 // Offline Button
     DOMCacheGetOrSet('exitOffline').addEventListener('click', () => exitOffline());
+    DOMCacheGetOrSet('emergencyExitOffline').addEventListener('click', () => exitOffline());
 // UPPER UI ELEMENTS
     //Prelude: Cube/Tesseract/Hypercube/Platonic display UIs (Onclicks)
     DOMCacheGetOrSet('ascCubeStats').addEventListener('click', () => toggleAscStatPerSecond(1))

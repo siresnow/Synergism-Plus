@@ -806,6 +806,7 @@ nav li:hover {
     margin-left: 10px;
 }
 
+
 #taxinfo {
     text-align: center;
     font-size: 1em;
@@ -3234,4 +3235,16 @@ header #obtainiumDisplay {
 .singularityUpgradeFiller {
     display: flex;
     width: 105px;
+}
+
+
+#emergencyExitOffline{
+    width: 150px;
+    min-width: 150px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid white !important;
+    background-color: #171717;
+    transition-duration: 0.15s;
+    cursor: default;
 }
