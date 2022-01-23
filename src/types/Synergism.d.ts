@@ -346,6 +346,11 @@ export interface Player {
         calculator3: number,
         constantEX: number,
         powderEX: number,
+        chronometer2: number,
+        chronometer3: number,
+        seasonPassY: number,
+        seasonPassZ: number,
+        challengeTome2: number,
     }
     autoSacrificeToggle: boolean,
     autoFortifyToggle: boolean,
@@ -458,7 +463,6 @@ export interface Player {
 
     constantUpgrades: number[]
     history: Record<Category, ResetHistoryEntryUnion[]>
-    historyCountMax: number
     historyShowPerSecond: boolean,
 
     autoChallengeRunning: boolean,
@@ -516,11 +520,17 @@ export interface Player {
 
     firstLoad: boolean,
     mods: string[]
+
+    singularityCount: number
+    goldenQuarks: number
+    quarksThisSingularity: number
+    dailyCodeUsed: boolean
 }
 
 export interface GlobalVariables {
     runediv: number[]
     runeexpbase: number[]
+    runeMaxLvl: number
     upgradeCosts: number[]
 
     // Mega list of Variables to be used elsewhere
@@ -853,6 +863,8 @@ export interface GlobalVariables {
     timeMultiplier: number
     upgradeMultiplier: number
 
+    historyCountMax: number
+
     isEvent: boolean
 }
 
@@ -870,6 +882,7 @@ export type resetNames =
     | "transcension" 
     | "reincarnation" 
     | "ascension" 
+    | "singularity"
     | "transcensionChallenge" 
     | "reincarnationChallenge" 
     | "ascensionChallenge" 

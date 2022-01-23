@@ -35,7 +35,8 @@ const tabNumberConst = {
     "researches": 6,
     "ants": 7,
     "cubes": 8,
-    "traits": 9
+    "traits": 9,
+    "singularity": 10
 } as const;
 
 export const toggleTabs = (name: keyof typeof tabNumberConst) => {
@@ -261,6 +262,8 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: true, unlocked: player.achievements[141] > 0, buttonID: "corrStatsBtn"},
                 {subTabID: false, unlocked: player.achievements[141] > 0, buttonID: "corrLoadoutsBtn"}]
         },
+        10: {
+            subTabList: []}
     }
     return subTabs[mainTab];
 }
@@ -583,10 +586,11 @@ const setActiveSettingScreen = async (subtab: string, clickedButton: HTMLButtonE
         const credits = DOMCacheGetOrSet('creditList');
         const artists = DOMCacheGetOrSet('artistList');
 
-        if (credits.childElementCount > 0 || artists.childElementCount > 0)
+        if (credits.childElementCount > 0 || artists.childElementCount > 0) {
             return;
-        else if (!navigator.onLine)
+        } else if (!navigator.onLine || document.hidden) {
             return;
+        }
 
         try {
             const r = await fetch('https://api.github.com/repos/pseudo-corp/SynergismOfficial/contributors', {

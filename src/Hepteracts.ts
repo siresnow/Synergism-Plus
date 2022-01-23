@@ -16,8 +16,10 @@ export interface IHepteractCraft {
     DISCOUNT?: number 
 }
 
-type hepteractTypes = 'chronos' | 'hyperrealism' | 'quark' | 'challenge' |
-                      'abyss' | 'accelerator' | 'acceleratorBoost' | 'multiplier'
+export const hepteractTypeList = ['chronos', 'hyperrealism', 'quark', 'challenge',
+    'abyss', 'accelerator', 'acceleratorBoost', 'multiplier'] as const;
+
+export type hepteractTypes = typeof hepteractTypeList[number];
 
 export class HepteractCraft {
     /**
@@ -76,12 +78,20 @@ export class HepteractCraft {
     }
 
     // Add to balance through crafting.
-    craft = async() : Promise<HepteractCraft> => {
+    craft = async (max = false): Promise<HepteractCraft> => {
+        let craftAmount = null;
         //Prompt used here. Thank you Khafra for the already made code! -Platonic
-        const craftingPrompt = await Prompt('How many would you like to craft?');
-        if (craftingPrompt === null) // Number(null) is 0. Yeah..
-            return Alert('Okay, maybe next time.');
-        const craftAmount = Number(craftingPrompt)
+        if (!max) {
+            const craftingPrompt = await Prompt('How many would you like to craft?');
+            if (craftingPrompt === null) // Number(null) is 0. Yeah..
+                return Alert('Okay, maybe next time.');
+            craftAmount = Number(craftingPrompt)
+        } else {
+            const craftYesPlz = await Confirm('This will attempt to buy as many as possible. Are you sure?')
+            if (!craftYesPlz) 
+                return Alert('Okay, maybe next time.');
+            craftAmount = this.CAP
+        }
 
         //Check these lol
         if (Number.isNaN(craftAmount) || !Number.isFinite(craftAmount)) // nan + Infinity checks
@@ -111,16 +121,25 @@ export class HepteractCraft {
         this.BAL += amountToCraft
 
         // Subtract spent items from player
-        player.wowAbyssals -= amountToCraft * this.HEPTERACT_CONVERSION
+        player.wowAbyssals -= amountToCraft * this.HEPTERACT_CONVERSION;
+
+        if (player.wowAbyssals < 0) {
+            player.wowAbyssals = 0;
+        }
+
         for (const item in this.OTHER_CONVERSIONS) {
             if (typeof player[item as keyof Player] === 'number')
                 (player[item as keyof Player] as number) -= amountToCraft * this.OTHER_CONVERSIONS[item as keyof Player];
+
+                if ((player[item as keyof Player] as number) < 0) {
+                    (player[item as keyof Player] as number) = 0;
+                }
             else if (player[item as keyof Player] instanceof Cube)
                 (player[item as keyof Player] as Cube).sub(amountToCraft * this.OTHER_CONVERSIONS[item as keyof Player]);
             else if (item == 'worlds')
                 player.worlds.sub(amountToCraft * this.OTHER_CONVERSIONS[item])
         }
-        return Alert('You have successfully crafted ' + format(amountToCraft, 0, true) + ' hepteracts. If this is less than your input, you either hit the inventory limit or you had insufficient resources.');
+        return Alert('You have successfully crafted ' + format(amountToCraft, 0, true) + ' hepteracts.' + (max ? '' : ' If this is less than your input, you either hit the inventory limit or you had insufficient resources.'));
     }
 
     // Reduce balance through spending
@@ -252,8 +271,8 @@ export const hepteractDescriptions = (type: hepteractTypes) => {
             unlockedText.textContent = (player.hepteractCrafts.chronos.UNLOCKED) ? "< UNLOCKED >": "< LOCKED >"
             effectText.textContent = "This hepteract bends time, in your favor. +0.06% Ascension Speed per Chronos Hepteract."
             currentEffectText.textContent = "Current Effect: Ascension Speed +" + format(hepteractEffective('chronos') * 6 / 100, 2, true) + "%"
-            balanceText.textContent = "Inventory: " + format(player.hepteractCrafts.chronos.BAL, 0, true) + " / " + format(player.hepteractCrafts.chronos.CAP)
-            costText.textContent = "One of these will cost you " + format(player.hepteractCrafts.chronos.HEPTERACT_CONVERSION, 0, true) + " Hepteracts and 1e115 Obtainium [WIP]"
+            balanceText.textContent = "Inventory: " + format(player.hepteractCrafts.chronos.BAL) + " / " + format(player.hepteractCrafts.chronos.CAP)
+            costText.textContent = "One of these will cost you " + format(player.hepteractCrafts.chronos.HEPTERACT_CONVERSION, 0, true) + " Hepteracts and 1e115 Obtainium"
             break;
         case 'hyperrealism':
             unlockedText.textContent = (player.hepteractCrafts.hyperrealism.UNLOCKED) ? "< UNLOCKED >": "< LOCKED >"

@@ -5,7 +5,7 @@ import { isDecimal, getElementById, sortWithIndices, sumContents, btoa } from '.
 import { blankGlobals, Globals as G, mods, modNames, modIds } from './Variables';
 import { CalcECC, getChallengeConditions, challengeDisplay, highestChallengeRewards, challengeRequirement, runChallengeSweep, getMaxChallenges, challenge15ScoreMultiplier } from './Challenges';
 
-import type { OneToFive, Player, ZeroToFour } from './types/Synergism';
+import type { OneToFive, Player, resetNames, ZeroToFour } from './types/Synergism';
 import { upgradeupdate, getConstUpgradeMetadata, buyConstantUpgrades, ascendBuildingDR } from './Upgrades';
 import { updateResearchBG, maxRoombaResearchIndex, buyResearch } from './Research';
 import { updateChallengeDisplay, revealStuff, showCorruptionStatsLoadouts, CSSAscend, updateAchievementBG, updateChallengeLevel, buttoncolorchange, htmlInserts, hideStuff, changeTabColor, Confirm, Alert } from './UpdateHTML';
@@ -20,7 +20,7 @@ import { calculatePlatonicBlessings } from './PlatonicCubes';
 import { antSacrificePointsToMultiplier, autoBuyAnts, calculateCrumbToCoinExp } from './Ants';
 import { calculatetax } from './Tax';
 import { ascensionAchievementCheck, challengeachievementcheck, achievementaward, resetachievementcheck, buildingAchievementCheck } from './Achievements';
-import { reset, resetrepeat } from './Reset';
+import { calculateGoldenQuarkGain, reset, resetrepeat, singularity } from './Reset';
 import { buyMax, buyAccelerator, buyMultiplier, boostAccelerator, buyCrystalUpgrades, buyParticleBuilding, getReductionValue, getCost, buyRuneBonusLevels, buyTesseractBuilding, TesseractBuildings, calculateTessBuildingsInBudget } from './Buy';
 import { autoUpgrades } from './Automation';
 import { redeemShards } from './Runes';
@@ -414,7 +414,7 @@ export const player: Player = {
 
     // create a Map with keys defaulting to false
     codes: new Map(
-        Array.from({ length: 35 }, (_, i) => [i + 1, false])
+        Array.from({ length: 36 }, (_, i) => [i + 1, false])
     ),
 
     loaded1009: true,
@@ -449,6 +449,11 @@ export const player: Player = {
         calculator3: 0,
         constantEX: 0,
         powderEX: 0,
+        chronometer2: 0,
+        chronometer3: 0,
+        seasonPassY: 0,
+        seasonPassZ: 0,
+        challengeTome2: 0,
     },
     autoSacrificeToggle: false,
     autoFortifyToggle: false,
@@ -593,7 +598,6 @@ export const player: Player = {
 
     constantUpgrades: [null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     history: { ants: [], ascend: [], reset: [] },
-    historyCountMax: 10,
     historyShowPerSecond: false,
 
     autoChallengeRunning: false,
@@ -640,11 +644,15 @@ export const player: Player = {
         time: 0
     },
     firstLoad: true,
-    mods: []
+    mods: [],
+    singularityCount: 0,
+    goldenQuarks: 0,
+    quarksThisSingularity: 0,
+    dailyCodeUsed: false,
 }
 
 export const blankSave = Object.assign({}, player, {
-    codes: new Map(Array.from({ length: 35 }, (_, i) => [i + 1, false]))
+    codes: new Map(Array.from({ length: 36 }, (_, i) => [i + 1, false]))
 });
 
 export const saveSynergy = (button?: boolean) => {
@@ -727,11 +735,11 @@ const loadSynergy = () => {
 
         Object.keys(data).forEach((stringProp) => {
             const prop = stringProp as keyof Player;
-            if (toAdapt.has(prop)) {
+            if (!(prop in player)) {
+                return;
+            } else if (toAdapt.has(prop)) {
                 return ((player[prop] as unknown) = toAdapt.get(prop)(data));
-            }
-
-            if (isDecimal(player[prop])) {
+            } else if (isDecimal(player[prop])) {
                 return ((player[prop] as Decimal) = new Decimal(data[prop] as DecimalSource));
             } else if (prop === 'codes') {
                 return (player.codes = new Map(data[prop]));
@@ -1088,7 +1096,6 @@ const loadSynergy = () => {
         }
         if (data.historyShowPerSecond === undefined || player.historyShowPerSecond === undefined) {
             player.historyShowPerSecond = false;
-            player.historyCountMax = 10;
         }
 
         if (!Number.isInteger(player.ascendBuilding1.cost)) {
@@ -1405,6 +1412,23 @@ const [{ value: group }, { value: dec }] = IntlFormatter?.length !== 2
 // Number.toLocaleString opts for 2 decimal places
 const locOpts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
 
+const padEvery = (str: string, places = 3) => {
+    let step = 1, newStr = '';
+    for (let i = str.length - 1; i >= 0; i--) {
+        // pad every [places] places if we aren't at the beginning of the string
+        if (step++ === places && i !== 0) {
+            step = 1;
+            newStr = group + str[i] + newStr;
+        } else {
+            newStr = str[i] + newStr;
+        }
+    }
+
+    // see https://www.npmjs.com/package/flatstr
+    (newStr as unknown as number) | 0;
+    return newStr;
+}
+
 /**
  * This function displays the numbers such as 1,234 or 1.00e1234 or 1.00e1.234M.
  * @param input value to format
@@ -1414,7 +1438,7 @@ const locOpts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
  * @param long dictates whether or not a given number displays as scientific at 1,000,000. This auto defaults to short if input >= 1e13
  */
 export const format = (
-    input: Decimal | number | { [Symbol.toPrimitive]: unknown } | bigint, 
+    input: Decimal | number | { [Symbol.toPrimitive]: unknown }, 
     accuracy = 0, 
     long = false,
     truncate = true
@@ -1490,9 +1514,7 @@ export const format = (
         // Split it on the decimal place
         const [front, back] = standardString.split('.');
         // Apply a number group 3 comma regex to the front
-        const frontFormatted = typeof BigInt === 'function'
-            ? BigInt(front).toLocaleString()
-            : front.replace(/(\d)(?=(\d{3})+$)/g, `$1${group}`);
+        const frontFormatted = padEvery(front);
 
         // if the back is undefined that means there are no decimals to display, return just the front
         return !back 
@@ -1503,9 +1525,7 @@ export const format = (
         // Makes mantissa be rounded down to 2 decimal places
         const mantissaLook = (Math.floor(mantissa * 100) / 100).toLocaleString(undefined, locOpts);
         // Makes the power group 3 with commas
-        const powerLook = typeof BigInt === 'function'
-            ? BigInt(power).toLocaleString()
-            : power.toString().replace(/(\d)(?=(\d{3})+$)/g, `$1${group}`);
+        const powerLook = padEvery(power.toString());
         // returns format (1.23e456,789)
         return `${mantissaLook}e${powerLook}`;
     } else if (power >= 1e6) {
@@ -1583,19 +1603,11 @@ export const format = (
 }
 
 export const formatTimeShort = (seconds: number, msMaxSeconds?: number): string => {
-    return ((seconds >= 86400)
-        ? format(Math.floor(seconds / 86400)) + "d"
-        : '') +
-        ((seconds >= 3600)
-            ? format(Math.floor(seconds / 3600) % 24) + "h"
-            : '') +
-        ((seconds >= 60)
-            ? format(Math.floor(seconds / 60) % 60) + "m"
-            : '') +
-        format(Math.floor(seconds) % 60) +
-        ((msMaxSeconds && seconds < msMaxSeconds)
-            ? "." + (Math.floor((seconds % 1) * 1000).toString().padStart(3, '0'))
-            : '') + "s";
+    return ((seconds >= 86400) ? format(Math.floor(seconds / 86400)) + "d" : '') +
+        ((seconds >= 3600) ? format(Math.floor(seconds / 3600) % 24) + "h" : '') +
+        ((seconds >= 60)   ? format(Math.floor(seconds / 60) % 60) + "m"   : '') +
+        ((seconds >= 8640000) ? '' : format(Math.floor(seconds) % 60) + ((msMaxSeconds && seconds < msMaxSeconds)  //Don't show seconds when you're over 100 days, like honestly
+            ? "." + (Math.floor((seconds % 1) * 1000).toString().padStart(3, '0')) : '') + "s");
 }
 
 export const updateAllTick = (): void => {
@@ -1825,12 +1837,7 @@ export const updateAllMultiplier = (): void => {
     a *= (1 + player.achievements[58] / 100)
     a *= (1 + player.achievements[59] / 100)
     a *= Math.pow(1.01, player.upgrades[21] + player.upgrades[22] + player.upgrades[23] + player.upgrades[24] + player.upgrades[25])
-    if (player.upgrades[34] > 0.5) {
-        a *= 1.03 * 100 / 100
-    }
-    if (player.upgrades[35] > 0.5) {
-        a *= 1.05 / 1.03 * 100 / 100
-    }
+	a *= (1 + 0.03 * player.upgrades[34] + 0.02 * player.upgrades[35])
     a *= (1 + 1 / 5 * player.researches[2] * (1 + 1 / 2 * CalcECC('ascension', player.challengecompletions[14])))
     a *= (1 + 1 / 20 * player.researches[11] + 1 / 25 * player.researches[12] + 1 / 40 * player.researches[13] + 3 / 200 * player.researches[14] + 1 / 200 * player.researches[15])
     a *= (1 + G['rune2level'] / 400 * G['effectiveLevelMult'])
@@ -1942,6 +1949,9 @@ export const multipliers = (): void => {
     // PLAT - check
     const first6CoinUp = new Decimal(G['totalCoinOwned'] + 1).times(Decimal.min(1e30, Decimal.pow(1.008, G['totalCoinOwned'])));
 
+    if (player.singularityCount > 0) {
+        s = s.times(Math.pow(player.goldenQuarks + 1, 1.5) * Math.pow(player.singularityCount + 1, 2))
+    }
     if (player.upgrades[6] > 0.5) {
         s = s.times(first6CoinUp);
     }
@@ -2055,7 +2065,7 @@ export const multipliers = (): void => {
     if (player.achievements[37] > 0.5 && player.prestigePoints.gte(10)) {
         G['globalCrystalMultiplier'] = G['globalCrystalMultiplier'].times(Decimal.log(player.prestigePoints.add(1), 10))
     }
-    if (player.achievements[43] > 0.5) {
+    if (player.achievements[44] > 0.5) {
         G['globalCrystalMultiplier'] = G['globalCrystalMultiplier']
             .times(Decimal.pow(G['rune3level'] / 2 * G['effectiveLevelMult'], 2)
             .times(Decimal.pow(2, G['rune3level'] * G['effectiveLevelMult'] / 2 - 8))
@@ -2214,13 +2224,13 @@ export const resourceGain = (dt: number): void => {
     multipliers();
     calculatetax();
     if (G['produceTotal'].gte(0.001)) {
-        let addcoin = Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))
+        let addcoin = (Decimal.min(G['produceTotal'].dividedBy(G['taxdivisor']), Decimal.pow(10, G['maxexponent'] - Decimal.log(G['taxdivisorcheck'], 10)))).times(dt/0.025)
         if(inMod("coingain"))G["totalCoinGain"]=addcoin.times(40)
-        player.coins = player.coins.add(addcoin.times(dt / 0.025));
-        player.coinsThisPrestige = player.coinsThisPrestige.add(addcoin.times(dt / 0.025));
-        player.coinsThisTranscension = player.coinsThisTranscension.add(addcoin.times(dt / 0.025));
-        player.coinsThisReincarnation = player.coinsThisReincarnation.add(addcoin.times(dt / 0.025));
-        player.coinsTotal = player.coinsTotal.add(addcoin.times(dt / 0.025))
+        player.coins = player.coins.add(addcoin);
+        player.coinsThisPrestige = player.coinsThisPrestige.add(addcoin);
+        player.coinsThisTranscension = player.coinsThisTranscension.add(addcoin);
+        player.coinsThisReincarnation = player.coinsThisReincarnation.add(addcoin);
+        player.coinsTotal = player.coinsTotal.add(addcoin)
     }else{
         if(player.coins.lt(100))player.coins=new Decimal(100)
     }
@@ -2382,19 +2392,19 @@ export const resourceGain = (dt: number): void => {
     const ascendchal = player.currentChallenge.ascension;
     if (chal !== 0) {
         if (player.coinsThisTranscension.gte(challengeRequirement(chal, player.challengecompletions[chal], chal))) { 
-            void resetCheck('challenge', false);
+            void resetCheck('transcensionChallenge', false);
             G['autoChallengeTimerIncrement'] = 0;
         }
     }
     if (reinchal < 9 && reinchal !== 0) {
         if (player.transcendShards.gte(challengeRequirement(reinchal, player.challengecompletions[reinchal], reinchal))) {
-            void resetCheck('reincarnationchallenge', false)
+            void resetCheck("reincarnationChallenge", false)
             G['autoChallengeTimerIncrement'] = 0;
         }
     }
     if (reinchal >= 9) {
         if (player.coins.gte(challengeRequirement(reinchal, player.challengecompletions[reinchal], reinchal))) {
-            void resetCheck('reincarnationchallenge', false)
+            void resetCheck("reincarnationChallenge", false)
             G['autoChallengeTimerIncrement'] = 0;
         }
     }
@@ -2535,7 +2545,7 @@ export const resetCurrency = (): void => {
     }
 }
 
-export const resetCheck = async (i: string, manual = true, leaving = false): Promise<void> => {
+export const resetCheck = async (i: resetNames, manual = true, leaving = false): Promise<void> => {
     if (i === 'prestige') {
         if (player.coinsThisPrestige.gte(1e16) || G['prestigePointGain'].gte(100)) {
             if (manual) {
@@ -2546,7 +2556,7 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
             }
         }
     }
-    if (i === 'transcend') {
+    if (i === 'transcension') {
         if ((player.coinsThisTranscension.gte(1e100) || G['transcendPointGain'].gte(0.5)) && player.currentChallenge.transcension === 0) {
             if (manual) {
                 void resetConfirmation('transcend');
@@ -2557,7 +2567,7 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
             }
         }
     }
-    if (i === 'challenge') {
+    if (i === 'transcensionChallenge') {
         const q = player.currentChallenge.transcension;
         const maxCompletions = getMaxChallenges(q);
         if (player.currentChallenge.transcension !== 0) {
@@ -2602,7 +2612,7 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
         }
     }
 
-    if (i === "reincarnate") {
+    if (i === 'reincarnation') {
         if (G['reincarnationPointGain'].gt(0.5) && player.currentChallenge.transcension === 0 && player.currentChallenge.reincarnation === 0) {
             if (manual) {
                 void resetConfirmation('reincarnate');
@@ -2613,7 +2623,7 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
             }
         }
     }
-    if (i === "reincarnationchallenge" && player.currentChallenge.reincarnation !== 0) {
+    if (i === 'reincarnationChallenge' && player.currentChallenge.reincarnation !== 0) {
         const q = player.currentChallenge.reincarnation;
         const maxCompletions = getMaxChallenges(q);
         if (player.currentChallenge.transcension !== 0) {
@@ -2669,7 +2679,7 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
         }
     }
 
-    if (i === "ascend") {
+    if (i === 'ascension') {
         if (player.challengecompletions[10] > 0) {
             if (manual) {
                 void resetConfirmation('ascend');
@@ -2677,7 +2687,7 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
         }
     }
 
-    if (i === "ascensionChallenge" && player.currentChallenge.ascension !== 0) {
+    if (i === 'ascensionChallenge' && player.currentChallenge.ascension !== 0) {
         let conf = true
         if (manual) {
             conf = await Confirm('Are you absolutely sure that you want to exit the Ascension Challenge? You will need to clear challenge 10 again before you can attempt the challenge again!')
@@ -2731,6 +2741,31 @@ export const resetCheck = async (i: string, manual = true, leaving = false): Pro
         }
         updateChallengeDisplay();
         challengeachievementcheck(a, true)
+    }
+
+    if (i === 'singularity') {
+        if (player.runelevels[6] === 0) {
+            return Alert("Hmph. Please return with an Antiquity. Thank you. -Ant God")
+        }
+        await Alert("You have reached the end of the game, on singularity #" +format(player.singularityCount)+". Platonic and the Ant God are proud of you.")
+        await Alert("You may choose to sit on your laurels, and consider the game 'beaten', or you may do something more interesting.")
+        await Alert("You're too powerful for this current universe. The multiverse of Synergism is truly endless, but out there are even more challenging universes parallel to your very own.")
+        await Alert(`Start anew, and enter singularity #${format(player.singularityCount + 1)}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} golden quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
+        await Alert("However, all your past accomplishments are gone! ALL Challenges, Refundable Shop upgrades, Upgrade Tab, Runes, All Cube upgrades, All Cube Openings, Hepteracts, Achievements will be wiped clean.")
+        let c1 = false
+        let c2 = false
+        let c3 = false
+        c1 = await Confirm("So, what do you say? Do you wish to enter the singularity?")
+        if (c1)
+            c2 = await Confirm("Are you sure you wish to enter the Singularity?")
+        if (c2)
+            c3 = await Confirm("Are you REALLY SURE? You cannot go back from this (without an older savefile)! Confirm one last time to finalize your decision.")
+        if (c3) {
+            void singularity();
+            return Alert("Welcome to Singularity #" + format(player.singularityCount) + ". You're back to familiar territory, but something doesn't seem right.")
+        }
+        if (!c1 || !c2 || !c3)
+            return Alert("If you decide to change your mind, let me know. -Ant God")
     }
 }
 
@@ -3418,6 +3453,7 @@ export const reloadShit = async (reset = false) => {
 
     eventCheck();
     interval(() => eventCheck(), 15000);
+    setTimeout(() => DOMCacheGetOrSet('exitOffline').classList.remove('subtabContent'), 2000);
 
     if (localStorage.getItem('pleaseStar') === null) {
         void Alert(`Please show your appreciation by giving the GitHub repo a star. ❤️ https://github.com/pseudo-corp/SynergismOfficial`);

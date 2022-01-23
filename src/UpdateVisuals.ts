@@ -3,13 +3,14 @@ import { Globals as G, modNames, modIds } from './Variables';
 import { player, format, formatTimeShort, inMod } from './Synergism';
 import { version } from './Config';
 import { CalcECC } from './Challenges';
-import { calculateSigmoidExponential, calculateMaxRunes, calculateRuneExpToLevel, calculateSummationLinear, calculateRecycleMultiplier, calculateCorruptionPoints, CalcCorruptionStuff, calculateAutomaticObtainium, calculateTimeAcceleration } from './Calculate';
+import { calculateSigmoidExponential, calculateMaxRunes, calculateRuneExpToLevel, calculateSummationLinear, calculateRecycleMultiplier, calculateCorruptionPoints, CalcCorruptionStuff, calculateAutomaticObtainium, calculateTimeAcceleration, calcAscensionCount, calculateCubeQuarkMultiplier } from './Calculate';
 import { displayRuneInformation } from './Runes';
 import { showSacrifice } from './Ants';
 import { sumContents } from './Utility';
-import { getShopCosts, shopData } from './Shop';
+import { getShopCosts, shopData, shopUpgradeTypes } from './Shop';
 import { quarkHandler } from './Quark';
 import type { Player, ZeroToFour } from './types/Synergism';
+import { hepteractTypeList, hepteractTypes } from './Hepteracts';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 
 export const visualUpdateBuildings = () => {
@@ -201,6 +202,12 @@ export const visualUpdateRunes = () => {
         for (let i = 1; i <= 7; i++) { //First one updates level, second one updates TNL, third updates orange bonus levels
             let place = G[talismans[i-1]];
             if (i > 5) place = 0;
+            const runeLevel = player.runelevels[i - 1]
+            const maxLevel = calculateMaxRunes(i)
+            DOMCacheGetOrSet('rune' + i + 'level').childNodes[0].textContent = "Level: " + format(runeLevel) + "/" + format(maxLevel)
+            DOMCacheGetOrSet('rune' + i + 'exp').textContent = (runeLevel < maxLevel ? "+1 in " + format(calculateRuneExpToLevel(i - 1) - player.runeexp[i - 1], 2) + " EXP" : "Max level!")
+            if (i <= 5) DOMCacheGetOrSet('bonusrune' + i).textContent = " [Bonus: " + format(7 * player.constantUpgrades[7] + Math.min(1e7, player.antUpgrades[9-1] + G['bonusant9']) + place) + "]"
+            else DOMCacheGetOrSet('bonusrune' + i).textContent = "[Bonus: Nope!]"
             DOMCacheGetOrSet('rune' + i + 'level').childNodes[0].textContent = "Level: " + format(player.runelevels[i - 1]) + "/" + format(calculateMaxRunes(i))
             DOMCacheGetOrSet('rune' + i + 'exp').textContent = "+1 in " + format(calculateRuneExpToLevel(i - 1) - player.runeexp[i - 1], 2) + " EXP"
             if (i <= 5) DOMCacheGetOrSet('bonusrune' + i).textContent = " [Bonus: " + format(7 * player.constantUpgrades[7] + Math.min(1e7, player.antUpgrades[9-1] + G['bonusant9']) + place) + "]"
@@ -395,11 +402,47 @@ export const visualUpdateCubes = () => {
             break;
         case 6:
             DOMCacheGetOrSet('hepteractQuantity').textContent = format(player.wowAbyssals, 0, true)
+
+            //Update the grid
+            hepteractTypeList.forEach((type) => {
+                UpdateHeptGridValues(type);
+            });
+
+            //orbs
+            DOMCacheGetOrSet('heptGridOrbBalance').textContent = format(player.overfluxOrbs)
+            DOMCacheGetOrSet('heptGridOrbEffect').textContent = format(100 * (-1 + calculateCubeQuarkMultiplier()), 2, true) + '%'
+
+            //powder
+            DOMCacheGetOrSet('heptGridPowderBalance').textContent = format(player.overfluxPowder)
+            DOMCacheGetOrSet('heptGridPowderWarps').textContent = format(player.dailyPowderResetUses)
             break;
         default:
             // console.log(`player.subtabNumber (${player.subtabNumber}) was outside of the allowed range (${subTabsInMainTab(8).subTabList.length}) for the cube tab`);
             break;
     }
+}
+
+const UpdateHeptGridValues = (type: hepteractTypes) => {
+    const text = type + 'ProgressBarText'
+    const bar = type + 'ProgressBar'
+    const textEl = document.getElementById(text)
+    const barEl = document.getElementById(bar)
+    const balance = player.hepteractCrafts[type].BAL
+    const cap = player.hepteractCrafts[type].CAP
+    const barWidth = Math.round((balance / cap) * 100)
+
+    let barColor = "";
+    if (barWidth < 34) {
+        barColor = "red";
+    } else if (barWidth >= 34 && barWidth < 68) {
+        barColor = "#cca300";
+    } else {
+        barColor = "green";
+    }
+
+    textEl.textContent = format(balance) + " / " + format(cap)
+    barEl.style.width = barWidth + '%'
+    barEl.style.backgroundColor = barColor
 }
 
 export const visualUpdateCorruptions = () => {
@@ -408,18 +451,24 @@ export const visualUpdateCorruptions = () => {
 
     DOMCacheGetOrSet("autoAscendMetric").textContent = format(player.autoAscendThreshold, 0, true)
     const metaData = CalcCorruptionStuff();
+    const ascCount = calcAscensionCount();
 
-    DOMCacheGetOrSet("corruptionBankValue").textContent = format(metaData[0])
-    DOMCacheGetOrSet("corruptionScoreValue").textContent = format(metaData[1], 0, true)
-    DOMCacheGetOrSet("corruptionMultiplierValue").textContent = format(metaData[2], 1, true)
-    DOMCacheGetOrSet("corruptionTotalScore").textContent = format(metaData[3], 0, true)
-    DOMCacheGetOrSet("corruptionCubesValue").textContent = format(metaData[4], 0, true)
-    DOMCacheGetOrSet("corruptionTesseractsValue").textContent = format(metaData[5])
-    DOMCacheGetOrSet("corruptionHypercubesValue").textContent = format(metaData[6])
-    DOMCacheGetOrSet("corruptionPlatonicCubesValue").textContent = format(metaData[7])
-    DOMCacheGetOrSet("corruptionHepteractsValue").textContent = format(metaData[8])
-    DOMCacheGetOrSet("corruptionAntExponentValue").textContent = format((1 - 0.9 / 90 * sumContents(player.usedCorruptions)) * G['extinctionMultiplier'][player.usedCorruptions[7]], 3)
-    DOMCacheGetOrSet("corruptionSpiritBonusValue").textContent = format(calculateCorruptionPoints()/400,2,true)
+    DOMCacheGetOrSet("corruptionBankValue").textContent = format(metaData[0]);
+    DOMCacheGetOrSet("corruptionScoreValue").textContent = format(metaData[1], 0, true);
+    DOMCacheGetOrSet("corruptionMultiplierValue").textContent = format(metaData[2], 1, true);
+    DOMCacheGetOrSet("corruptionTotalScore").textContent = format(metaData[3], 0, true);
+    DOMCacheGetOrSet("corruptionCubesValue").textContent = format(metaData[4], 0, true);
+    DOMCacheGetOrSet("corruptionTesseractsValue").textContent = format(metaData[5]);
+    DOMCacheGetOrSet("corruptionHypercubesValue").textContent = format(metaData[6]);
+    DOMCacheGetOrSet("corruptionPlatonicCubesValue").textContent = format(metaData[7]);
+    DOMCacheGetOrSet("corruptionHepteractsValue").textContent = format(metaData[8]);
+    DOMCacheGetOrSet("corruptionAntExponentValue").textContent = format((1 - 0.9 / 90 * sumContents(player.usedCorruptions)) * G['extinctionMultiplier'][player.usedCorruptions[7]], 3);
+    DOMCacheGetOrSet("corruptionSpiritBonusValue").textContent = format(calculateCorruptionPoints()/400,2,true);
+    DOMCacheGetOrSet("corruptionAscensionCount").style.display = ascCount > 1 ? 'block' : 'none';
+
+    if (ascCount > 1) {
+        DOMCacheGetOrSet("corruptionAscensionCountValue").textContent = format(calcAscensionCount());
+    }
 }
 
 export const visualUpdateSettings = () => {
@@ -465,7 +514,7 @@ export const visualUpdateShop = () => {
         const shopItem = shopData[key]
         
         // Ignore all consumables, to be handled above, since they're different.
-        if (shopItem.type === 'upgrade') {
+        if (shopItem.type === shopUpgradeTypes.UPGRADE) {
             // Case: If max level is 1, then it can be considered a boolean "bought" or "not bought" item
             if (shopItem.maxLevel === 1) {
                 player.shopUpgrades[key] === shopItem.maxLevel ?

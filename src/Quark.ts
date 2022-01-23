@@ -9,6 +9,7 @@ import { DOMCacheGetOrSet } from './Cache/DOM';
 
 const getBonus = async (): Promise<null | number> => {
     if (navigator.onLine === false) return null;
+    if (document.hidden === true) return null;
 
     try {
         const r = await fetch('https://api.github.com/gists/44be6ad2dcf0d44d6a29dffe1d66a84a', {
@@ -32,7 +33,7 @@ const getBonus = async (): Promise<null | number> => {
         return j.bonus;
     } catch (e) {
         console.log(`workers.dev: ${(<Error>e).message}`);
-        return null;
+        return undefined;
     }
 }
 
@@ -70,6 +71,12 @@ export const getQuarkMultiplier = () => {
     }
     if (player.achievements[266] > 0) { // Achievement 266 [Max: 10% at 1Qa Ascensions]
         multiplier *= (1 + Math.min(0.1, (player.ascensionCount) / 1e16))
+    }
+    if (player.singularityCount > 0) { // Singularity Modifier
+        multiplier *= (1 + player.singularityCount / 10)
+    }
+    if (G['isEvent']) {
+        multiplier *= 2; // dec 23 to jan 3
     }
     return multiplier
 }
@@ -136,6 +143,7 @@ export class QuarkHandler {
     /** Subtracts quarks, as the name suggests. */
     add(amount: number, useBonus = true) {
         this.QUARKS += useBonus ? this.applyBonus(amount) : amount;
+        player.quarksThisSingularity += useBonus ? this.applyBonus(amount) : amount;
         return this;
     }
 
@@ -156,16 +164,20 @@ export class QuarkHandler {
                     `%c \tBonus of ${bonus}% quarks has been applied! \n\t(Cached at ${fetched})`, 
                     'color:gold; font-size:60px; font-weight:bold; font-family:helvetica;'
                 );
-                el.textContent = `Generous patrons give you a bonus of ${bonus}% more quarks!`;
+                el.textContent = `Generous patrons give you a bonus of ${bonus}% more quarks!`
                 return this.BONUS = bonus;
             }
         } else if (!navigator.onLine) {
-            return el.textContent = `Current Bonus: N/A (offline)%!`;
+            return el.textContent = `Current Bonus: N/A% (offline)!`;
+        } else if (document.hidden) {
+            return el.textContent = `Current Bonus: N/A% (unfocused)!`;
         }
 
         const b = await getBonus();
 
-        if (Number.isNaN(b) || typeof b !== 'number') 
+        if (b === null) {
+            return;
+        } else if (Number.isNaN(b) || typeof b !== 'number') 
             return Alert('No bonus could be applied, an error occurred. [NaN] :(');
         else if (!Number.isFinite(b))
             return Alert('No bonus could be applied, an error occurred. [Infinity] :(');

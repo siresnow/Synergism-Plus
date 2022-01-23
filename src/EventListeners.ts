@@ -16,8 +16,8 @@ import { buyPlatonicUpgrades, createPlatonicDescription } from "./Platonic"
 import { corruptionCleanseConfirm, corruptionDisplay } from "./Corruptions"
 import { exportSynergism, updateSaveString, promocodes, importSynergism, resetGame } from "./ImportExport"
 import { resetHistoryTogglePerSecond } from "./History"
-import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, shopData } from "./Shop"
 import { Globals as G, modNames, modDescs, modIds } from './Variables';
+import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, shopData, shopUpgradeTypes } from "./Shop"
 import { changeTabColor } from "./UpdateHTML"
 import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp } from "./Hepteracts"
 import { exitOffline, forcedDailyReset, timeWarp } from "./Calculate"
@@ -25,6 +25,7 @@ import type { OneToFive, Player } from "./types/Synergism"
 import { displayStats } from "./Statistics"
 import { testing } from './Config';
 import { DOMCacheGetOrSet } from "./Cache/DOM"
+import { toggleTheme } from "./Themes"
 
 /* STYLE GUIDE */
 /* 
@@ -79,6 +80,7 @@ export const generateEventHandlers = () => {
     DOMCacheGetOrSet('reincarnatechallengebtn').addEventListener('mouseover', () => resetrepeat("reincarnationChallenge"))
     DOMCacheGetOrSet('ascendChallengeBtn').addEventListener('mouseover', () => resetrepeat("ascensionChallenge"))
     DOMCacheGetOrSet('ascendbtn').addEventListener('mouseover', () => resetrepeat("ascension"))
+    DOMCacheGetOrSet('singularitybtn').addEventListener('mouseover', () => resetrepeat("singularity"))
 
     for (const resetButton of Array.from(document.querySelectorAll('.resetbtn'))) {
         resetButton.addEventListener('mouseover', () => {
@@ -98,13 +100,14 @@ export const generateEventHandlers = () => {
 
 //Onclick Events (this is particularly bad)
     DOMCacheGetOrSet('prestigebtn').addEventListener('click', () => resetCheck('prestige'))
-    DOMCacheGetOrSet('transcendbtn').addEventListener('click', () => resetCheck('transcend'))
-    DOMCacheGetOrSet('reincarnatebtn').addEventListener('click', () => resetCheck('reincarnate'))
+    DOMCacheGetOrSet('transcendbtn').addEventListener('click', () => resetCheck('transcension'))
+    DOMCacheGetOrSet('reincarnatebtn').addEventListener('click', () => resetCheck('reincarnation'))
     DOMCacheGetOrSet('acceleratorboostbtn').addEventListener('click', () => boostAccelerator())
-    DOMCacheGetOrSet('challengebtn').addEventListener('click', () => resetCheck('challenge',undefined,true))
-    DOMCacheGetOrSet('reincarnatechallengebtn').addEventListener('click', () => resetCheck('reincarnationchallenge',undefined,true))
+    DOMCacheGetOrSet('challengebtn').addEventListener('click', () => resetCheck('transcensionChallenge',undefined,true))
+    DOMCacheGetOrSet('reincarnatechallengebtn').addEventListener('click', () => resetCheck('reincarnationChallenge',undefined,true))
     DOMCacheGetOrSet('ascendChallengeBtn').addEventListener('click', () => resetCheck('ascensionChallenge')) 
-    DOMCacheGetOrSet('ascendbtn').addEventListener('click', () => resetCheck('ascend'))
+    DOMCacheGetOrSet('ascendbtn').addEventListener('click', () => resetCheck('ascension'))
+    DOMCacheGetOrSet('singularitybtn').addEventListener('click', () => resetCheck('singularity'))
 //Part 2: Tabs (sucks)
 //Onmouseover Events
     DOMCacheGetOrSet('buildingstab').addEventListener('click', () => toggleTabs('buildings'))
@@ -118,6 +121,7 @@ export const generateEventHandlers = () => {
     DOMCacheGetOrSet('anttab').addEventListener('click', () => toggleTabs('ants'))
     DOMCacheGetOrSet('cubetab').addEventListener('click', () => toggleTabs('cubes'))
     DOMCacheGetOrSet('traitstab').addEventListener('click', () => toggleTabs('traits'))
+    DOMCacheGetOrSet('singularitytab').addEventListener('click', () => toggleTabs('singularity'))
 
 // BUILDINGS TAB
 //Part 1: Upper portion (Subtab toggle)
@@ -502,6 +506,15 @@ DOMCacheGetOrSet('acceleratorHepteractCraft').addEventListener('click', () => pl
 DOMCacheGetOrSet('acceleratorBoostHepteractCraft').addEventListener('click', () => player.hepteractCrafts.acceleratorBoost.craft())
 DOMCacheGetOrSet('multiplierHepteractCraft').addEventListener('click', () => player.hepteractCrafts.multiplier.craft())
 
+DOMCacheGetOrSet('chronosHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.chronos.craft(true))
+DOMCacheGetOrSet('hyperrealismHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.hyperrealism.craft(true))
+DOMCacheGetOrSet('quarkHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.quark.craft(true))
+DOMCacheGetOrSet('challengeHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.challenge.craft(true))
+DOMCacheGetOrSet('abyssHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.abyss.craft(true))
+DOMCacheGetOrSet('acceleratorHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.accelerator.craft(true))
+DOMCacheGetOrSet('acceleratorBoostHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.acceleratorBoost.craft(true))
+DOMCacheGetOrSet('multiplierHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.multiplier.craft(true))
+
 DOMCacheGetOrSet('chronosHepteractCap').addEventListener('click', () => player.hepteractCrafts.chronos.expand())
 DOMCacheGetOrSet('hyperrealismHepteractCap').addEventListener('click', () => player.hepteractCrafts.hyperrealism.expand())
 DOMCacheGetOrSet('quarkHepteractCap').addEventListener('click', () => player.hepteractCrafts.quark.expand())
@@ -515,6 +528,7 @@ DOMCacheGetOrSet('hepteractToQuark').addEventListener('mouseover', () => heptera
 DOMCacheGetOrSet('hepteractToQuarkTrade').addEventListener('click', () => tradeHepteractToOverfluxOrb())
 DOMCacheGetOrSet('overfluxPowder').addEventListener('mouseover', () => overfluxPowderDescription())
 DOMCacheGetOrSet('powderDayWarp').addEventListener('click', () => overfluxPowderWarp())
+
 // CORRUPTION TAB
 //Part 0: Subtabs
 DOMCacheGetOrSet('corrStatsBtn').addEventListener('click', () => toggleSubTab(9, 0))
@@ -570,7 +584,7 @@ TODO: Fix this entire tab it's utter shit
     DOMCacheGetOrSet('buyofferingpotion').addEventListener('mouseover', () => shopDescriptions("offeringPotion"))
     DOMCacheGetOrSet('useofferingpotion').addEventListener('mouseover', () => shopDescriptions("offeringPotion"))
     DOMCacheGetOrSet('buyofferingpotion').addEventListener('click', () => buyShopUpgrades("offeringPotion"))
-    DOMCacheGetOrSet('offeringPotions').addEventListener('click', () => buyShopUpgrades("offeringPotion"))  //Allow clicking of image to buy also
+    //DOMCacheGetOrSet('offeringPotions').addEventListener('click', () => buyShopUpgrades("offeringPotion"))  //Allow clicking of image to buy also
     DOMCacheGetOrSet('useofferingpotion').addEventListener('click', () => useConsumable("offeringPotion"))
 /*Obtainium Potion*/
     DOMCacheGetOrSet('obtainiumPotions').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
@@ -578,17 +592,17 @@ TODO: Fix this entire tab it's utter shit
     DOMCacheGetOrSet('buyobtainiumpotion').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
     DOMCacheGetOrSet('useobtainiumpotion').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
     DOMCacheGetOrSet('buyobtainiumpotion').addEventListener('click', () => buyShopUpgrades("obtainiumPotion"))
-    DOMCacheGetOrSet('obtainiumPotions').addEventListener('click', () => buyShopUpgrades("obtainiumPotion"))  //Allow clicking of image to buy also
+    //DOMCacheGetOrSet('obtainiumPotions').addEventListener('click', () => buyShopUpgrades("obtainiumPotion"))  //Allow clicking of image to buy also
     DOMCacheGetOrSet('useobtainiumpotion').addEventListener('click', () => useConsumable("obtainiumPotion"))
 /* Permanent Upgrade Images */
     const shopKeys = Object.keys(player.shopUpgrades) as (keyof Player['shopUpgrades'])[]
     for (const key of shopKeys) {
         const shopItem = shopData[key]
-        if (shopItem.type === 'upgrade') {
+        if (shopItem.type === shopUpgradeTypes.UPGRADE) {
             DOMCacheGetOrSet(`${key}`).addEventListener('mouseover', () => shopDescriptions(key))
             DOMCacheGetOrSet(`${key}Level`).addEventListener('mouseover', () => shopDescriptions(key))
             DOMCacheGetOrSet(`${key}Button`).addEventListener('mouseover', () => shopDescriptions(key))
-            DOMCacheGetOrSet(`${key}`).addEventListener('click', () => buyShopUpgrades(key))  //Allow clicking of image to buy also
+            //DOMCacheGetOrSet(`${key}`).addEventListener('click', () => buyShopUpgrades(key))  //Allow clicking of image to buy also
             DOMCacheGetOrSet(`${key}Button`).addEventListener('click', () => buyShopUpgrades(key))
         }
     }
@@ -619,4 +633,6 @@ TODO: Fix this entire tab it's utter shit
 
         return importSynergism(save);
     });
+
+    DOMCacheGetOrSet('theme').addEventListener('click', toggleTheme);
 }

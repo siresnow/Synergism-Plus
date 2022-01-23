@@ -8,6 +8,7 @@ import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, 
 import { getMaxChallenges } from './Challenges';
 import { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
+import { updateSingularityStats } from './singularity';
 
 export const revealStuff = () => {
     const example = document.getElementsByClassName("coinunlock1") as HTMLCollectionOf<HTMLElement>;
@@ -189,12 +190,14 @@ export const revealStuff = () => {
     for (const ex of Array.from(example32)) { // Ability to use and gain hepteracts //
         ex.style.display = player.challenge15Exponent >= 1e15 ? "block" : "none";
     }
-
     const example33 = document.getElementsByClassName("supertax") as HTMLCollectionOf<HTMLElement>;
     for (const ex of Array.from(example33)) { // in SuperTax mod //
         ex.style.display = inMod("supertax") ? "block" : "none";
     }
-
+    const singularityHTMLs = document.getElementsByClassName("singularity") as HTMLCollectionOf<HTMLElement>;
+    for (const HTML of Array.from(singularityHTMLs)) { // Ability to view singularity features.
+        HTML.style.display = player.singularityCount > 0 ? "block" : "none";
+    }
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
     hepts.style.display = (player.achievements[255] > 0) ? "block" : "none";
 
@@ -332,7 +335,15 @@ export const revealStuff = () => {
         (DOMCacheGetOrSet('rune7area').style.display = 'flex', DOMCacheGetOrSet('runeshowpower7').style.display = "flex") :
         (DOMCacheGetOrSet('rune7area').style.display = 'none', DOMCacheGetOrSet('runeshowpower7').style.display = "none") ;
 
-    DOMCacheGetOrSet("ascensionStats").style.visibility = player.achievements[197] > 0 ? "visible" : "hidden";
+    player.singularityCount > 0 ?
+        (DOMCacheGetOrSet('singularitytab').style.display = 'block'):
+        (DOMCacheGetOrSet('singularitytab').style.display = 'none');
+        
+    (player.runelevels[6] > 0 || player.singularityCount > 0) ?
+        (DOMCacheGetOrSet('singularitybtn').style.display = 'block') :
+        (DOMCacheGetOrSet('singularitybtn').style.display = 'none');
+
+    DOMCacheGetOrSet("ascensionStats").style.visibility = (player.achievements[197] > 0 || player.singularityCount > 0) ? "visible" : "hidden";
     DOMCacheGetOrSet("ascHyperStats").style.display = player.challengecompletions[13] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascPlatonicStats").style.display = player.challengecompletions[14] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascHepteractStats").style.display = player.achievements[255] > 0 ? "" : "none";
@@ -343,7 +354,7 @@ export const revealStuff = () => {
 
     // These are currently listed in the order they were in when this was converted to use element IDs instead of
     // the ordering of the HTML elements with the class "auto".
-    var automationUnlocks: Record<string, boolean> = {
+    let automationUnlocks: Record<string, boolean> = {
         "toggle1": player.upgrades[81] === 1, // Autobuyer - Coin Buildings - Tier 1 (Worker)
         "toggle2": player.upgrades[82] === 1, // Autobuyer - Coin Buildings - Tier 2 (Investments)
         "toggle3": player.upgrades[83] === 1, // Autobuyer - Coin Buildings - Tier 3 (Printers)
@@ -418,6 +429,8 @@ export const hideStuff = () => {
     DOMCacheGetOrSet("traitstab").style.backgroundColor = ""
     DOMCacheGetOrSet("cubes").style.display = "none"
     DOMCacheGetOrSet("traits").style.display = "none"
+    DOMCacheGetOrSet("singularity").style.display = 'none'
+    DOMCacheGetOrSet("singularitytab").style.backgroundColor = "black"
     
     const tab = DOMCacheGetOrSet('settingstab')!;
     tab.style.backgroundColor = '';
@@ -480,6 +493,12 @@ export const hideStuff = () => {
     if (G['currentTab'] === "traits") {
         DOMCacheGetOrSet("traits").style.display = "flex";
         DOMCacheGetOrSet("traitstab").style.backgroundColor = "white";
+    }
+
+    if (G['currentTab'] === "singularity") {
+        DOMCacheGetOrSet('singularity').style.display = "block";
+        DOMCacheGetOrSet("singularitytab").style.backgroundColor = "lightgoldenrodyellow"
+        updateSingularityStats();
     }
 }
 
@@ -982,10 +1001,13 @@ const NotificationCB = (text: string, time = 30000, cb: () => void) => {
 
     textNode.textContent = text;
     notification.style.display = 'block';
+    notification.classList.remove('slide-out');
+    notification.classList.add('slide-in');
 
     const close = () => {
-        textNode.textContent = '';
-        notification.style.display = 'none';
+        setTimeout(() => textNode.textContent = '', 1000);
+        notification.classList.add('slide-out');
+        notification.classList.remove('slide-in');
 
         x.removeEventListener('click', close);
         cb();
