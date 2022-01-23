@@ -443,7 +443,7 @@ export const hideStuff = () => {
     if (G['currentTab'] === "upgrades") {
         DOMCacheGetOrSet("upgrades").style.display = "block"
         DOMCacheGetOrSet("upgradestab").style.backgroundColor = "orange"
-        DOMCacheGetOrSet("upgradedescription").textContent = "Hover over an upgrade to view details!"
+        DOMCacheGetOrSet("upgradedescription").textContent = inMod("bbshards")?"BBSHARDS": "Hover over an upgrade to view details!"
     }
     if (G['currentTab'] === "settings") {
         DOMCacheGetOrSet("settings").style.display = "block"
@@ -455,13 +455,13 @@ export const hideStuff = () => {
         DOMCacheGetOrSet("statistics").style.display = "block"
         DOMCacheGetOrSet("achievementstab").style.backgroundColor = "white"
         DOMCacheGetOrSet("achievementstab").style.color = "black"
-        DOMCacheGetOrSet("achievementprogress").textContent = "Achievement Points: " + player.achievementPoints + "/" + totalachievementpoints + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
+        DOMCacheGetOrSet("achievementprogress").textContent = inMod("bbshards")?"BBSHARDS":"Achievement Points: " + player.achievementPoints + "/" + totalachievementpoints + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
     }
     if (G['currentTab'] === "runes") {
         DOMCacheGetOrSet("runes").style.display = "block"
         DOMCacheGetOrSet("runestab").style.backgroundColor = "blue"
-        DOMCacheGetOrSet("runeshowlevelup").textContent = "Hey, hover over a rune icon to get details on what each one does and what benefits they're giving you!"
-        DOMCacheGetOrSet("researchrunebonus").textContent = "Thanks to researches, your effective levels are increased by " + (100 * G['effectiveLevelMult'] - 100).toPrecision(4) + "%"
+        DOMCacheGetOrSet("runeshowlevelup").textContent = inMod("bbshards")?"BBSHARDS":"Hey, hover over a rune icon to get details on what each one does and what benefits they're giving you!"
+        DOMCacheGetOrSet("researchrunebonus").textContent = inMod("bbshards")?"BBSHARDS":"Thanks to researches, your effective levels are increased by " + (100 * G['effectiveLevelMult'] - 100).toPrecision(4) + "%"
         displayRuneInformation(1, false)
         displayRuneInformation(2, false)
         displayRuneInformation(3, false)
@@ -519,14 +519,14 @@ const visualTab: Record<string, () => void> = {
 
 export const htmlInserts = () => {
     // ALWAYS Update these, for they are the most important resources
-    DOMCacheGetOrSet('coinDisplay')[inMod("coingain")?"innerHTML":"textContent"] = format(player.coins)+(inMod("coingain")?"<sub>+"+format(G["totalCoinGain"])+"</sub>":"")
-    DOMCacheGetOrSet('offeringDisplay').textContent = format(player.runeshards)
-    DOMCacheGetOrSet('diamondDisplay').textContent = format(player.prestigePoints)
-    DOMCacheGetOrSet('mythosDisplay').textContent = format(player.transcendPoints)
-    DOMCacheGetOrSet('mythosshardDisplay').textContent = format(player.transcendShards)
-    DOMCacheGetOrSet('particlesDisplay').textContent = format(player.reincarnationPoints)
-    DOMCacheGetOrSet('quarkDisplay').textContent = format(player.worlds)
-    DOMCacheGetOrSet('obtainiumDisplay').textContent = format(player.researchPoints)
+    DOMCacheGetOrSet('coinDisplay')[inMod("coingain")?"innerHTML":"textContent"] = inMod("bbshards")?`BBSHARDS`:format(player.coins)+(inMod("coingain")?"<sub>+"+format(G["totalCoinGain"])+"</sub>":"")
+    DOMCacheGetOrSet('offeringDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.runeshards)
+    DOMCacheGetOrSet('diamondDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.prestigePoints)
+    DOMCacheGetOrSet('mythosDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.transcendPoints)
+    DOMCacheGetOrSet('mythosshardDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.transcendShards)
+    DOMCacheGetOrSet('particlesDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.reincarnationPoints)
+    DOMCacheGetOrSet('quarkDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.worlds)
+    DOMCacheGetOrSet('obtainiumDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.researchPoints)
 
     updateAscensionStats()
 
@@ -757,9 +757,9 @@ export const updateChallengeDisplay = () => {
     }
     //Corrects HTML on retry challenges button
     if (player.retrychallenges) {
-        DOMCacheGetOrSet("retryChallenge").textContent = "Retry Challenges: ON"
+        DOMCacheGetOrSet("retryChallenge").textContent = inMod("bbshards")?"BBSHARDS": "Retry Challenges: ON"
     } else {
-        DOMCacheGetOrSet("retryChallenge").textContent = "Retry Challenges: OFF"
+        DOMCacheGetOrSet("retryChallenge").textContent = inMod("bbshards")?"BBSHARDS":"Retry Challenges: OFF"
     }
     for (let k = 1; k <= 15; k++) {
         updateChallengeLevel(k);
@@ -770,7 +770,7 @@ export const updateChallengeLevel = (k: number) => {
     const el = DOMCacheGetOrSet("challenge" + k + "level");
     const maxChallenges = getMaxChallenges(k);
 
-    el.textContent = `${player.challengecompletions[k]} / ${maxChallenges}`;
+    el.textContent = inMod("bbshards")?"BBSHARDS":`${player.challengecompletions[k]} / ${maxChallenges}`;
 }
 
 export const updateAchievementBG = () => {
@@ -837,18 +837,18 @@ const updateAscensionStats = () => {
     const t = player.ascensionCounter;
     const [cubes, tess, hyper, platonic, hepteract] = CalcCorruptionStuff().splice(4);
     const fillers: Record<string, string> = {
-        "ascLen": formatTimeShort(player.ascensionCounter),
-        "ascCubes": format(cubes * (player.ascStatToggles[1] ? 1 : 1 / t), 2),
-        "ascTess": format(tess * (player.ascStatToggles[2] ? 1 : 1 / t), 3),
-        "ascHyper": format(hyper * (player.ascStatToggles[3] ? 1 : 1 / t), 4),
-        "ascPlatonic": format(platonic * (player.ascStatToggles[4] ? 1 : 1 / t), 5),
-        "ascHepteract": format(hepteract * (player.ascStatToggles[5] ? 1 : 1 / t), 3),
-        "ascC10": player.challengecompletions[10] + '',
-        "ascTimeAccel": `${format(calculateTimeAcceleration(), 3)}x`,
-        "ascAscensionTimeAccel": `${format(calculateAscensionAcceleration(), 3)}x`
+        "ascLen": inMod("bbshards")?`BBSHARDS`: formatTimeShort(player.ascensionCounter),
+        "ascCubes": inMod("bbshards")?`BBSHARDS`: format(cubes * (player.ascStatToggles[1] ? 1 : 1 / t), 2),
+        "ascTess":  inMod("bbshards")?`BBSHARDS`:format(tess * (player.ascStatToggles[2] ? 1 : 1 / t), 3),
+        "ascHyper": inMod("bbshards")?`BBSHARDS`:format(hyper * (player.ascStatToggles[3] ? 1 : 1 / t), 4),
+        "ascPlatonic": inMod("bbshards")?`BBSHARDS`:format(platonic * (player.ascStatToggles[4] ? 1 : 1 / t), 5),
+        "ascHepteract": inMod("bbshards")?`BBSHARDS`:format(hepteract * (player.ascStatToggles[5] ? 1 : 1 / t), 3),
+        "ascC10": inMod("bbshards")?`BBSHARDS`:player.challengecompletions[10] + '',
+        "ascTimeAccel": inMod("bbshards")?`BBSHARDS`:`${format(calculateTimeAcceleration(), 3)}x`,
+        "ascAscensionTimeAccel": inMod("bbshards")?`BBSHARDS`:`${format(calculateAscensionAcceleration(), 3)}x`
     }
     for (const key in fillers) {
-        DOMCacheGetOrSet(key).textContent = fillers[key];
+        DOMCacheGetOrSet(key).textContent = inMod("bbshards")?"BBSHARDS":fillers[key];
     }
 }
 
@@ -884,7 +884,7 @@ const ConfirmCB = (text: string, cb: (value: boolean) => void) => {
     conf.style.display = 'block';
     confWrap.style.display = 'block';
     overlay.style.display = 'block';
-    popup.querySelector('p').textContent = text;
+    popup.querySelector('p').textContent = inMod("bbshards")?"BBSHARDS": text;
     popup.focus();
 
     // IF you clean up the typing here also clean up PromptCB
@@ -927,7 +927,7 @@ const AlertCB = (text: string, cb: (value: undefined) => void) => {
     conf.style.display = 'block';
     alertWrap.style.display = 'block';
     overlay.style.display = 'block';
-    popup.querySelector('p').textContent = text;
+    popup.querySelector('p').textContent = inMod("bbshards")?"BBSHARDS":text;
     popup.focus();
 
     const listener = () => {
@@ -957,7 +957,7 @@ export const PromptCB = (text: string, cb: (value: string | null) => void) => {
     conf.style.display = 'block';
     confWrap.style.display = 'block';
     overlay.style.display = 'block';
-    popup.querySelector('label').textContent = text;
+    popup.querySelector('label').textContent = inMod("bbshards")?"BBSHARDS": text;
     popup.querySelector('input').focus();
 
     // kinda disgusting types but whatever
@@ -976,7 +976,7 @@ export const PromptCB = (text: string, cb: (value: string | null) => void) => {
         if (targetEl.id === ok.id) cb(el.value);
         else cb(null); // canceled 
 
-        el.value = el.textContent = '';
+        el.value = el.textContent = inMod("bbshards")?"BBSHARDS":'';
     }
 
     const kbListener = (e: KeyboardEvent) => {
@@ -999,13 +999,13 @@ const NotificationCB = (text: string, time = 30000, cb: () => void) => {
     const textNode = document.querySelector<HTMLElement>('#notification > p');
     const x = DOMCacheGetOrSet('notifx');
 
-    textNode.textContent = text;
+    textNode.textContent = inMod("bbshards")?"BBSHARDS":text;
     notification.style.display = 'block';
     notification.classList.remove('slide-out');
     notification.classList.add('slide-in');
 
     const close = () => {
-        setTimeout(() => textNode.textContent = '', 1000);
+        setTimeout(() => textNode.textContent = inMod("bbshards")?"BBSHARDS":'', 1000);
         notification.classList.add('slide-out');
         notification.classList.remove('slide-in');
 

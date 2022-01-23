@@ -476,6 +476,12 @@ export const mods = [
         author: "gapples2",
         id: "10xspeed"
     },
+    {
+        title: "BBSHARDS",
+        desc: "Just see what it does...",
+        author: "Flame",
+        id: "bbshards",
+    },
 ]
 
 export let modNames = [] as string[]
