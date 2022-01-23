@@ -407,7 +407,7 @@ export const revealStuff = () => {
     const currencyRow3 = DOMCacheGetOrSet("currencyRow3");
     const resetInfoContainer = DOMCacheGetOrSet("resetInfoContainer");
     // region tabs
-    const buildingsTab = DOMCacheGetOrSet("buildingstab");
+    /*const buildingsTab = DOMCacheGetOrSet("buildingstab");
     const upgradestab = DOMCacheGetOrSet("upgradestab");
     const achievementstab = DOMCacheGetOrSet("achievementstab");
     const runestab = DOMCacheGetOrSet("runestab");
@@ -418,13 +418,14 @@ export const revealStuff = () => {
     const traitstab = DOMCacheGetOrSet("traitstab");
     const shoptab = DOMCacheGetOrSet("shoptab");
     const singularitytab = DOMCacheGetOrSet("singularitytab");
+     */
     //endregion
     currencyRow1.style.display = !inMod("bbshards")?"flex":"none";
     currencyRow2.style.display = !inMod("bbshards")?"flex":"none";
     currencyRow3.style.display = !inMod("bbshards")?"none":"flex";
     resetInfoContainer.style.display = !inMod("bbshards")?"block":"none";
     //region more tabs
-    buildingsTab.style.display = !inMod("bbshards")?"block":"none";
+    /*buildingsTab.style.display = !inMod("bbshards")?"block":"none";
     upgradestab.style.display = !inMod("bbshards")?"block":"none";
     achievementstab.style.display = !inMod("bbshards")?"block":"none";
     runestab.style.display = !inMod("bbshards")?"block":"none";
@@ -434,7 +435,8 @@ export const revealStuff = () => {
     cubetab.style.display = !inMod("bbshards")?"block":"none";
     traitstab.style.display = !inMod("bbshards")?"block":"none";
     shoptab.style.display = !inMod("bbshards")?"block":"none";
-    singularitytab.style.display = !inMod("bbshards")?"block":"none";
+    singularitytab.style.display = !inMod("bbshards")?"block":"none"
+     */
     //endregion
 }
 
