@@ -18,7 +18,7 @@ import { exportSynergism, updateSaveString, promocodes, importSynergism, resetGa
 import { resetHistoryTogglePerSecond } from "./History"
 import { Globals as G, modNames, modDescs, modIds } from './Variables';
 import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, shopData, shopUpgradeTypes } from "./Shop"
-import { changeTabColor } from "./UpdateHTML"
+import {changeTabColor, revealStuff} from "./UpdateHTML"
 import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp } from "./Hepteracts"
 import { exitOffline, forcedDailyReset, timeWarp } from "./Calculate"
 import type { OneToFive, Player } from "./types/Synergism"
@@ -227,6 +227,7 @@ export const generateEventHandlers = () => {
             let id = Number(tog.id.slice(9))
             if(inMod(modIds[id-1]))player.mods.splice(player.mods.indexOf(modIds[id-1]),1)
             else player.mods.push(modIds[id-1])
+            revealStuff()
         })
     }
 

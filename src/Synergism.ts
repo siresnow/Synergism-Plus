@@ -74,6 +74,8 @@ export const player: Player = {
     coinsThisReincarnation: new Decimal("1e2"),
     coinsTotal: new Decimal("100"),
 
+    bbShards: new Decimal("0"),
+
     firstOwnedCoin: 0,
     firstGeneratedCoin: new Decimal("0"),
     firstCostCoin: new Decimal("100"),
@@ -2231,6 +2233,13 @@ export const resourceGain = (dt: number): void => {
         player.coinsThisTranscension = player.coinsThisTranscension.add(addcoin);
         player.coinsThisReincarnation = player.coinsThisReincarnation.add(addcoin);
         player.coinsTotal = player.coinsTotal.add(addcoin)
+
+        if (!inMod("bbshards")) player.bbShards = new Decimal(0)
+        if (inMod("bbshards")){
+            let addBBShards = new Decimal(1)
+            addBBShards = addBBShards.plus(addBBShards.sqrt())
+            player.bbShards = player.bbShards.add(addBBShards)
+        }
     }else{
         if(player.coins.lt(100))player.coins=new Decimal(100)
     }

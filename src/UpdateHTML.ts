@@ -200,7 +200,6 @@ export const revealStuff = () => {
     }
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
     hepts.style.display = (player.achievements[255] > 0) ? "block" : "none";
-
     if (player.upgrades[89] === 1) {
         DOMCacheGetOrSet('transcendautotoggle').style.display = 'block';
         DOMCacheGetOrSet('transcendamount').style.display = 'block';
@@ -343,7 +342,7 @@ export const revealStuff = () => {
         (DOMCacheGetOrSet('singularitybtn').style.display = 'block') :
         (DOMCacheGetOrSet('singularitybtn').style.display = 'none');
 
-    DOMCacheGetOrSet("ascensionStats").style.visibility = (player.achievements[197] > 0 || player.singularityCount > 0) ? "visible" : "hidden";
+    DOMCacheGetOrSet("ascensionStats").style.visibility = !inMod("bbshards")?(player.achievements[197] > 0 || player.singularityCount > 0) ? "visible" : "hidden" : "hidden";
     DOMCacheGetOrSet("ascHyperStats").style.display = player.challengecompletions[13] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascPlatonicStats").style.display = player.challengecompletions[14] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascHepteractStats").style.display = player.achievements[255] > 0 ? "" : "none";
@@ -402,6 +401,41 @@ export const revealStuff = () => {
 
         el.style.display = automationUnlocks[key] ? "block" : "none";
     });
+
+    const currencyRow1 = DOMCacheGetOrSet("currencyRow1");
+    const currencyRow2 = DOMCacheGetOrSet("currencyRow2");
+    const currencyRow3 = DOMCacheGetOrSet("currencyRow3");
+    const resetInfoContainer = DOMCacheGetOrSet("resetInfoContainer");
+    // region tabs
+    const buildingsTab = DOMCacheGetOrSet("buildingstab");
+    const upgradestab = DOMCacheGetOrSet("upgradestab");
+    const achievementstab = DOMCacheGetOrSet("achievementstab");
+    const runestab = DOMCacheGetOrSet("runestab");
+    const challengetab = DOMCacheGetOrSet("challengetab");
+    const researchtab = DOMCacheGetOrSet("researchtab");
+    const anttab = DOMCacheGetOrSet("anttab");
+    const cubetab = DOMCacheGetOrSet("cubetab");
+    const traitstab = DOMCacheGetOrSet("traitstab");
+    const shoptab = DOMCacheGetOrSet("shoptab");
+    const singularitytab = DOMCacheGetOrSet("singularitytab");
+    //endregion
+    currencyRow1.style.display = !inMod("bbshards")?"flex":"none";
+    currencyRow2.style.display = !inMod("bbshards")?"flex":"none";
+    currencyRow3.style.display = !inMod("bbshards")?"none":"flex";
+    resetInfoContainer.style.display = !inMod("bbshards")?"block":"none";
+    //region more tabs
+    buildingsTab.style.display = !inMod("bbshards")?"block":"none";
+    upgradestab.style.display = !inMod("bbshards")?"block":"none";
+    achievementstab.style.display = !inMod("bbshards")?"block":"none";
+    runestab.style.display = !inMod("bbshards")?"block":"none";
+    challengetab.style.display = !inMod("bbshards")?"block":"none";
+    researchtab.style.display = !inMod("bbshards")?"block":"none";
+    anttab.style.display = !inMod("bbshards")?"block":"none";
+    cubetab.style.display = !inMod("bbshards")?"block":"none";
+    traitstab.style.display = !inMod("bbshards")?"block":"none";
+    shoptab.style.display = !inMod("bbshards")?"block":"none";
+    singularitytab.style.display = !inMod("bbshards")?"block":"none";
+    //endregion
 }
 
 export const hideStuff = () => {
@@ -527,6 +561,8 @@ export const htmlInserts = () => {
     DOMCacheGetOrSet('particlesDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.reincarnationPoints)
     DOMCacheGetOrSet('quarkDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.worlds)
     DOMCacheGetOrSet('obtainiumDisplay').textContent = inMod("bbshards")?`BBSHARDS`:format(player.researchPoints)
+
+    if (inMod(`bbshards`)) DOMCacheGetOrSet("bbShardsDisplay").innerHTML = `${format(player.bbShards)} Just sit back and enjoy the BBShards...`
 
     updateAscensionStats()
 

@@ -13,6 +13,8 @@ export interface Player {
     coinsThisReincarnation: Decimal,
     coinsTotal: Decimal,
 
+    bbShards: Decimal,
+
     firstOwnedCoin: number
     firstGeneratedCoin: Decimal,
     firstCostCoin: Decimal,
@@ -866,6 +868,8 @@ export interface GlobalVariables {
     historyCountMax: number
 
     isEvent: boolean
+
+    bbShards: Decimal
 }
 
 export interface SynergismEvents {
