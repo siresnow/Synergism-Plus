@@ -104,7 +104,7 @@ const makeSlot = (key: string, descr: string) => {
 export const startHotkeys = () => {
     const hotkey = document.querySelector('.hotkeys');
 
-    for (const child of Array.from(hotkey.children))
+    /*for (const child of Array.from(hotkey.children))
         hotkey.removeChild(child);
 
     for (const [key, [descr]] of [...hotkeys.entries()]) {
@@ -112,4 +112,5 @@ export const startHotkeys = () => {
 
         hotkey.appendChild(div);
     }
+     */
 }
