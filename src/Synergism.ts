@@ -1698,7 +1698,7 @@ export const updateAllTick = (): void => {
     }
 
     G['acceleratorPower'] = Math.pow(
-        (inMod("supertax")&&!inMod("ng-")?1.25:(inMod("ng-")?1.05:1.1)) + G['tuSevenMulti'] * 
+        (inMod("supertax")&&!inMod("ng-")?1.25:(inMod("ng-")?1.05:1.1)) - (inMod("ng-0.5")?0.01:0) + G['tuSevenMulti'] * 
         (G['totalAcceleratorBoost'] / 100) 
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20), 
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
@@ -1883,7 +1883,7 @@ export const updateAllMultiplier = (): void => {
         c7 = 1.25
     }
 
-    G['multiplierPower'] = (inMod("supertax")&&!inMod("ng-")?5:(inMod("ng-")?1.5:2)) + 0.005 * G['totalMultiplierBoost'] * c7
+    G['multiplierPower'] = (inMod("supertax")&&!inMod("ng-")?5:(inMod("ng-")?1.5:2)) - (inMod("ng-0.5")?0.1:0) + 0.005 * G['totalMultiplierBoost'] * c7
 
     //No MA and Sadistic will always override Transcend Challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
@@ -1941,6 +1941,7 @@ export const multipliers = (): void => {
 
     G['antMultiplier'] = Decimal.pow(Decimal.max(1, player.antPoints), calculateCrumbToCoinExp());
 
+    if(inMod("ng-0.5")) s=s.div(10)
     s = s.times(G['multiplierEffect']);
     s = s.times(G['acceleratorEffect']);
     s = s.times(G['prestigeMultiplier']);
