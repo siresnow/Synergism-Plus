@@ -2519,7 +2519,7 @@ export const resetCurrency = (): void => {
     }
     prestigePow *= G['deflationMultiplier'][player.usedCorruptions[6]]
     //Prestige Point Formulae
-    G['prestigePointGain'] = Decimal.floor(Decimal.pow(player.coinsThisPrestige.dividedBy(1e12), prestigePow));
+    G['prestigePointGain'] = Decimal.floor(Decimal.pow(player.coinsThisPrestige.dividedBy(inMod("ng-0.5")?4e12:1e12), prestigePow));
     if (player.upgrades[16] > 0.5 && player.currentChallenge.transcension !== 5 && player.currentChallenge.reincarnation !== 10) {
         G['prestigePointGain'] = G['prestigePointGain'].times(Decimal.min(Decimal.pow(10, 1e33), Decimal.pow(G['acceleratorEffect'], 1 / 3 * G['deflationMultiplier'][player.usedCorruptions[6]])));
     }

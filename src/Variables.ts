@@ -484,7 +484,7 @@ export const mods = [
     },
     {
         title: "NG-0.5",
-        desc: "Makes some small nerf.",
+        desc: "Makes some small nerf before prestige which make lots of timewall.",
         author: "3^3=7",
         id: "ng-0.5"
     },
