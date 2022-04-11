@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 {
     "extends": "stylelint-config-standard",
     "rules": {
         "no-descending-specificity": null,
         "indentation": 4
     }
+=======
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "no-descending-specificity": null,
+        "indentation": 4
+    }
+>>>>>>> upstream/plus
 }

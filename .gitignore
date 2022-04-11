@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 node_modules/
 *.js
 !scripts/*.js
 dist
+=======
+node_modules/
+*.js
+!scripts/*.js
+dist
+>>>>>>> upstream/plus
 !.eslintrc.js

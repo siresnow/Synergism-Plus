@@ -823,6 +823,102 @@ nav li:hover {
     margin: 0 auto;
     text-align: center;
 }
+<<<<<<< HEAD
+=======
+#quarktimerdisplay {
+	height: 22px;
+	margin-top: 60px;
+}
+
+#quarktimeramount {
+	height: 22px;
+}
+
+#exportgame {
+	width: 150px;
+	height: 40px;
+	margin: 5px auto;
+}
+#exportinfo {
+	height: 20px;
+}
+#saveStringInput {
+	width: 250px;
+}
+
+#importgame {
+	width: 150px;
+}
+#importFileButton {
+	width: 100px;
+	margin: 2px auto;
+	border: 1px solid white;
+}
+#savegame{
+	width: 180px;
+	margin: 2px auto;
+}
+
+#discord {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	top: 335px;
+	left: 50%;
+	margin-left: -150px;
+	color: gold;
+}
+#discordhref {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+}
+#discordicon {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	margin-top: 5px;
+}
+#patreon{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	top: 335px;
+	left: 25%;
+	margin-left: -150px;
+	color: gold;
+}
+#patreonicon{
+	cursor: pointer;
+}
+#versionnumber{
+	position: absolute;
+	width: 900px;
+	height: 100px;
+	top: 450px;
+	left: 50%;
+	margin-left: -450px;
+}
+#event{
+	position: absolute;
+	width: 900px;
+	height: 100px;
+	top: 470px;
+	left: 50%;
+	margin-left: -450px;
+}
+#eventBuffs{
+	position: absolute;
+	width: 900px;
+	height: 100px;
+	top: 490px;
+	left: 50%;
+	margin-left: -450px;
+}
+
+>>>>>>> upstream/plus
 
 #statistics {
     position: relative;
